@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+:root {
+  /* PostHog dark palette */
+  --bg: #1c1c1c;
+  --bg-raised: #232323;
+  --bg-window: #1a1a1a;
+  --titlebar: #2a2a2a;
+  --border: #3a3a3a;
+  --border-strong: #4a4a4a;
+
+  /* PostHog signature yellow */
+  --yellow: #f9bd2b;
+  --yellow-dim: rgba(249, 189, 43, 0.12);
+  --yellow-border: rgba(249, 189, 43, 0.35);
+
+  /* Text */
+  --text: #fffaf0;
+  --text-muted: #9c9489;
+  --text-faint: #5c564f;
+  --text-on-yellow: #1c1c1c;
+
+  /* Status colors */
+  --red: #ff5f57;
+  --orange: #ffbd2e;
+  --green: #28c840;
+
+  /* Hard shadow — PostHog's signature offset shadow */
+  --shadow-window: 6px 6px 0px 0px rgba(0, 0, 0, 0.85);
+  --shadow-card: 4px 4px 0px 0px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 0.6);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-window: var(--bg-window);
+  --color-titlebar: var(--titlebar);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-yellow: var(--yellow);
+  --color-yellow-dim: var(--yellow-dim);
+  --color-yellow-border: var(--yellow-border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-text-on-yellow: var(--text-on-yellow);
+  --color-red: var(--red);
+  --color-orange: var(--orange);
+  --color-green: var(--green);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* Dot grid desktop background */
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--text-on-yellow);
+}
+
+/* Diagonal stripe pattern — PostHog decorative texture */
+.stripe-bg {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(255, 255, 255, 0.025) 5px,
+    rgba(255, 255, 255, 0.025) 10px
+  );
+}
+
+/* Yellow stripe variant */
+.stripe-yellow {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(249, 189, 43, 0.08) 5px,
+    rgba(249, 189, 43, 0.08) 10px
+  );
+}
+
+/* OS window styles */
+.window {
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-window);
+  background: var(--bg-window);
+}
+
+.window-titlebar {
+  background: var(--titlebar);
+  border-bottom: 2px solid var(--border);
+  padding: 0 12px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.traffic-lights {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.traffic-light {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.window-title {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  font-family: var(--font-geist-mono), monospace;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* Monospace tag */
+.tag {
+  display: inline-flex;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: var(--font-geist-mono), monospace;
+  color: var(--text-faint);
+  background: var(--bg);
+  white-space: nowrap;
+}
+
+.tag-yellow {
+  border-color: var(--yellow-border);
+  color: var(--yellow);
+  background: var(--yellow-dim);
+}
+
+/* PostHog-style section label */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: var(--font-geist-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
