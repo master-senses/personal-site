@@ -5,34 +5,31 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
 
   return (
     <div>
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "13px 18px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "14px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
-          <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>{item.frontmatter.title}</div>
-          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", fontWeight: 600, marginTop: 3 }}>{item.frontmatter.company}</div>
+          <div className="type-subheading" style={{ fontSize: "var(--font-lg)" }}>{item.frontmatter.title}</div>
+          <div className="type-label" style={{ color: "var(--blue)", marginTop: 4 }}>{item.frontmatter.company}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-          <span style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
+          <span className="type-body-mono" style={{ fontSize: "var(--font-sm)", color: "var(--text-secondary)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
           {item.frontmatter.url && (
-            <a href={item.frontmatter.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+            <a href={item.frontmatter.url} target="_blank" rel="noopener noreferrer" className="type-label" style={{ color: "var(--blue)", textDecoration: "underline", textUnderlineOffset: 2, fontSize: "var(--font-sm)" }}>
               paper ↗
             </a>
           )}
         </div>
       </div>
 
-      {/* Bullets */}
-      <ul style={{ margin: 0, padding: "14px 18px 16px", listStyle: "none" }}>
+      <ul style={{ margin: 0, padding: "16px 20px 18px", listStyle: "none" }}>
         {bullets.map((b, i) => (
-          <li key={i} style={{ display: "flex", gap: 10, fontSize: 15, color: "var(--text)", lineHeight: 1.7, marginBottom: i < bullets.length - 1 ? 8 : 0 }}>
-            <span style={{ color: "var(--text-secondary)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 2 }}>·</span>
+          <li key={i} className="type-body" style={{ display: "flex", gap: 10, marginBottom: i < bullets.length - 1 ? 10 : 0 }}>
+            <span style={{ color: "var(--text-secondary)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 3 }}>·</span>
             {b}
           </li>
         ))}
       </ul>
 
-      {/* Tags */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "10px 18px 14px", borderTop: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "12px 20px 16px", borderTop: "1px solid var(--border)" }}>
         {item.frontmatter.tags.map((t) => <span key={t} className="tag">{t}</span>)}
       </div>
     </div>

@@ -11,19 +11,19 @@ export default function AboutWindow() {
   ];
 
   return (
-    <div style={{ fontFamily: "var(--font-geist-mono), monospace", fontSize: 15, padding: "18px 22px" }}>
-      <div style={{ color: "var(--text)", marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", fontSize: 13, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+    <div className="type-body-mono" style={{ padding: "20px 24px" }}>
+      <div className="type-caption" style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", textTransform: "uppercase" }}>
         about.txt — plain text
       </div>
       {rows.map(({ key, value, href, green }) => (
-        <div key={key} style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: 14, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ color: "var(--blue)", fontWeight: 600 }}>{key}</span>
+        <div key={key} style={{ display: "grid", gridTemplateColumns: "128px 1fr", gap: 16, padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+          <span className="type-label" style={{ color: "var(--yellow)" }}>{key}</span>
           {href ? (
             <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500 }}>
               {value}
             </a>
           ) : (
-            <span style={{ color: green ? "var(--green)" : "var(--text)" }}>{value}</span>
+            <span style={{ color: green ? "var(--green)" : "var(--text)", fontWeight: 500 }}>{value}</span>
           )}
         </div>
       ))}

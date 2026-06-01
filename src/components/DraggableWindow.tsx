@@ -167,10 +167,11 @@ export default function DraggableWindow({
           style={{
             flex: 1,
             textAlign: "center",
-            fontSize: 13,
+            fontSize: "var(--font-sm)",
             fontFamily: "var(--font-geist-mono), monospace",
             color: "var(--text)",
-            letterSpacing: "0.03em",
+            letterSpacing: "0.02em",
+            lineHeight: "var(--leading-snug)",
           }}
         >
           {title}
