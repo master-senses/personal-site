@@ -4,13 +4,13 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
   const bullets = item.content.split("\n\n").map((p) => p.trim()).filter(Boolean);
 
   return (
-    <div>
+    <div className="txt-window">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "14px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "6px 14px" }}>
             <span className="type-subheading" style={{ fontSize: "var(--font-lg)" }}>{item.frontmatter.title}</span>
             {item.frontmatter.current && (
-              <span className="type-caption" style={{ color: "var(--yellow)", background: "var(--yellow-dim)", border: "1px solid var(--yellow-border)", borderRadius: 3, padding: "2px 7px", fontWeight: 700 }}>
+              <span className="type-caption" style={{ color: "var(--yellow)", background: "var(--yellow-dim)", border: "1px solid var(--yellow-border)", borderRadius: 3, padding: "3px 9px", fontWeight: 700, flexShrink: 0 }}>
                 current
               </span>
             )}
@@ -27,8 +27,8 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
       <ul style={{ margin: 0, padding: "16px 20px 18px", listStyle: "none" }}>
         {bullets.map((b, i) => (
           <li key={i} className="type-body" style={{ display: "flex", gap: 10, marginBottom: i < bullets.length - 1 ? 10 : 0 }}>
-            <span style={{ color: "var(--text-secondary)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 3 }}>·</span>
-            {b}
+            <span className="type-body-mono" style={{ color: "var(--text-secondary)", flexShrink: 0, marginTop: 2 }}>·</span>
+            <span style={{ minWidth: 0 }}>{b}</span>
           </li>
         ))}
       </ul>

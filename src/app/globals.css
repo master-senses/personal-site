@@ -54,7 +54,7 @@
   --icon-inline: 18px;       /* nav github/linkedin */
   --icon-desktop-w: 52px;
   --icon-desktop-h: 64px;
-  --icon-desktop-btn: 96px;  /* icon + label hit area width */
+  --icon-desktop-btn: 172px; /* fits longest filename on one line */
 
   /* ── Semantic status ──────────────────────────────────────────────── */
   --red: #ff5f57;
@@ -277,6 +277,43 @@ body {
   font-size: var(--font-md);
   line-height: var(--leading-relaxed);
   font-weight: 500;
+}
+
+/* .txt windows — sans body, mono labels (readable + OS file feel) */
+.txt-window {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+
+.txt-window .type-body,
+.txt-window .type-subheading {
+  font-family: inherit;
+}
+
+.txt-window .type-label,
+.txt-window .type-caption,
+.txt-window .type-body-mono,
+.txt-window .tag {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 500;
+}
+
+.txt-window .type-subheading {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* skills.json — full monospace */
+.json-window {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 500;
+  font-variant-ligatures: none;
+}
+
+.json-window .type-body,
+.json-window .type-label,
+.json-window .type-caption {
+  font-family: inherit;
 }
 
 @media (prefers-reduced-motion: reduce) {

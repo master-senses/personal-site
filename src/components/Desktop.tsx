@@ -39,12 +39,15 @@ const INITIAL: Record<WinId, WinConfig> = {
 
 const WIN_WIDTHS: Record<WinId, number> = {
   terminal: 580,
-  about:    480,
-  work:     900,
-  projects: 980,
-  research: 860,
-  skills:   780,
+  about:    640,
+  work:     980,
+  projects: 1080,
+  research: 960,
+  skills:   860,
 };
+
+/** Individual desktop file windows — ~70ch body at 17px sans */
+const ITEM_WIN_WIDTHS = { default: 720, project: 880 } as const;
 
 const WIN_TITLES: Record<WinId, string> = {
   terminal: "terminal — bash",
@@ -256,7 +259,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>main</span>
           <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
             <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--green)", fontWeight: 600 }}>● available for work</span>
-            <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>Urbana-Champaign, IL</span>
+            <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>Indianapolis, IN</span>
           </div>
         </div>
       </header>
@@ -304,7 +307,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             if (item) content = <ResearchContent item={item} />;
           }
           return (
-            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? 680 : 520} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
+            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? ITEM_WIN_WIDTHS.project : ITEM_WIN_WIDTHS.default} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
               {content}
             </DraggableWindow>
           );
@@ -316,7 +319,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             position: "absolute",
             top: 16,
             left: 16,
-            width: 260,
+            width: 400,
             display: "flex",
             flexDirection: "column",
             gap: 28,
@@ -339,7 +342,7 @@ export default function Desktop({ experience, projects, research }: Props) {
                 {group.label}
               </div>
               {/* Icon grid */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", columnGap: 36, rowGap: 28 }}>
                 {group.icons.map((icon) => (
                   <DesktopIcon
                     key={icon.slug}
@@ -379,13 +382,15 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 6,
-        padding: "8px 6px 7px",
+        gap: 8,
+        padding: "10px 8px 9px",
         background: hovered ? "rgba(249,189,43,0.1)" : "transparent",
         border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
         borderRadius: 6,
         cursor: "pointer",
         width: "var(--icon-desktop-btn)",
+        boxSizing: "border-box",
+        overflow: "hidden",
         transition: "background 0.12s, border-color 0.12s",
       }}
     >
@@ -396,9 +401,9 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         fontWeight: 500,
         color: "var(--text)",
         textAlign: "center",
-        lineHeight: "var(--leading-snug)",
-        wordBreak: "break-all",
-        maxWidth: "calc(var(--icon-desktop-btn) - 12px)",
+        lineHeight: 1.2,
+        whiteSpace: "nowrap",
+        maxWidth: "100%",
       }}>
         {filename}
       </span>

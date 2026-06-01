@@ -10,7 +10,7 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
   const embedUrl = item.frontmatter.url ? getYouTubeEmbedUrl(item.frontmatter.url) : null;
 
   return (
-    <div>
+    <div className="txt-window">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "14px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div className="type-subheading" style={{ fontSize: "var(--font-lg)" }}>{item.frontmatter.title}</div>

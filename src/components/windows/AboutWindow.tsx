@@ -11,19 +11,19 @@ export default function AboutWindow() {
   ];
 
   return (
-    <div className="type-body-mono" style={{ padding: "20px 24px" }}>
+    <div className="txt-window" style={{ padding: "20px 24px" }}>
       <div className="type-caption" style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", textTransform: "uppercase" }}>
         about.txt — plain text
       </div>
       {rows.map(({ key, value, href, green }) => (
-        <div key={key} style={{ display: "grid", gridTemplateColumns: "128px 1fr", gap: 16, padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div key={key} style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: 16, padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "baseline" }}>
           <span className="type-label" style={{ color: "var(--yellow)" }}>{key}</span>
           {href ? (
-            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500 }}>
+            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="type-body" style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500, minWidth: 0, wordBreak: "break-word" }}>
               {value}
             </a>
           ) : (
-            <span style={{ color: green ? "var(--green)" : "var(--text)", fontWeight: 500 }}>{value}</span>
+            <span className="type-body" style={{ color: green ? "var(--green)" : "var(--text)", minWidth: 0, wordBreak: "break-word" }}>{value}</span>
           )}
         </div>
       ))}

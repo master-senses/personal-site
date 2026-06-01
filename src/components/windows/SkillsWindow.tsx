@@ -9,7 +9,7 @@ const GROUPS = [
 
 export default function SkillsWindow() {
   return (
-    <div className="type-body-mono" style={{ padding: "22px 26px" }}>
+    <div className="json-window type-body-mono" style={{ padding: "22px 26px" }}>
       <div style={{ color: "var(--text-secondary)", marginBottom: 8 }}>{"{"}</div>
       <div style={{ paddingLeft: 20 }}>
         {GROUPS.map((g, gi) => (
@@ -33,7 +33,7 @@ export default function SkillsWindow() {
         <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 10, fontWeight: 600 }}>
           education
         </div>
-        <div className="type-body" style={{ fontSize: "var(--font-lg)", fontWeight: 500 }}>University of Illinois at Urbana-Champaign</div>
+        <div className="type-body" style={{ fontSize: "var(--font-lg)", fontWeight: 500, lineHeight: "var(--leading-snug)" }}>University of Illinois at Urbana-Champaign</div>
         <div className="type-label" style={{ color: "var(--blue)", marginTop: 6, fontSize: "var(--font-base)" }}>B.S. Computer Science</div>
       </div>
     </div>

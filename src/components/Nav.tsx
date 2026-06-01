@@ -142,7 +142,7 @@ export default function Nav() {
             available for work
           </span>
           <span className="section-label" style={{ fontSize: 10 }}>
-            Urbana-Champaign, IL
+            Indianapolis, IN
           </span>
         </div>
       </div>
