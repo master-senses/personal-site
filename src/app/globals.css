@@ -14,10 +14,10 @@
   --yellow-dim: rgba(249, 189, 43, 0.12);
   --yellow-border: rgba(249, 189, 43, 0.35);
 
-  /* Text — everything readable by default */
-  --text: #f0ece4;          /* warm white: main content */
-  --text-muted: #b8b2aa;    /* light warm grey: secondary labels, dates */
-  --text-faint: #6e6860;    /* medium grey: decorative only (borders, tags) */
+  /* Text — white only, no grey allowed for reading */
+  --text: #f0ece4;           /* warm white: everything */
+  --text-muted: #d4cfc7;     /* near-white: secondary labels only */
+  --text-faint: #a09890;     /* used only for JSON punctuation, decorative */
   --text-on-yellow: #1c1c1c;
 
   /* Status colors */
@@ -139,9 +139,9 @@ body {
 .window-title {
   flex: 1;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--font-geist-mono), monospace;
-  color: var(--text-muted);
+  color: var(--text);
   letter-spacing: 0.02em;
 }
 
@@ -163,13 +163,13 @@ body {
 /* Monospace tag */
 .tag {
   display: inline-flex;
-  padding: 3px 9px;
+  padding: 4px 10px;
   border: 1px solid var(--border-strong);
   border-radius: 3px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: var(--font-geist-mono), monospace;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
   white-space: nowrap;
 }
 

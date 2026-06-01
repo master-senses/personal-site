@@ -126,10 +126,10 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
       style={{
         padding: "18px 22px",
         fontFamily: "var(--font-geist-mono), monospace",
-        fontSize: 16,
-        lineHeight: 1.7,
-        minHeight: 220,
-        maxHeight: "58vh",
+        fontSize: 18,
+        lineHeight: 1.75,
+        minHeight: 240,
+        maxHeight: "60vh",
         overflowY: "auto",
       }}
     >

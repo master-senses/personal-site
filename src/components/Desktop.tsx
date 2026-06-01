@@ -8,8 +8,17 @@ import WorkWindow from "./windows/WorkWindow";
 import ProjectsWindow from "./windows/ProjectsWindow";
 import ResearchWindow from "./windows/ResearchWindow";
 import SkillsWindow from "./windows/SkillsWindow";
-import { ContentItem, ExperienceFrontmatter, ProjectFrontmatter, ResearchFrontmatter } from "@/lib/mdx";
+import ExperienceContent from "./windows/ExperienceContent";
+import ProjectContent from "./windows/ProjectContent";
+import ResearchContent from "./windows/ResearchContent";
+import {
+  ContentItem,
+  ExperienceFrontmatter,
+  ProjectFrontmatter,
+  ResearchFrontmatter,
+} from "@/lib/mdx";
 
+// ── Fixed window IDs ──────────────────────────────────────────────────────────
 type WinId = "terminal" | "about" | "work" | "projects" | "research" | "skills";
 
 interface WinConfig {
@@ -31,10 +40,10 @@ const INITIAL: Record<WinId, WinConfig> = {
 const WIN_WIDTHS: Record<WinId, number> = {
   terminal: 580,
   about:    480,
-  work:     880,
+  work:     900,
   projects: 980,
   research: 860,
-  skills:   760,
+  skills:   780,
 };
 
 const WIN_TITLES: Record<WinId, string> = {
@@ -53,394 +62,316 @@ const NAV_ITEMS: { id: WinId; label: string }[] = [
   { id: "skills",   label: "Skills"   },
 ];
 
+// ── Item window state ─────────────────────────────────────────────────────────
+type ItemType = "experience" | "project" | "research";
+
+interface ItemWin {
+  open: boolean;
+  x: number;
+  y: number;
+  z: number;
+  type: ItemType;
+  slug: string;
+  title: string;
+}
+
+// Desktop icon groups
+interface IconGroup {
+  label: string;
+  icons: { filename: string; type: ItemType; slug: string }[];
+}
+
+// ── Props ─────────────────────────────────────────────────────────────────────
 interface Props {
   experience: ContentItem<ExperienceFrontmatter>[];
   projects: ContentItem<ProjectFrontmatter>[];
   research: ContentItem<ResearchFrontmatter>[];
 }
 
+// ── Filename helpers ──────────────────────────────────────────────────────────
+function expFilename(slug: string, company: string): string {
+  const shortCompany = company
+    .replace("Eli Lilly and Company", "lilly")
+    .replace("Illini Solar Car", "illini-solar")
+    .replace("Optivolt Labs", "optivolt")
+    .replace("NCSA (National Center for Supercomputing Applications)", "ncsa")
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 20);
+  if (slug.includes("intern")) return `${shortCompany}-intern.txt`;
+  return `${shortCompany}.txt`;
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function Desktop({ experience, projects, research }: Props) {
   const [windows, setWindows] = useState<Record<WinId, WinConfig>>(INITIAL);
+  const [itemWins, setItemWins] = useState<Record<string, ItemWin>>({});
   const zCounter = useRef(11);
 
-  const focus = useCallback((id: WinId) => {
+  // ── Focus / open / close for fixed windows ───────────────────────────────
+  const focus = useCallback((id: string) => {
+    if (id in INITIAL) {
+      setWindows((prev) => ({ ...prev, [id]: { ...prev[id as WinId], z: ++zCounter.current } }));
+    } else {
+      setItemWins((prev) => ({ ...prev, [id]: { ...prev[id], z: ++zCounter.current } }));
+    }
+  }, []);
+
+  const openFixed = useCallback((id: WinId) => {
     setWindows((prev) => ({
       ...prev,
-      [id]: { ...prev[id], z: ++zCounter.current },
+      [id]: { ...prev[id], open: true, z: ++zCounter.current },
     }));
   }, []);
 
-  const open = useCallback((id: WinId) => {
-    setWindows((prev) => {
-      const already = prev[id].open;
-      return {
-        ...prev,
-        [id]: { ...prev[id], open: true, z: ++zCounter.current, x: already ? prev[id].x : INITIAL[id].x, y: already ? prev[id].y : INITIAL[id].y },
-      };
-    });
+  const closeWin = useCallback((id: string) => {
+    if (id in INITIAL) {
+      setWindows((prev) => ({ ...prev, [id as WinId]: { ...prev[id as WinId], open: false, z: 0 } }));
+    } else {
+      setItemWins((prev) => ({ ...prev, [id]: { ...prev[id], open: false, z: 0 } }));
+    }
   }, []);
 
-  const close = useCallback((id: string) => {
-    setWindows((prev) => ({
+  // ── Open individual item window ──────────────────────────────────────────
+  const openItem = useCallback((type: ItemType, slug: string, filename: string) => {
+    const key = `${type}::${slug}`;
+    const existing = itemWins[key];
+    if (existing?.open) {
+      // Bring to front
+      setItemWins((prev) => ({ ...prev, [key]: { ...prev[key], z: ++zCounter.current } }));
+      return;
+    }
+    // Stagger position for each new window
+    const base = { experience: { x: 200, y: 80 }, project: { x: 220, y: 100 }, research: { x: 240, y: 120 } }[type] ?? { x: 200, y: 80 };
+    const offset = Object.keys(itemWins).filter((k) => itemWins[k].open).length;
+    setItemWins((prev) => ({
       ...prev,
-      [id as WinId]: { ...prev[id as WinId], open: false, z: 0 },
+      [key]: {
+        open: true,
+        x: base.x + offset * 24,
+        y: base.y + offset * 24,
+        z: ++zCounter.current,
+        type,
+        slug,
+        title: filename,
+      },
     }));
-  }, []);
+  }, [itemWins]);
 
-  const handleAboutOpen = useCallback(() => {
-    open("about");
-  }, [open]);
+  // ── Terminal callback ────────────────────────────────────────────────────
+  const handleAboutOpen = useCallback(() => openFixed("about"), [openFixed]);
+
+  // ── Build icon groups ────────────────────────────────────────────────────
+  const iconGroups: IconGroup[] = [
+    {
+      label: "work/",
+      icons: experience.map((e) => ({
+        filename: expFilename(e.slug, e.frontmatter.company),
+        type: "experience" as ItemType,
+        slug: e.slug,
+      })),
+    },
+    {
+      label: "projects/",
+      icons: projects.map((p) => ({
+        filename: `${p.slug}.txt`,
+        type: "project" as ItemType,
+        slug: p.slug,
+      })),
+    },
+    {
+      label: "research/",
+      icons: research.map((r) => ({
+        filename: `${r.slug}.txt`,
+        type: "research" as ItemType,
+        slug: r.slug,
+      })),
+    },
+  ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100dvh", overflow: "hidden" }}>
-      {/* ── Menubar ───────────────────────────────────────── */}
-      <header
-        style={{
-          background: "var(--titlebar)",
-          borderBottom: "2px solid var(--border)",
-          flexShrink: 0,
-        }}
-      >
-        {/* Top bar */}
-        <div style={{ display: "flex", alignItems: "stretch", height: 40 }}>
+
+      {/* ── Menubar ──────────────────────────────────────────────────────── */}
+      <header style={{ background: "var(--titlebar)", borderBottom: "2px solid var(--border)", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "stretch", height: 44 }}>
           {/* Logo */}
           <button
-            onClick={() => open("terminal")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "0 16px",
-              background: "none",
-              borderRight: "1px solid var(--border)",
-              cursor: "pointer",
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: 14,
-              fontWeight: 700,
-              color: "var(--yellow)",
-              letterSpacing: "-0.02em",
-            }}
+            onClick={() => openFixed("terminal")}
+            style={{ display: "flex", alignItems: "center", gap: 9, padding: "0 18px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: 15, fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
           >
-            <span
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 4,
-                background: "var(--yellow)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "var(--text-on-yellow)",
-                fontSize: 9,
-                fontWeight: 900,
-                flexShrink: 0,
-              }}
-            >
-              HK
-            </span>
+            <span style={{ width: 22, height: 22, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: 9, fontWeight: 900, flexShrink: 0 }}>HK</span>
             <span>hrishikesh</span>
           </button>
 
           {/* Nav items */}
-          <nav
-            style={{
-              display: "flex",
-              alignItems: "stretch",
-              borderRight: "1px solid var(--border)",
-            }}
-            aria-label="Open windows"
-          >
+          <nav style={{ display: "flex", alignItems: "stretch", borderRight: "1px solid var(--border)" }}>
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
-                onClick={() => open(item.id)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0 18px",
-                  background: windows[item.id].open ? "rgba(249,189,43,0.1)" : "none",
-                  border: "none",
-                  borderRight: "1px solid var(--border)",
-                  borderBottom: windows[item.id].open ? "2px solid var(--yellow)" : "2px solid transparent",
-                  cursor: "pointer",
-                  fontSize: 14,
-                  color: windows[item.id].open ? "var(--yellow)" : "var(--text)",
-                  fontFamily: "var(--font-geist-sans)",
-                  transition: "color 0.15s, background 0.15s",
-                }}
+                onClick={() => openFixed(item.id)}
+                style={{ display: "flex", alignItems: "center", padding: "0 20px", background: windows[item.id].open ? "rgba(249,189,43,0.1)" : "none", border: "none", borderRight: "1px solid var(--border)", borderBottom: windows[item.id].open ? "2px solid var(--yellow)" : "2px solid transparent", cursor: "pointer", fontSize: 15, color: "var(--text)", fontFamily: "var(--font-geist-sans)", transition: "color 0.15s, background 0.15s" }}
               >
                 {item.label}
               </button>
             ))}
           </nav>
 
-          {/* Right side */}
+          {/* Right */}
           <div style={{ display: "flex", alignItems: "stretch", marginLeft: "auto" }}>
-            <a
-              href="https://github.com/master-senses"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "0 12px",
-                borderLeft: "1px solid var(--border)",
-                color: "var(--text-muted)",
-                textDecoration: "none",
-              }}
-            >
+            <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--text)", textDecoration: "none" }}>
               <GithubIcon />
             </a>
-            <a
-              href="https://linkedin.com/in/hrishikeshkalyanaraman"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "0 12px",
-                borderLeft: "1px solid var(--border)",
-                color: "var(--text-muted)",
-                textDecoration: "none",
-              }}
-            >
+            <a href="https://linkedin.com/in/hrishikeshkalyanaraman" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--text)", textDecoration: "none" }}>
               <LinkedinIcon />
             </a>
-            <a
-              href="mailto:hrishikeshkalyanaraman@gmail.com"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "0 16px",
-                borderLeft: "2px solid var(--yellow)",
-                background: "var(--yellow)",
-                color: "var(--text-on-yellow)",
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: 13,
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
-            >
+            <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 18px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
               Get in touch
             </a>
           </div>
         </div>
 
-        {/* Status bar */}
-        <div
-          style={{
-            height: 24,
-            display: "flex",
-            alignItems: "center",
-            paddingInline: 16,
-            gap: 8,
-            borderTop: "1px solid var(--border-strong, var(--border))",
-            background: "rgba(0,0,0,0.2)",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: 12,
-              color: "var(--yellow)",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}
-          >
-            ●
-          </span>
-          <span
-            style={{
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: 12,
-              color: "var(--text-faint)",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}
-          >
-            personal-site
-          </span>
-          <span style={{ color: "var(--text-faint)", fontFamily: "var(--font-geist-mono)", fontSize: 12 }}>/</span>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)" }}>main</span>
-
-          <div style={{ marginLeft: "auto", display: "flex", gap: 16 }}>
-            <span
-              style={{
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: 12,
-                color: "var(--green)",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              ● available for work
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: 12,
-                color: "var(--text-faint)",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              Urbana-Champaign, IL
-            </span>
+        {/* Status sub-bar */}
+        <div style={{ height: 26, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--yellow)" }}>●</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.07em" }}>personal-site</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-muted)" }}>/</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)" }}>main</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
+            <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--green)", textTransform: "uppercase", letterSpacing: "0.07em" }}>● available for work</span>
+            <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Urbana-Champaign, IL</span>
           </div>
         </div>
       </header>
 
-      {/* ── Desktop area ──────────────────────────────────── */}
+      {/* ── Desktop ──────────────────────────────────────────────────────── */}
       <div style={{ position: "relative", flex: 1, overflow: "hidden" }}>
-        {/* Terminal */}
-        <DraggableWindow
-          id="terminal"
-          title={WIN_TITLES.terminal}
-          initialX={INITIAL.terminal.x}
-          initialY={INITIAL.terminal.y}
-          width={WIN_WIDTHS.terminal}
-          isOpen={windows.terminal.open}
-          zIndex={windows.terminal.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-          accentBar
-          centered
-        >
+
+        {/* Fixed windows */}
+        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} accentBar centered>
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
 
-        {/* About */}
-        <DraggableWindow
-          id="about"
-          title={WIN_TITLES.about}
-          initialX={INITIAL.about.x}
-          initialY={INITIAL.about.y}
-          width={WIN_WIDTHS.about}
-          isOpen={windows.about.open}
-          zIndex={windows.about.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-        >
+        <DraggableWindow id="about" title={WIN_TITLES.about} initialX={INITIAL.about.x} initialY={INITIAL.about.y} width={WIN_WIDTHS.about} isOpen={windows.about.open} zIndex={windows.about.z} onFocus={focus} onClose={closeWin}>
           <AboutWindow />
         </DraggableWindow>
 
-        {/* Work */}
-        <DraggableWindow
-          id="work"
-          title={WIN_TITLES.work}
-          initialX={INITIAL.work.x}
-          initialY={INITIAL.work.y}
-          width={WIN_WIDTHS.work}
-          isOpen={windows.work.open}
-          zIndex={windows.work.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-        >
+        <DraggableWindow id="work" title={WIN_TITLES.work} initialX={INITIAL.work.x} initialY={INITIAL.work.y} width={WIN_WIDTHS.work} isOpen={windows.work.open} zIndex={windows.work.z} onFocus={focus} onClose={closeWin}>
           <WorkWindow experience={experience} />
         </DraggableWindow>
 
-        {/* Projects */}
-        <DraggableWindow
-          id="projects"
-          title={WIN_TITLES.projects}
-          initialX={INITIAL.projects.x}
-          initialY={INITIAL.projects.y}
-          width={WIN_WIDTHS.projects}
-          isOpen={windows.projects.open}
-          zIndex={windows.projects.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-        >
+        <DraggableWindow id="projects" title={WIN_TITLES.projects} initialX={INITIAL.projects.x} initialY={INITIAL.projects.y} width={WIN_WIDTHS.projects} isOpen={windows.projects.open} zIndex={windows.projects.z} onFocus={focus} onClose={closeWin}>
           <ProjectsWindow projects={projects} />
         </DraggableWindow>
 
-        {/* Research */}
-        <DraggableWindow
-          id="research"
-          title={WIN_TITLES.research}
-          initialX={INITIAL.research.x}
-          initialY={INITIAL.research.y}
-          width={WIN_WIDTHS.research}
-          isOpen={windows.research.open}
-          zIndex={windows.research.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-        >
+        <DraggableWindow id="research" title={WIN_TITLES.research} initialX={INITIAL.research.x} initialY={INITIAL.research.y} width={WIN_WIDTHS.research} isOpen={windows.research.open} zIndex={windows.research.z} onFocus={focus} onClose={closeWin}>
           <ResearchWindow research={research} />
         </DraggableWindow>
 
-        {/* Skills */}
-        <DraggableWindow
-          id="skills"
-          title={WIN_TITLES.skills}
-          initialX={INITIAL.skills.x}
-          initialY={INITIAL.skills.y}
-          width={WIN_WIDTHS.skills}
-          isOpen={windows.skills.open}
-          zIndex={windows.skills.z}
-          onFocus={focus as (id: string) => void}
-          onClose={close}
-        >
+        <DraggableWindow id="skills" title={WIN_TITLES.skills} initialX={INITIAL.skills.x} initialY={INITIAL.skills.y} width={WIN_WIDTHS.skills} isOpen={windows.skills.open} zIndex={windows.skills.z} onFocus={focus} onClose={closeWin}>
           <SkillsWindow />
         </DraggableWindow>
 
-        {/* Empty state hint */}
-        {Object.values(windows).filter((w) => w.open).length <= 1 && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: 40,
-              left: "50%",
-              transform: "translateX(-50%)",
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: 11,
-              color: "var(--text-faint)",
-              textAlign: "center",
-              pointerEvents: "none",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}
-          >
-            click Work · Projects · Research · Skills to open windows
-          </div>
-        )}
+        {/* Dynamic item windows */}
+        {Object.entries(itemWins).map(([key, win]) => {
+          if (!win.open) return null;
+          let content: React.ReactNode = null;
+          if (win.type === "experience") {
+            const item = experience.find((e) => e.slug === win.slug);
+            if (item) content = <ExperienceContent item={item} />;
+          } else if (win.type === "project") {
+            const item = projects.find((p) => p.slug === win.slug);
+            if (item) content = <ProjectContent item={item} />;
+          } else if (win.type === "research") {
+            const item = research.find((r) => r.slug === win.slug);
+            if (item) content = <ResearchContent item={item} />;
+          }
+          return (
+            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={520} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
+              {content}
+            </DraggableWindow>
+          );
+        })}
+
+        {/* ── Desktop icon sidebar ────────────────────────────────────── */}
+        <div
+          style={{
+            position: "absolute",
+            top: 20,
+            right: 20,
+            width: 190,
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        >
+          {iconGroups.map((group) => (
+            <div key={group.label} style={{ pointerEvents: "auto" }}>
+              {/* Group label */}
+              <div style={{ fontFamily: "var(--font-geist-mono)", fontSize: 11, color: "var(--yellow)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingBottom: 5, borderBottom: "1px solid var(--border)" }}>
+                {group.label}
+              </div>
+              {/* Files */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {group.icons.map((icon) => (
+                  <button
+                    key={icon.slug}
+                    onClick={() => openItem(icon.type, icon.slug, icon.filename)}
+                    style={{ display: "flex", alignItems: "center", gap: 7, padding: "4px 6px", background: "none", border: "1px solid transparent", borderRadius: 4, cursor: "pointer", textAlign: "left", width: "100%", transition: "background 0.12s, border-color 0.12s" }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = "rgba(249,189,43,0.08)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "var(--yellow-border)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = "none";
+                      (e.currentTarget as HTMLElement).style.borderColor = "transparent";
+                    }}
+                  >
+                    <TxtFileIcon />
+                    <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", letterSpacing: "0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {icon.filename}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ── Dock / status bar ─────────────────────────────── */}
-      <footer
-        style={{
-          background: "var(--titlebar)",
-          borderTop: "2px solid var(--border)",
-          height: 28,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingInline: 16,
-          flexShrink: 0,
-        }}
-      >
-        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)" }}>
-          hrishikesh kalyanaraman · personal-site v2.0
-        </span>
-        <div style={{ display: "flex", gap: 16 }}>
-          <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)", textDecoration: "none" }}>
-            hrishikeshkalyanaraman@gmail.com
-          </a>
-          <span style={{ width: 1, background: "var(--border)" }} />
-          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)", textDecoration: "none" }}>
-            github/master-senses
-          </a>
+      {/* ── Footer status bar ──────────────────────────────────────────── */}
+      <footer style={{ background: "var(--titlebar)", borderTop: "2px solid var(--border)", height: 28, display: "flex", alignItems: "center", justifyContent: "space-between", paddingInline: 16, flexShrink: 0 }}>
+        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", textDecoration: "none" }}>hrishikeshkalyanaraman@gmail.com</a>
+          <span style={{ width: 1, height: 10, background: "var(--border)" }} />
+          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", textDecoration: "none" }}>github/master-senses</a>
         </div>
       </footer>
     </div>
   );
 }
 
+// ── Icons ─────────────────────────────────────────────────────────────────────
+function TxtFileIcon() {
+  return (
+    <svg width="13" height="15" viewBox="0 0 13 15" fill="none" aria-hidden="true">
+      <rect x="0.5" y="0.5" width="9" height="12" rx="1" stroke="var(--yellow)" strokeOpacity="0.7" />
+      <path d="M9.5 0.5L12.5 3.5" stroke="var(--yellow)" strokeOpacity="0.7" />
+      <path d="M9.5 0.5V3.5H12.5" fill="var(--yellow)" fillOpacity="0.15" stroke="var(--yellow)" strokeOpacity="0.7" />
+      <line x1="2" y1="6" x2="8" y2="6" stroke="var(--text-muted)" strokeOpacity="0.6" />
+      <line x1="2" y1="8" x2="8" y2="8" stroke="var(--text-muted)" strokeOpacity="0.6" />
+      <line x1="2" y1="10" x2="6" y2="10" stroke="var(--text-muted)" strokeOpacity="0.6" />
+    </svg>
+  );
+}
+
 function GithubIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
     </svg>
   );
@@ -448,7 +379,7 @@ function GithubIcon() {
 
 function LinkedinIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
   );
