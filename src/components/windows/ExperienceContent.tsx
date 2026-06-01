@@ -16,7 +16,7 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
               </span>
             )}
           </div>
-          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", marginTop: 3 }}>
+          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", fontWeight: 600, marginTop: 3 }}>
             {item.frontmatter.company}
           </div>
         </div>

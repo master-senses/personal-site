@@ -17,9 +17,9 @@ export default function AboutWindow() {
       </div>
       {rows.map(({ key, value, href, green }) => (
         <div key={key} style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: 14, padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ color: "var(--yellow)", opacity: 0.9 }}>{key}</span>
+          <span style={{ color: "var(--blue)", fontWeight: 600 }}>{key}</span>
           {href ? (
-            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} style={{ color: "var(--text)", textDecoration: "none" }}>
+            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500 }}>
               {value}
             </a>
           ) : (

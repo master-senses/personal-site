@@ -236,10 +236,10 @@ export default function Desktop({ experience, projects, research }: Props) {
 
           {/* Right */}
           <div style={{ display: "flex", alignItems: "stretch", marginLeft: "auto" }}>
-            <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--text)", textDecoration: "none" }}>
+            <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <GithubIcon />
             </a>
-            <a href="https://linkedin.com/in/hrishikeshkalyanaraman" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--text)", textDecoration: "none" }}>
+            <a href="https://linkedin.com/in/hrishikeshkalyanaraman" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <LinkedinIcon />
             </a>
             <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 18px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
@@ -331,11 +331,12 @@ export default function Desktop({ experience, projects, research }: Props) {
                 fontFamily: "var(--font-geist-mono)",
                 fontSize: 13,
                 color: "var(--blue)",
+                fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
                 marginBottom: 10,
                 paddingBottom: 5,
-                borderBottom: "1px solid var(--border)",
+                borderBottom: "1px solid var(--blue-border)",
               }}>
                 {group.label}
               </div>

@@ -23,10 +23,10 @@
   --yellow-border: rgba(245, 192, 53, 0.4);
   --yellow-hover: #ffd04d;
 
-  /* Split-complementary secondary (steel blue): links, org names, metadata */
-  --blue: #82bdf8;
-  --blue-dim: rgba(130, 189, 248, 0.1);
-  --blue-border: rgba(130, 189, 248, 0.35);
+  /* Split-complementary secondary — clearly blue, not white-adjacent */
+  --blue: #4A9EFF;
+  --blue-dim: rgba(74, 158, 255, 0.12);
+  --blue-border: rgba(74, 158, 255, 0.45);
 
   /* ── Text hierarchy (warm cream whites, WCAG-friendly on dark bg) ─── */
   --text: #f2ede6;            /* primary — all readable content */

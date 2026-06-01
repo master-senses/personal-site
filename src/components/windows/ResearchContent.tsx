@@ -9,7 +9,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "13px 18px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>{item.frontmatter.title}</div>
-          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", marginTop: 3 }}>{item.frontmatter.company}</div>
+          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", fontWeight: 600, marginTop: 3 }}>{item.frontmatter.company}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
           <span style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
