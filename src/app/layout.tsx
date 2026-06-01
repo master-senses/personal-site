@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: "Hrishikesh Kalyanaraman",
     images: [
       {
-        url: "/hk-logo.svg",
+        url: "/hk-logo.png",
         width: 512,
         height: 512,
         alt: "HK logo",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: "Hrishikesh Kalyanaraman",
     description:
       "Software engineer building AI tooling, design systems, and things that actually ship.",
-    images: ["/hk-logo.svg"],
+    images: ["/hk-logo.png"],
   },
 };
 
