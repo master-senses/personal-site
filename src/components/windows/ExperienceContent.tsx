@@ -16,7 +16,7 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
               </span>
             )}
           </div>
-          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--yellow)", marginTop: 3 }}>
+          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", marginTop: 3 }}>
             {item.frontmatter.company}
           </div>
         </div>
@@ -29,7 +29,7 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
       <ul style={{ margin: 0, padding: "14px 18px 16px", listStyle: "none" }}>
         {bullets.map((b, i) => (
           <li key={i} style={{ display: "flex", gap: 10, fontSize: 15, color: "var(--text)", lineHeight: 1.7, marginBottom: i < bullets.length - 1 ? 8 : 0 }}>
-            <span style={{ color: "var(--text-muted)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 2 }}>·</span>
+            <span style={{ color: "var(--text-secondary)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 2 }}>·</span>
             {b}
           </li>
         ))}

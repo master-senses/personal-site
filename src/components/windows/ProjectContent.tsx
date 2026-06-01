@@ -3,7 +3,7 @@ import { getYouTubeEmbedUrl } from "@/lib/youtube";
 
 const TYPE_COLOR: Record<string, string> = {
   Startup: "var(--red)",
-  "Personal Project": "var(--text-muted)",
+  "Personal Project": "var(--text-secondary)",
 };
 
 export default function ProjectContent({ item }: { item: ContentItem<ProjectFrontmatter> }) {

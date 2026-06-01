@@ -1,31 +1,45 @@
 @import "tailwindcss";
 
+/*
+ * Palette: monochromatic dark (60%) + warm neutrals (30%) + yellow accent (10%)
+ * Split-complementary secondary: steel blue (yellow's split pair) for links/metadata
+ * Ref: Figma 60-30-10 rule + split complementary for balanced contrast
+ */
+
 :root {
-  /* PostHog dark palette */
-  --bg: #1c1c1c;
-  --bg-raised: #232323;
-  --bg-window: #1a1a1a;
-  --titlebar: #2a2a2a;
-  --border: #3d3d3d;
-  --border-strong: #555050;
+  /* ── 60% — dominant surface (desktop) ─────────────────────────────── */
+  --bg: #131313;
 
-  /* PostHog signature yellow */
-  --yellow: #f9bd2b;
-  --yellow-dim: rgba(249, 189, 43, 0.12);
-  --yellow-border: rgba(249, 189, 43, 0.35);
+  /* ── 30% — secondary surfaces (windows, chrome) ─────────────────── */
+  --bg-raised: #1e1e1e;
+  --bg-window: #181818;
+  --titlebar: #252525;
+  --border: #383838;
+  --border-strong: #4a4a4a;
 
-  /* Text — white only, no grey allowed for reading */
-  --text: #f0ece4;           /* warm white: everything */
-  --text-muted: #d4cfc7;     /* near-white: secondary labels only */
-  --text-faint: #a09890;     /* used only for JSON punctuation, decorative */
-  --text-on-yellow: #1c1c1c;
+  /* ── 10% — primary accent (yellow: energy, CTA, active states) ───── */
+  --yellow: #f5c035;
+  --yellow-dim: rgba(245, 192, 53, 0.1);
+  --yellow-border: rgba(245, 192, 53, 0.4);
+  --yellow-hover: #ffd04d;
 
-  /* Status colors */
+  /* Split-complementary secondary (steel blue): links, org names, metadata */
+  --blue: #82bdf8;
+  --blue-dim: rgba(130, 189, 248, 0.1);
+  --blue-border: rgba(130, 189, 248, 0.35);
+
+  /* ── Text hierarchy (warm cream whites, WCAG-friendly on dark bg) ─── */
+  --text: #f2ede6;            /* primary — all readable content */
+  --text-secondary: #ddd7cf;  /* dates, labels, JSON punctuation */
+  --text-on-yellow: #131313;
+  --text-on-blue: #131313;
+
+  /* ── Semantic status ──────────────────────────────────────────────── */
   --red: #ff5f57;
   --orange: #ffbd2e;
-  --green: #28c840;
+  --green: #34d058;
 
-  /* Hard shadow — PostHog's signature offset shadow */
+  /* Hard shadow */
   --shadow-window: 6px 6px 0px 0px rgba(0, 0, 0, 0.85);
   --shadow-card: 4px 4px 0px 0px rgba(0, 0, 0, 0.7);
   --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 0.6);
@@ -41,9 +55,10 @@
   --color-yellow: var(--yellow);
   --color-yellow-dim: var(--yellow-dim);
   --color-yellow-border: var(--yellow-border);
+  --color-blue: var(--blue);
+  --color-blue-dim: var(--blue-dim);
   --color-text: var(--text);
-  --color-text-muted: var(--text-muted);
-  --color-text-faint: var(--text-faint);
+  --color-text-secondary: var(--text-secondary);
   --color-text-on-yellow: var(--text-on-yellow);
   --color-red: var(--red);
   --color-orange: var(--orange);
@@ -67,10 +82,9 @@ body {
   color: var(--text);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  /* Dot grid desktop background */
   background-image: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.06) 1px,
+    rgba(255, 255, 255, 0.05) 1px,
     transparent 1px
   );
   background-size: 24px 24px;
@@ -81,29 +95,26 @@ body {
   color: var(--text-on-yellow);
 }
 
-/* Diagonal stripe pattern — PostHog decorative texture */
 .stripe-bg {
   background-image: repeating-linear-gradient(
     -45deg,
     transparent,
     transparent 5px,
-    rgba(255, 255, 255, 0.025) 5px,
-    rgba(255, 255, 255, 0.025) 10px
+    rgba(255, 255, 255, 0.02) 5px,
+    rgba(255, 255, 255, 0.02) 10px
   );
 }
 
-/* Yellow stripe variant */
 .stripe-yellow {
   background-image: repeating-linear-gradient(
     -45deg,
     transparent,
     transparent 5px,
-    rgba(249, 189, 43, 0.08) 5px,
-    rgba(249, 189, 43, 0.08) 10px
+    rgba(245, 192, 53, 0.07) 5px,
+    rgba(245, 192, 53, 0.07) 10px
   );
 }
 
-/* OS window styles */
 .window {
   border: 2px solid var(--border);
   border-radius: 6px;
@@ -145,7 +156,6 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -160,7 +170,6 @@ body {
   background: var(--border-strong);
 }
 
-/* Monospace tag */
 .tag {
   display: inline-flex;
   padding: 4px 10px;
@@ -169,7 +178,7 @@ body {
   font-size: 13px;
   font-family: var(--font-geist-mono), monospace;
   color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   white-space: nowrap;
 }
 
@@ -179,7 +188,12 @@ body {
   background: var(--yellow-dim);
 }
 
-/* PostHog-style section label */
+.tag-blue {
+  border-color: var(--blue-border);
+  color: var(--blue);
+  background: var(--blue-dim);
+}
+
 .section-label {
   display: inline-flex;
   align-items: center;
@@ -188,7 +202,7 @@ body {
   font-family: var(--font-geist-mono), monospace;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-faint);
+  color: var(--text-secondary);
 }
 
 @media (prefers-reduced-motion: reduce) {

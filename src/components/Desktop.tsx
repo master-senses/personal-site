@@ -252,7 +252,7 @@ export default function Desktop({ experience, projects, research }: Props) {
         <div style={{ height: 26, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--yellow)" }}>●</span>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.07em" }}>personal-site</span>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-muted)" }}>/</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-secondary)" }}>/</span>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)" }}>main</span>
           <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
             <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--green)", textTransform: "uppercase", letterSpacing: "0.07em" }}>● available for work</span>
@@ -330,7 +330,7 @@ export default function Desktop({ experience, projects, research }: Props) {
               <div style={{
                 fontFamily: "var(--font-geist-mono)",
                 fontSize: 13,
-                color: "var(--yellow)",
+                color: "var(--blue)",
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
                 marginBottom: 10,
@@ -415,9 +415,9 @@ function BigTxtFileIcon() {
       <path d="M24 1 L34 11" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
       <path d="M24 1 L24 11 L34 11" fill="rgba(249,189,43,0.15)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
       {/* Text lines */}
-      <line x1="6" y1="19" x2="28" y2="19" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
-      <line x1="6" y1="25" x2="28" y2="25" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
-      <line x1="6" y1="31" x2="20" y2="31" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="6" y1="19" x2="28" y2="19" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="6" y1="25" x2="28" y2="25" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="6" y1="31" x2="20" y2="31" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
       {/* TXT badge */}
       <rect x="0" y="36" width="46" height="20" rx="3" fill="var(--yellow)" />
       <text x="23" y="51" fontFamily="monospace" fontSize="12" fontWeight="800" fill="var(--text-on-yellow)" textAnchor="middle">TXT</text>

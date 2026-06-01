@@ -9,7 +9,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "13px 18px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>{item.frontmatter.title}</div>
-          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--yellow)", marginTop: 3 }}>{item.frontmatter.company}</div>
+          <div style={{ fontSize: 14, fontFamily: "var(--font-geist-mono)", color: "var(--blue)", marginTop: 3 }}>{item.frontmatter.company}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
           <span style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
@@ -25,7 +25,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
       <ul style={{ margin: 0, padding: "14px 18px 16px", listStyle: "none" }}>
         {bullets.map((b, i) => (
           <li key={i} style={{ display: "flex", gap: 10, fontSize: 15, color: "var(--text)", lineHeight: 1.7, marginBottom: i < bullets.length - 1 ? 8 : 0 }}>
-            <span style={{ color: "var(--text-muted)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 2 }}>·</span>
+            <span style={{ color: "var(--text-secondary)", flexShrink: 0, fontFamily: "var(--font-geist-mono)", marginTop: 2 }}>·</span>
             {b}
           </li>
         ))}
