@@ -159,15 +159,19 @@ export default function Desktop({ experience, projects, research }: Props) {
     }));
   }, [itemWins]);
 
-  // ── Terminal callback — position about.txt to the right of the terminal ──
+  // ── Terminal callback — position about.txt just right of terminal center ──
   const handleAboutOpen = useCallback(() => {
-    // Terminal is centered: left edge = 50vw - terminalWidth/2
-    // Place about.txt 20px to its right
     const terminalWidth = WIN_WIDTHS.terminal;
-    const gap = 20;
+    const aboutWidth = WIN_WIDTHS.about;
+    const gap = 24;
+    // terminal right edge = 50vw + terminalWidth/2
+    // clamp so about doesn't go off-screen right
     const x = typeof window !== "undefined"
-      ? Math.round(window.innerWidth / 2 + terminalWidth / 2 + gap)
-      : 660;
+      ? Math.min(
+          Math.round(window.innerWidth / 2 + terminalWidth / 2 + gap),
+          window.innerWidth - aboutWidth - 16
+        )
+      : 640;
     setWindows((prev) => ({
       ...prev,
       about: { ...prev.about, open: true, x, y: INITIAL.about.y, z: ++zCounter.current },
@@ -306,16 +310,16 @@ export default function Desktop({ experience, projects, research }: Props) {
           );
         })}
 
-        {/* ── Desktop icon grid ───────────────────────────────────────── */}
+        {/* ── Desktop icon grid (LEFT side) ──────────────────────────── */}
         <div
           style={{
             position: "absolute",
             top: 16,
-            right: 16,
-            width: 220,
+            left: 16,
+            width: 240,
             display: "flex",
             flexDirection: "column",
-            gap: 24,
+            gap: 28,
             zIndex: 1,
             pointerEvents: "none",
           }}
@@ -325,18 +329,18 @@ export default function Desktop({ experience, projects, research }: Props) {
               {/* Group label */}
               <div style={{
                 fontFamily: "var(--font-geist-mono)",
-                fontSize: 10,
+                fontSize: 13,
                 color: "var(--yellow)",
                 textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                marginBottom: 8,
-                paddingBottom: 4,
+                letterSpacing: "0.1em",
+                marginBottom: 10,
+                paddingBottom: 5,
                 borderBottom: "1px solid var(--border)",
               }}>
                 {group.label}
               </div>
               {/* Icon grid */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                 {group.icons.map((icon) => (
                   <DesktopIcon
                     key={icon.slug}
@@ -376,25 +380,25 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 5,
-        padding: "6px 5px 5px",
+        gap: 6,
+        padding: "8px 6px 7px",
         background: hovered ? "rgba(249,189,43,0.1)" : "transparent",
         border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
         borderRadius: 6,
         cursor: "pointer",
-        width: 68,
+        width: 82,
         transition: "background 0.12s, border-color 0.12s",
       }}
     >
       <BigTxtFileIcon />
       <span style={{
         fontFamily: "var(--font-geist-mono)",
-        fontSize: 10,
+        fontSize: 13,
         color: "var(--text)",
         textAlign: "center",
-        lineHeight: 1.3,
+        lineHeight: 1.35,
         wordBreak: "break-all",
-        maxWidth: 60,
+        maxWidth: 76,
       }}>
         {filename}
       </span>
@@ -404,19 +408,19 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
 
 function BigTxtFileIcon() {
   return (
-    <svg width="36" height="44" viewBox="0 0 36 44" fill="none" aria-hidden="true">
+    <svg width="46" height="56" viewBox="0 0 46 56" fill="none" aria-hidden="true">
       {/* Page body */}
-      <rect x="1" y="1" width="26" height="34" rx="2" fill="var(--bg-window)" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
+      <rect x="1" y="1" width="33" height="43" rx="2" fill="var(--bg-window)" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
       {/* Dog-ear fold */}
-      <path d="M19 1 L27 9" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
-      <path d="M19 1 L19 9 L27 9" fill="rgba(249,189,43,0.12)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
+      <path d="M24 1 L34 11" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
+      <path d="M24 1 L24 11 L34 11" fill="rgba(249,189,43,0.15)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
       {/* Text lines */}
-      <line x1="5" y1="15" x2="22" y2="15" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
-      <line x1="5" y1="20" x2="22" y2="20" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
-      <line x1="5" y1="25" x2="16" y2="25" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
+      <line x1="6" y1="19" x2="28" y2="19" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="6" y1="25" x2="28" y2="25" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="6" y1="31" x2="20" y2="31" stroke="var(--text-muted)" strokeOpacity="0.8" strokeWidth="1.5" />
       {/* TXT badge */}
-      <rect x="0" y="28" width="36" height="16" rx="3" fill="var(--yellow)" />
-      <text x="18" y="40" fontFamily="monospace" fontSize="10" fontWeight="700" fill="var(--text-on-yellow)" textAnchor="middle">TXT</text>
+      <rect x="0" y="36" width="46" height="20" rx="3" fill="var(--yellow)" />
+      <text x="23" y="51" fontFamily="monospace" fontSize="12" fontWeight="800" fill="var(--text-on-yellow)" textAnchor="middle">TXT</text>
     </svg>
   );
 }
