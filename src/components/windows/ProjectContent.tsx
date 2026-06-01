@@ -3,7 +3,7 @@ import { getYouTubeEmbedUrl } from "@/lib/youtube";
 
 const TYPE_COLOR: Record<string, string> = {
   Startup: "var(--red)",
-  "Personal Project": "var(--text-secondary)",
+  "Personal Project": "var(--blue)",
 };
 
 export default function ProjectContent({ item }: { item: ContentItem<ProjectFrontmatter> }) {
@@ -11,24 +11,24 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
 
   return (
     <div className="txt-window">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "14px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "16px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
-          <div className="type-subheading" style={{ fontSize: "var(--font-lg)" }}>{item.frontmatter.title}</div>
-          <div className="type-caption" style={{ color: TYPE_COLOR[item.frontmatter.type] ?? "var(--text-secondary)", textTransform: "uppercase", marginTop: 4, fontWeight: 600 }}>
+          <div className="type-subheading">{item.frontmatter.title}</div>
+          <div className="type-caption" style={{ color: TYPE_COLOR[item.frontmatter.type] ?? "var(--text)", textTransform: "uppercase", marginTop: 4, fontWeight: 600 }}>
             {item.frontmatter.type}
           </div>
         </div>
-        <span className="type-body-mono" style={{ fontSize: "var(--font-sm)", color: "var(--text-secondary)", whiteSpace: "nowrap" }}>
+        <span className="type-label" style={{ color: "var(--text)", whiteSpace: "nowrap" }}>
           {item.frontmatter.period}
         </span>
       </div>
 
-      <p className="type-body" style={{ margin: 0, padding: "18px 20px" }}>
+      <p className="type-body" style={{ margin: 0, padding: "16px 20px" }}>
         {item.content}
       </p>
 
       {embedUrl && (
-        <div style={{ padding: "0 20px 18px" }}>
+        <div style={{ padding: "0 20px 16px" }}>
           <div style={{ position: "relative", aspectRatio: "16 / 9", border: "2px solid var(--border)", boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.7)", background: "#000" }}>
             <iframe
               src={embedUrl}

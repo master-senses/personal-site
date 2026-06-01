@@ -5,10 +5,10 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
 
   return (
     <div className="txt-window">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "14px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "16px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "6px 14px" }}>
-            <span className="type-subheading" style={{ fontSize: "var(--font-lg)" }}>{item.frontmatter.title}</span>
+            <span className="type-subheading">{item.frontmatter.title}</span>
             {item.frontmatter.current && (
               <span className="type-caption" style={{ color: "var(--yellow)", background: "var(--yellow-dim)", border: "1px solid var(--yellow-border)", borderRadius: 3, padding: "3px 9px", fontWeight: 700, flexShrink: 0 }}>
                 current
@@ -19,15 +19,15 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
             {item.frontmatter.company}
           </div>
         </div>
-        <span className="type-body-mono" style={{ fontSize: "var(--font-sm)", color: "var(--text-secondary)", whiteSpace: "nowrap" }}>
+        <span className="type-label" style={{ color: "var(--text)", whiteSpace: "nowrap" }}>
           {item.frontmatter.period}
         </span>
       </div>
 
-      <ul style={{ margin: 0, padding: "16px 20px 18px", listStyle: "none" }}>
+      <ul style={{ margin: 0, padding: "16px 20px", listStyle: "none" }}>
         {bullets.map((b, i) => (
           <li key={i} className="type-body" style={{ display: "flex", gap: 10, marginBottom: i < bullets.length - 1 ? 10 : 0 }}>
-            <span className="type-body-mono" style={{ color: "var(--text-secondary)", flexShrink: 0, marginTop: 2 }}>·</span>
+            <span style={{ color: "var(--yellow)", flexShrink: 0, marginTop: 2, fontWeight: 700 }}>·</span>
             <span style={{ minWidth: 0 }}>{b}</span>
           </li>
         ))}

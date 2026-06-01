@@ -28,24 +28,37 @@
   --blue-dim: rgba(74, 158, 255, 0.12);
   --blue-border: rgba(74, 158, 255, 0.45);
 
-  /* ── Text hierarchy (semantic tokens, WCAG AA on dark surfaces) ───── */
-  --text: #FAFAF8;             /* primary — high contrast body */
-  --text-secondary: #E4DFD8;   /* meta, dates, punctuation */
+  /* ── Text (Figma: type style ≠ color; dark/negative application) ──────── */
+  --text: #FAFAF8;             /* primary — content, headings, values */
+  --text-dim: #B8B4AE;         /* chrome only — separators, breadcrumbs, timestamps (not content) */
+  --text-secondary: #FAFAF8; /* legacy alias → --text */
+  --text-muted: var(--text-dim);
+  --text-faint: var(--text-dim);
   --text-on-yellow: #131313;
   --text-on-blue: #131313;
 
-  /* ── Typography scale (base 17px, ~1.25 modular) ─────────────────── */
-  --font-xs: 13px;    /* captions, footer, uppercase labels */
-  --font-sm: 15px;    /* window titles, icon labels, meta */
-  --font-base: 17px;  /* body default */
-  --font-md: 19px;    /* terminal, emphasized body */
-  --font-lg: 22px;    /* window headings */
+  /* ── Typography scale (~1.3 content ratio: 13 / 17 / 21) ─────────────── */
+  --font-xs: 13px;    /* content labels, meta, dates, captions */
+  --font-sm: 15px;    /* chrome only — window titles, icon labels, nav CTA */
+  --font-base: 17px;  /* body */
+  --font-md: 19px;    /* terminal */
+  --font-lg: 21px;    /* content headings */
   --font-xl: 26px;    /* hero (reserved) */
 
-  --leading-tight: 1.15;   /* headings */
+  --leading-tight: 1.15;   /* display headings */
+  --leading-subheading: 1.25; /* window headings (Figma: ~110–130% at 22px) */
   --leading-snug: 1.35;    /* labels, icon filenames */
   --leading-normal: 1.5;   /* UI chrome */
-  --leading-relaxed: 1.7;  /* body, bullets */
+  --leading-relaxed: 1.7;  /* body, bullets — WCAG ≥1.5 on dark */
+
+  /* ── Spacing (8pt grid) ─────────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
 
   --tracking-label: 0.06em;  /* small caps / folder labels */
   --tracking-caption: 0.08em;
@@ -81,6 +94,7 @@
   --color-blue-dim: var(--blue-dim);
   --color-text: var(--text);
   --color-text-secondary: var(--text-secondary);
+  --color-text-dim: var(--text-dim);
   --color-text-on-yellow: var(--text-on-yellow);
   --color-red: var(--red);
   --color-orange: var(--orange);
@@ -230,17 +244,22 @@ body {
   font-family: var(--font-geist-mono), monospace;
   text-transform: uppercase;
   letter-spacing: var(--tracking-caption);
-  color: var(--text-secondary);
+  color: var(--text);
   line-height: var(--leading-snug);
 }
 
-/* ── Semantic type styles (Figma text styles) ─────────────────────── */
+/* ── Semantic type styles (Figma: size/weight in style, color applied separately) ─ */
 
 .type-caption {
   font-size: var(--font-xs);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-caption);
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.type-caption-chrome {
+  color: var(--text-dim);
 }
 
 .type-label {
@@ -267,7 +286,7 @@ body {
 
 .type-subheading {
   font-size: var(--font-lg);
-  line-height: var(--leading-tight);
+  line-height: var(--leading-subheading);
   font-weight: 700;
   color: var(--text);
 }
@@ -279,35 +298,59 @@ body {
   font-weight: 500;
 }
 
-/* .txt windows — sans body, mono labels (readable + OS file feel) */
+/* .txt windows — unified sans; Figma negative application (dark bg) */
 .txt-window {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 400;
-}
-
-.txt-window .type-body,
-.txt-window .type-subheading {
-  font-family: inherit;
+  font-weight: 500;
+  font-feature-settings: "kern" 1, "liga" 1;
+  letter-spacing: 0.01em;
+  color: var(--text);
 }
 
 .txt-window .type-label,
 .txt-window .type-caption,
+.txt-window .type-body,
 .txt-window .type-body-mono,
+.txt-window .type-subheading,
 .txt-window .tag {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: inherit;
+}
+
+.txt-window .type-label {
+  /* Match body size for key/value parity on about.txt */
+  font-size: var(--font-base);
+  font-weight: 600;
+  line-height: var(--leading-normal);
+  letter-spacing: 0.01em;
+}
+
+.txt-window .type-caption {
+  font-size: var(--font-xs);
+}
+
+.txt-window .type-body,
+.txt-window .type-body-mono {
   font-weight: 500;
 }
 
 .txt-window .type-subheading {
   font-weight: 700;
+  line-height: var(--leading-subheading);
   letter-spacing: -0.02em;
 }
 
-/* skills.json — full monospace */
+.txt-window .tag {
+  font-size: var(--font-xs);
+  font-weight: 500;
+}
+
+/* skills.json — full monospace, high-contrast on dark */
 .json-window {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-weight: 500;
   font-variant-ligatures: none;
+  letter-spacing: 0.02em;
+  color: var(--text);
 }
 
 .json-window .type-body,

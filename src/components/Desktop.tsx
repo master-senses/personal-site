@@ -167,8 +167,6 @@ export default function Desktop({ experience, projects, research }: Props) {
     const terminalWidth = WIN_WIDTHS.terminal;
     const aboutWidth = WIN_WIDTHS.about;
     const gap = 24;
-    // terminal right edge = 50vw + terminalWidth/2
-    // clamp so about doesn't go off-screen right
     const x = typeof window !== "undefined"
       ? Math.min(
           Math.round(window.innerWidth / 2 + terminalWidth / 2 + gap),
@@ -177,7 +175,7 @@ export default function Desktop({ experience, projects, research }: Props) {
       : 640;
     setWindows((prev) => ({
       ...prev,
-      about: { ...prev.about, open: true, x, y: INITIAL.about.y, z: ++zCounter.current },
+      about: { ...prev.about, open: true, x, y: INITIAL.terminal.y, z: ++zCounter.current },
     }));
   }, []);
 
@@ -218,9 +216,9 @@ export default function Desktop({ experience, projects, research }: Props) {
           {/* Logo */}
           <button
             onClick={() => openFixed("terminal")}
-            style={{ display: "flex", alignItems: "center", gap: 9, padding: "0 18px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
+            style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
           >
-            <span style={{ width: 22, height: 22, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: 9, fontWeight: 900, flexShrink: 0 }}>HK</span>
+            <span style={{ width: 22, height: 22, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: 11, fontWeight: 900, flexShrink: 0, letterSpacing: 0 }}>HK</span>
             <span>hrishikesh</span>
           </button>
 
@@ -245,7 +243,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://linkedin.com/in/hrishikeshkalyanaraman" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <LinkedinIcon />
             </a>
-            <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 18px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700, textDecoration: "none" }}>
+            <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 16px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700, textDecoration: "none" }}>
               Get in touch
             </a>
           </div>
@@ -255,7 +253,7 @@ export default function Desktop({ experience, projects, research }: Props) {
         <div style={{ height: 26, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--yellow)" }}>●</span>
           <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>personal-site</span>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--text-secondary)" }}>/</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--text-dim)" }}>/</span>
           <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>main</span>
           <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
             <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--green)", fontWeight: 600 }}>● available for work</span>
@@ -272,7 +270,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
 
-        <DraggableWindow id="about" title={WIN_TITLES.about} initialX={INITIAL.about.x} initialY={INITIAL.about.y} width={WIN_WIDTHS.about} isOpen={windows.about.open} zIndex={windows.about.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="about" title={WIN_TITLES.about} initialX={windows.about.x} initialY={windows.about.y} width={WIN_WIDTHS.about} isOpen={windows.about.open} zIndex={windows.about.z} onFocus={focus} onClose={closeWin}>
           <AboutWindow />
         </DraggableWindow>
 
@@ -383,7 +381,7 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         flexDirection: "column",
         alignItems: "center",
         gap: 8,
-        padding: "10px 8px 9px",
+        padding: "8px 8px",
         background: hovered ? "rgba(249,189,43,0.1)" : "transparent",
         border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
         borderRadius: 6,
@@ -417,9 +415,9 @@ function BigTxtFileIcon() {
       <rect x="1" y="1" width="37" height="49" rx="2" fill="var(--bg-window)" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
       <path d="M27 1 L39 13" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
       <path d="M27 1 L27 13 L39 13" fill="rgba(249,189,43,0.15)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
-      <line x1="7" y1="22" x2="32" y2="22" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
-      <line x1="7" y1="28" x2="32" y2="28" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
-      <line x1="7" y1="34" x2="23" y2="34" stroke="var(--text-secondary)" strokeOpacity="0.8" strokeWidth="1.5" />
+      <line x1="7" y1="22" x2="32" y2="22" stroke="var(--text-dim)" strokeWidth="1.5" />
+      <line x1="7" y1="28" x2="32" y2="28" stroke="var(--text-dim)" strokeWidth="1.5" />
+      <line x1="7" y1="34" x2="23" y2="34" stroke="var(--text-dim)" strokeWidth="1.5" />
       <rect x="0" y="42" width="52" height="22" rx="3" fill="var(--yellow)" />
       <text x="26" y="58" fontFamily="monospace" fontSize="13" fontWeight="800" fill="var(--text-on-yellow)" textAnchor="middle">TXT</text>
     </svg>

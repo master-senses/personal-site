@@ -122,7 +122,7 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
   }, [lines, typing]);
 
   return (
-    <div className="type-terminal" style={{ padding: "20px 24px", minHeight: 240, maxHeight: "60vh", overflowY: "auto" }}>
+    <div className="type-terminal" style={{ padding: "24px", minHeight: 240, maxHeight: "60vh", overflowY: "auto" }}>
       {lines.map((line, i) => (
         <div key={i} style={{ display: "flex", gap: 10 }}>
           {line.kind === "command" ? (

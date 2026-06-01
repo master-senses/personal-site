@@ -9,27 +9,27 @@ const GROUPS = [
 
 export default function SkillsWindow() {
   return (
-    <div className="json-window type-body-mono" style={{ padding: "22px 26px" }}>
-      <div style={{ color: "var(--text-secondary)", marginBottom: 8 }}>{"{"}</div>
+    <div className="json-window type-body-mono" style={{ padding: "24px" }}>
+      <div style={{ marginBottom: 8 }}>{"{"}</div>
       <div style={{ paddingLeft: 20 }}>
         {GROUPS.map((g, gi) => (
           <div key={g.label} style={{ display: "flex", flexWrap: "wrap", gap: 5, alignItems: "baseline", marginBottom: gi < GROUPS.length - 1 ? 10 : 0 }}>
             <span className="type-label" style={{ color: "var(--yellow)", fontSize: "var(--font-base)" }}>&quot;{g.label}&quot;</span>
-            <span style={{ color: "var(--text-secondary)" }}>: [</span>
+            <span>: [</span>
             {g.skills.map((s, si) => (
               <span key={s}>
-                <span style={{ color: "var(--text)", fontWeight: 500 }}>&quot;{s}&quot;</span>
-                {si < g.skills.length - 1 && <span style={{ color: "var(--text-secondary)" }}>, </span>}
+                <span style={{ fontWeight: 500 }}>&quot;{s}&quot;</span>
+                {si < g.skills.length - 1 && <span>, </span>}
               </span>
             ))}
-            <span style={{ color: "var(--text-secondary)" }}>]</span>
-            {gi < GROUPS.length - 1 && <span style={{ color: "var(--text-secondary)" }}>,</span>}
+            <span>]</span>
+            {gi < GROUPS.length - 1 && <span>,</span>}
           </div>
         ))}
       </div>
-      <div style={{ color: "var(--text-secondary)", marginTop: 8 }}>{"}"}</div>
+      <div style={{ marginTop: 8 }}>{"}"}</div>
 
-      <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid var(--border)" }}>
+      <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
         <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 10, fontWeight: 600 }}>
           education
         </div>
