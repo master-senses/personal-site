@@ -124,12 +124,12 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
   return (
     <div
       style={{
-        padding: "14px 18px",
+        padding: "18px 22px",
         fontFamily: "var(--font-geist-mono), monospace",
-        fontSize: 13,
-        lineHeight: 1.65,
-        minHeight: 200,
-        maxHeight: "55vh",
+        fontSize: 16,
+        lineHeight: 1.7,
+        minHeight: 220,
+        maxHeight: "58vh",
         overflowY: "auto",
       }}
     >
@@ -143,7 +143,7 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
           ) : (
             <>
               <span style={{ width: 9, flexShrink: 0 }} />
-              <span style={{ color: line.green ? "var(--green)" : "var(--text-muted)" }}>
+              <span style={{ color: line.green ? "var(--green)" : "var(--text)" }}>
                 {line.text}
               </span>
             </>

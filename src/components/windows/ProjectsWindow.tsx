@@ -22,7 +22,7 @@ export default function ProjectsWindow({ projects }: Props) {
         <div
           key={item.slug}
           style={{
-            padding: "14px 16px",
+            padding: "16px 18px",
             borderRight: (i + 1) % 3 !== 0 ? "1px solid var(--border)" : "none",
             borderBottom: i < projects.length - Math.ceil(projects.length / 3)
               ? "1px solid var(--border)"
@@ -34,12 +34,12 @@ export default function ProjectsWindow({ projects }: Props) {
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div>
-              <div style={{ fontWeight: 600, fontSize: 13, color: "var(--text)" }}>
+              <div style={{ fontWeight: 600, fontSize: 15, color: "var(--text)" }}>
                 {item.frontmatter.title}
               </div>
               <div
                 style={{
-                  fontSize: 10,
+                  fontSize: 11,
                   fontFamily: "var(--font-geist-mono)",
                   color: TYPE_COLOR[item.frontmatter.type] ?? "var(--text-faint)",
                   textTransform: "uppercase",
@@ -73,7 +73,7 @@ export default function ProjectsWindow({ projects }: Props) {
             )}
           </div>
 
-          <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0, flex: 1 }}>
+          <p style={{ fontSize: 14, color: "var(--text)", lineHeight: 1.7, margin: 0, flex: 1 }}>
             {item.content}
           </p>
 
@@ -85,7 +85,7 @@ export default function ProjectsWindow({ projects }: Props) {
 
           <div
             style={{
-              fontSize: 10,
+              fontSize: 12,
               fontFamily: "var(--font-geist-mono)",
               color: "var(--text-faint)",
             }}

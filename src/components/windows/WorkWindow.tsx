@@ -33,14 +33,14 @@ export default function WorkWindow({ experience }: Props) {
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: 12,
-                padding: "10px 16px",
+                padding: "12px 18px",
                 background: "var(--titlebar)",
                 borderBottom: "1px solid var(--border)",
               }}
             >
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text)" }}>
+                  <span style={{ fontWeight: 700, fontSize: 15, color: "var(--text)" }}>
                     {item.frontmatter.title}
                   </span>
                   {item.frontmatter.current && (
@@ -63,10 +63,10 @@ export default function WorkWindow({ experience }: Props) {
                 </div>
                 <div
                   style={{
-                    fontSize: 11,
+                    fontSize: 13,
                     fontFamily: "var(--font-geist-mono)",
                     color: "var(--yellow)",
-                    marginTop: 2,
+                    marginTop: 3,
                   }}
                 >
                   {item.frontmatter.company}
@@ -74,10 +74,10 @@ export default function WorkWindow({ experience }: Props) {
               </div>
               <span
                 style={{
-                  fontSize: 10,
-                  fontFamily: "var(--font-geist-mono)",
-                  color: "var(--text-faint)",
-                  whiteSpace: "nowrap",
+                  fontSize: 12,
+                    fontFamily: "var(--font-geist-mono)",
+                    color: "var(--text-faint)",
+                    whiteSpace: "nowrap",
                 }}
               >
                 {item.frontmatter.period}
@@ -85,21 +85,21 @@ export default function WorkWindow({ experience }: Props) {
             </div>
 
             {/* Bullets */}
-            <ul style={{ margin: 0, padding: "10px 16px 12px", listStyle: "none" }}>
+            <ul style={{ margin: 0, padding: "12px 18px 14px", listStyle: "none" }}>
               {bullets.map((b, bi) => (
                 <li
                   key={bi}
                   style={{
                     display: "flex",
                     gap: 10,
-                    fontSize: 12,
-                    color: "var(--text-muted)",
-                    lineHeight: 1.6,
-                    marginBottom: bi < bullets.length - 1 ? 4 : 0,
+                    fontSize: 14,
+                    color: "var(--text)",
+                    lineHeight: 1.7,
+                    marginBottom: bi < bullets.length - 1 ? 6 : 0,
                   }}
                 >
-                  <span style={{ color: "var(--yellow)", flexShrink: 0, fontFamily: "var(--font-geist-mono)" }}>
-                    →
+                  <span style={{ color: "var(--text-muted)", flexShrink: 0, fontFamily: "var(--font-geist-mono)" }}>
+                    ·
                   </span>
                   {b}
                 </li>
@@ -111,8 +111,8 @@ export default function WorkWindow({ experience }: Props) {
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 5,
-                padding: "8px 16px 12px",
+                gap: 6,
+                padding: "10px 18px 14px",
                 borderTop: "1px solid var(--border-subtle, var(--border))",
               }}
             >

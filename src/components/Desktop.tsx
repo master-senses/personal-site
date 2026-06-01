@@ -20,21 +20,21 @@ interface WinConfig {
 }
 
 const INITIAL: Record<WinId, WinConfig> = {
-  terminal:  { open: true,  x: 36,  y: 60,  z: 10 },
-  about:     { open: false, x: 520, y: 60,  z: 0  },
-  work:      { open: false, x: 80,  y: 90,  z: 0  },
-  projects:  { open: false, x: 100, y: 110, z: 0  },
-  research:  { open: false, x: 120, y: 130, z: 0  },
-  skills:    { open: false, x: 140, y: 150, z: 0  },
+  terminal:  { open: true,  x: 0,   y: 50,  z: 10 },
+  about:     { open: false, x: 660, y: 50,  z: 0  },
+  work:      { open: false, x: 60,  y: 80,  z: 0  },
+  projects:  { open: false, x: 80,  y: 100, z: 0  },
+  research:  { open: false, x: 100, y: 120, z: 0  },
+  skills:    { open: false, x: 120, y: 140, z: 0  },
 };
 
 const WIN_WIDTHS: Record<WinId, number> = {
-  terminal: 460,
-  about:    380,
-  work:     720,
-  projects: 780,
-  research: 700,
-  skills:   620,
+  terminal: 580,
+  about:    480,
+  work:     880,
+  projects: 980,
+  research: 860,
+  skills:   760,
 };
 
 const WIN_TITLES: Record<WinId, string> = {
@@ -115,7 +115,7 @@ export default function Desktop({ experience, projects, research }: Props) {
               borderRight: "1px solid var(--border)",
               cursor: "pointer",
               fontFamily: "var(--font-geist-mono)",
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: 700,
               color: "var(--yellow)",
               letterSpacing: "-0.02em",
@@ -163,8 +163,8 @@ export default function Desktop({ experience, projects, research }: Props) {
                   borderRight: "1px solid var(--border)",
                   borderBottom: windows[item.id].open ? "2px solid var(--yellow)" : "2px solid transparent",
                   cursor: "pointer",
-                  fontSize: 13,
-                  color: windows[item.id].open ? "var(--yellow)" : "var(--text-muted)",
+                  fontSize: 14,
+                  color: windows[item.id].open ? "var(--yellow)" : "var(--text)",
                   fontFamily: "var(--font-geist-sans)",
                   transition: "color 0.15s, background 0.15s",
                 }}
@@ -218,7 +218,7 @@ export default function Desktop({ experience, projects, research }: Props) {
                 background: "var(--yellow)",
                 color: "var(--text-on-yellow)",
                 fontFamily: "var(--font-geist-mono)",
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: 600,
                 textDecoration: "none",
               }}
@@ -243,7 +243,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           <span
             style={{
               fontFamily: "var(--font-geist-mono)",
-              fontSize: 10,
+              fontSize: 12,
               color: "var(--yellow)",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
@@ -254,7 +254,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           <span
             style={{
               fontFamily: "var(--font-geist-mono)",
-              fontSize: 10,
+              fontSize: 12,
               color: "var(--text-faint)",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
@@ -262,14 +262,14 @@ export default function Desktop({ experience, projects, research }: Props) {
           >
             personal-site
           </span>
-          <span style={{ color: "var(--text-faint)", fontFamily: "var(--font-geist-mono)", fontSize: 10 }}>/</span>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 10, color: "var(--text-faint)" }}>main</span>
+          <span style={{ color: "var(--text-faint)", fontFamily: "var(--font-geist-mono)", fontSize: 12 }}>/</span>
+          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)" }}>main</span>
 
           <div style={{ marginLeft: "auto", display: "flex", gap: 16 }}>
             <span
               style={{
                 fontFamily: "var(--font-geist-mono)",
-                fontSize: 10,
+                fontSize: 12,
                 color: "var(--green)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
@@ -280,7 +280,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <span
               style={{
                 fontFamily: "var(--font-geist-mono)",
-                fontSize: 10,
+                fontSize: 12,
                 color: "var(--text-faint)",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
@@ -306,6 +306,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           onFocus={focus as (id: string) => void}
           onClose={close}
           accentBar
+          centered
         >
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
@@ -420,15 +421,15 @@ export default function Desktop({ experience, projects, research }: Props) {
           flexShrink: 0,
         }}
       >
-        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 10, color: "var(--text-faint)" }}>
+        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)" }}>
           hrishikesh kalyanaraman · personal-site v2.0
         </span>
         <div style={{ display: "flex", gap: 16 }}>
-          <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 10, color: "var(--text-faint)", textDecoration: "none" }}>
+          <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)", textDecoration: "none" }}>
             hrishikeshkalyanaraman@gmail.com
           </a>
           <span style={{ width: 1, background: "var(--border)" }} />
-          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 10, color: "var(--text-faint)", textDecoration: "none" }}>
+          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text-faint)", textDecoration: "none" }}>
             github/master-senses
           </a>
         </div>

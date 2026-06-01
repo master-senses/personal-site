@@ -13,6 +13,7 @@ export interface DraggableWindowProps {
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
   accentBar?: boolean;
+  centered?: boolean;
   titleRight?: React.ReactNode;
   children: React.ReactNode;
 }
@@ -28,10 +29,12 @@ export default function DraggableWindow({
   onFocus,
   onClose,
   accentBar,
+  centered = false,
   titleRight,
   children,
 }: DraggableWindowProps) {
   const [pos, setPos] = useState({ x: initialX, y: initialY });
+  const [hasMoved, setHasMoved] = useState(false);
   const dragState = useRef<{
     startMouseX: number;
     startMouseY: number;
@@ -44,6 +47,7 @@ export default function DraggableWindow({
   useEffect(() => {
     if (!prevOpen.current && isOpen) {
       setPos({ x: initialX, y: initialY });
+      setHasMoved(false);
     }
     prevOpen.current = isOpen;
   }, [isOpen, initialX, initialY]);
@@ -55,6 +59,7 @@ export default function DraggableWindow({
       if ((e.target as HTMLElement).tagName === "BUTTON") return;
 
       onFocus(id);
+      setHasMoved(true);
       dragState.current = {
         startMouseX: e.clientX,
         startMouseY: e.clientY,
@@ -88,12 +93,15 @@ export default function DraggableWindow({
 
   if (!isOpen) return null;
 
+  const useCssCenter = centered && !hasMoved;
+
   return (
     <div
       style={{
         position: "absolute",
-        left: pos.x,
+        left: useCssCenter ? "50%" : pos.x,
         top: pos.y,
+        transform: useCssCenter ? "translateX(-50%)" : undefined,
         width,
         zIndex,
         borderRadius: 6,
@@ -124,7 +132,7 @@ export default function DraggableWindow({
         style={{
           background: "var(--titlebar)",
           borderBottom: "2px solid var(--border)",
-          height: 36,
+          height: 40,
           display: "flex",
           alignItems: "center",
           gap: 8,
@@ -159,10 +167,10 @@ export default function DraggableWindow({
           style={{
             flex: 1,
             textAlign: "center",
-            fontSize: 11,
+            fontSize: 13,
             fontFamily: "var(--font-geist-mono), monospace",
             color: "var(--text-muted)",
-            letterSpacing: "0.02em",
+            letterSpacing: "0.03em",
           }}
         >
           {title}
