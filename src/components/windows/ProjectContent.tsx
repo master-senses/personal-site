@@ -1,4 +1,5 @@
 import { ContentItem, ProjectFrontmatter } from "@/lib/mdx";
+import { getYouTubeEmbedUrl } from "@/lib/youtube";
 
 const TYPE_COLOR: Record<string, string> = {
   Startup: "var(--red)",
@@ -6,6 +7,8 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 export default function ProjectContent({ item }: { item: ContentItem<ProjectFrontmatter> }) {
+  const embedUrl = item.frontmatter.url ? getYouTubeEmbedUrl(item.frontmatter.url) : null;
+
   return (
     <div>
       {/* Header */}
@@ -16,14 +19,7 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
             {item.frontmatter.type}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-          <span style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
-          {item.frontmatter.url && (
-            <a href={item.frontmatter.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--yellow)", textDecoration: "none", display: "flex", alignItems: "center", gap: 4 }}>
-              <PlayIcon /> demo
-            </a>
-          )}
-        </div>
+        <span style={{ fontSize: 13, fontFamily: "var(--font-geist-mono)", color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
       </div>
 
       {/* Description */}
@@ -31,18 +27,38 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
         {item.content}
       </p>
 
+      {embedUrl && (
+        <div style={{ padding: "0 18px 16px" }}>
+          <div
+            style={{
+              position: "relative",
+              aspectRatio: "16 / 9",
+              border: "2px solid var(--border)",
+              boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.7)",
+              background: "#000",
+            }}
+          >
+            <iframe
+              src={embedUrl}
+              title={`${item.frontmatter.title} demo`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                border: "none",
+              }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Tags */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "10px 18px 14px", borderTop: "1px solid var(--border)" }}>
         {item.frontmatter.tags.map((t) => <span key={t} className="tag">{t}</span>)}
       </div>
     </div>
-  );
-}
-
-function PlayIcon() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polygon points="5 3 19 12 5 21 5 3" />
-    </svg>
   );
 }

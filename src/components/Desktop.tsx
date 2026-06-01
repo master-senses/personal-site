@@ -159,8 +159,20 @@ export default function Desktop({ experience, projects, research }: Props) {
     }));
   }, [itemWins]);
 
-  // ── Terminal callback ────────────────────────────────────────────────────
-  const handleAboutOpen = useCallback(() => openFixed("about"), [openFixed]);
+  // ── Terminal callback — position about.txt to the right of the terminal ──
+  const handleAboutOpen = useCallback(() => {
+    // Terminal is centered: left edge = 50vw - terminalWidth/2
+    // Place about.txt 20px to its right
+    const terminalWidth = WIN_WIDTHS.terminal;
+    const gap = 20;
+    const x = typeof window !== "undefined"
+      ? Math.round(window.innerWidth / 2 + terminalWidth / 2 + gap)
+      : 660;
+    setWindows((prev) => ({
+      ...prev,
+      about: { ...prev.about, open: true, x, y: INITIAL.about.y, z: ++zCounter.current },
+    }));
+  }, []);
 
   // ── Build icon groups ────────────────────────────────────────────────────
   const iconGroups: IconGroup[] = [
@@ -288,22 +300,22 @@ export default function Desktop({ experience, projects, research }: Props) {
             if (item) content = <ResearchContent item={item} />;
           }
           return (
-            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={520} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
+            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? 680 : 520} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
               {content}
             </DraggableWindow>
           );
         })}
 
-        {/* ── Desktop icon sidebar ────────────────────────────────────── */}
+        {/* ── Desktop icon grid ───────────────────────────────────────── */}
         <div
           style={{
             position: "absolute",
-            top: 20,
-            right: 20,
-            width: 190,
+            top: 16,
+            right: 16,
+            width: 220,
             display: "flex",
             flexDirection: "column",
-            gap: 20,
+            gap: 24,
             zIndex: 1,
             pointerEvents: "none",
           }}
@@ -311,30 +323,26 @@ export default function Desktop({ experience, projects, research }: Props) {
           {iconGroups.map((group) => (
             <div key={group.label} style={{ pointerEvents: "auto" }}>
               {/* Group label */}
-              <div style={{ fontFamily: "var(--font-geist-mono)", fontSize: 11, color: "var(--yellow)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6, paddingBottom: 5, borderBottom: "1px solid var(--border)" }}>
+              <div style={{
+                fontFamily: "var(--font-geist-mono)",
+                fontSize: 10,
+                color: "var(--yellow)",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                marginBottom: 8,
+                paddingBottom: 4,
+                borderBottom: "1px solid var(--border)",
+              }}>
                 {group.label}
               </div>
-              {/* Files */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {/* Icon grid */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {group.icons.map((icon) => (
-                  <button
+                  <DesktopIcon
                     key={icon.slug}
+                    filename={icon.filename}
                     onClick={() => openItem(icon.type, icon.slug, icon.filename)}
-                    style={{ display: "flex", alignItems: "center", gap: 7, padding: "4px 6px", background: "none", border: "1px solid transparent", borderRadius: 4, cursor: "pointer", textAlign: "left", width: "100%", transition: "background 0.12s, border-color 0.12s" }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "rgba(249,189,43,0.08)";
-                      (e.currentTarget as HTMLElement).style.borderColor = "var(--yellow-border)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "none";
-                      (e.currentTarget as HTMLElement).style.borderColor = "transparent";
-                    }}
-                  >
-                    <TxtFileIcon />
-                    <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 12, color: "var(--text)", letterSpacing: "0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {icon.filename}
-                    </span>
-                  </button>
+                  />
                 ))}
               </div>
             </div>
@@ -355,16 +363,60 @@ export default function Desktop({ experience, projects, research }: Props) {
   );
 }
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
-function TxtFileIcon() {
+// ── Desktop icon (macOS-style: big doc + label below) ────────────────────────
+function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <svg width="13" height="15" viewBox="0 0 13 15" fill="none" aria-hidden="true">
-      <rect x="0.5" y="0.5" width="9" height="12" rx="1" stroke="var(--yellow)" strokeOpacity="0.7" />
-      <path d="M9.5 0.5L12.5 3.5" stroke="var(--yellow)" strokeOpacity="0.7" />
-      <path d="M9.5 0.5V3.5H12.5" fill="var(--yellow)" fillOpacity="0.15" stroke="var(--yellow)" strokeOpacity="0.7" />
-      <line x1="2" y1="6" x2="8" y2="6" stroke="var(--text-muted)" strokeOpacity="0.6" />
-      <line x1="2" y1="8" x2="8" y2="8" stroke="var(--text-muted)" strokeOpacity="0.6" />
-      <line x1="2" y1="10" x2="6" y2="10" stroke="var(--text-muted)" strokeOpacity="0.6" />
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 5,
+        padding: "6px 5px 5px",
+        background: hovered ? "rgba(249,189,43,0.1)" : "transparent",
+        border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
+        borderRadius: 6,
+        cursor: "pointer",
+        width: 68,
+        transition: "background 0.12s, border-color 0.12s",
+      }}
+    >
+      <BigTxtFileIcon />
+      <span style={{
+        fontFamily: "var(--font-geist-mono)",
+        fontSize: 10,
+        color: "var(--text)",
+        textAlign: "center",
+        lineHeight: 1.3,
+        wordBreak: "break-all",
+        maxWidth: 60,
+      }}>
+        {filename}
+      </span>
+    </button>
+  );
+}
+
+function BigTxtFileIcon() {
+  return (
+    <svg width="36" height="44" viewBox="0 0 36 44" fill="none" aria-hidden="true">
+      {/* Page body */}
+      <rect x="1" y="1" width="26" height="34" rx="2" fill="var(--bg-window)" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
+      {/* Dog-ear fold */}
+      <path d="M19 1 L27 9" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
+      <path d="M19 1 L19 9 L27 9" fill="rgba(249,189,43,0.12)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
+      {/* Text lines */}
+      <line x1="5" y1="15" x2="22" y2="15" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
+      <line x1="5" y1="20" x2="22" y2="20" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
+      <line x1="5" y1="25" x2="16" y2="25" stroke="var(--text-muted)" strokeOpacity="0.7" strokeWidth="1.5" />
+      {/* TXT badge */}
+      <rect x="0" y="28" width="36" height="16" rx="3" fill="var(--yellow)" />
+      <text x="18" y="40" fontFamily="monospace" fontSize="10" fontWeight="700" fill="var(--text-on-yellow)" textAnchor="middle">TXT</text>
     </svg>
   );
 }
