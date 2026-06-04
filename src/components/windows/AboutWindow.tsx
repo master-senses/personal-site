@@ -5,7 +5,7 @@ export default function AboutWindow() {
     { key: "company",   value: "Eli Lilly and Company" },
     { key: "education", value: "B.S. Computer Science · UIUC" },
     { key: "github",    value: "github.com/master-senses",                  href: "https://github.com/master-senses" },
-    { key: "linkedin",  value: "linkedin.com/in/hrishikeshkalyanaraman",    href: "https://linkedin.com/in/hrishikeshkalyanaraman" },
+    { key: "linkedin",  value: "linkedin.com/in/hk39",                      href: "https://www.linkedin.com/in/hk39/" },
     { key: "email",     value: "hrishikeshkalyanaraman@gmail.com",          href: "mailto:hrishikeshkalyanaraman@gmail.com" },
     { key: "status",    value: "available for work  ●",                     green: true },
   ];

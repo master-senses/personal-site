@@ -240,7 +240,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <GithubIcon />
             </a>
-            <a href="https://linkedin.com/in/hrishikeshkalyanaraman" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
+            <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <LinkedinIcon />
             </a>
             <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 16px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700, textDecoration: "none" }}>
