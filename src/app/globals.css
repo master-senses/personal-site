@@ -357,35 +357,38 @@ body {
   z-index: 2;
 }
 .window-resize-edge-e {
-  top: 40px;
+  top: 36px;
   right: 0;
-  width: 6px;
-  height: calc(100% - 46px);
+  width: 10px;
+  height: calc(100% - 36px);
   cursor: ew-resize;
+  pointer-events: auto;
 }
 .window-resize-edge-s {
   left: 0;
   bottom: 0;
-  width: calc(100% - 14px);
-  height: 6px;
+  width: calc(100% - 20px);
+  height: 10px;
   cursor: ns-resize;
+  pointer-events: auto;
 }
 .window-resize-handle {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   cursor: nwse-resize;
   z-index: 3;
+  pointer-events: auto;
 }
 .window-resize-handle::after {
   content: "";
   position: absolute;
-  right: 3px;
-  bottom: 3px;
-  width: 8px;
-  height: 8px;
+  right: 4px;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
   border-right: 2px solid var(--border-strong);
   border-bottom: 2px solid var(--border-strong);
   opacity: 0.45;

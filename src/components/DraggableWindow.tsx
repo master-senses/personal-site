@@ -2,8 +2,8 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 
-const MIN_WIDTH = 280;
-const MIN_HEIGHT = 160;
+const MIN_WIDTH = 320;
+const MIN_HEIGHT = 200;
 
 export interface DraggableWindowProps {
   id: string;
@@ -54,6 +54,8 @@ export default function DraggableWindow({
     startMouseY: number;
     startW: number;
     startH: number;
+    anchorX: number;
+    anchorY: number;
   } | null>(null);
 
   // Reset position and size when reopened
@@ -115,6 +117,17 @@ export default function DraggableWindow({
     [id, onFocus, pos.x, pos.y, centered, hasMoved, pinCenteredWindow]
   );
 
+  const getAnchoredPosition = useCallback(() => {
+    const el = windowRef.current;
+    if (!el?.offsetParent) return { x: pos.x, y: pos.y };
+    const rect = el.getBoundingClientRect();
+    const parentRect = (el.offsetParent as HTMLElement).getBoundingClientRect();
+    return {
+      x: rect.left - parentRect.left,
+      y: rect.top - parentRect.top,
+    };
+  }, [pos.x, pos.y]);
+
   const onResizeMouseDown = useCallback(
     (e: React.MouseEvent, edge: ResizeEdge) => {
       if (e.button !== 0) return;
@@ -122,8 +135,11 @@ export default function DraggableWindow({
       e.preventDefault();
       onFocus(id);
 
-      if (centered && !hasMoved) pinCenteredWindow();
-      setHasMoved(true);
+      const anchored = getAnchoredPosition();
+      if (centered && !hasMoved) {
+        setPos(anchored);
+        setHasMoved(true);
+      }
 
       const el = windowRef.current;
       const currentH = size.h ?? el?.offsetHeight ?? MIN_HEIGHT;
@@ -137,11 +153,21 @@ export default function DraggableWindow({
         startMouseY: e.clientY,
         startW: currentW,
         startH: currentH,
+        anchorX: anchored.x,
+        anchorY: anchored.y,
       };
 
       const onMove = (ev: MouseEvent) => {
         if (!resizeState.current) return;
-        const { edge: resizeEdge, startMouseX, startMouseY, startW, startH } = resizeState.current;
+        const {
+          edge: resizeEdge,
+          startMouseX,
+          startMouseY,
+          startW,
+          startH,
+          anchorX,
+          anchorY,
+        } = resizeState.current;
         const dx = ev.clientX - startMouseX;
         const dy = ev.clientY - startMouseY;
 
@@ -155,8 +181,13 @@ export default function DraggableWindow({
           newH = Math.max(MIN_HEIGHT, startH + dy);
         }
 
-        const maxW = window.innerWidth - pos.x - 8;
-        const maxH = window.innerHeight - pos.y - 8;
+        const parent = el?.offsetParent as HTMLElement | null;
+        const maxW = parent
+          ? parent.clientWidth - anchorX - 8
+          : window.innerWidth - anchorX - 8;
+        const maxH = parent
+          ? parent.clientHeight - anchorY - 8
+          : window.innerHeight - anchorY - 8;
         newW = Math.min(newW, maxW);
         newH = Math.min(newH, maxH);
 
@@ -172,7 +203,7 @@ export default function DraggableWindow({
       document.addEventListener("mousemove", onMove);
       document.addEventListener("mouseup", onUp);
     },
-    [id, onFocus, size.h, size.w, pos.x, pos.y, centered, hasMoved, pinCenteredWindow]
+    [id, onFocus, size.h, size.w, centered, hasMoved, getAnchoredPosition]
   );
 
   if (!isOpen) return null;
@@ -199,8 +230,12 @@ export default function DraggableWindow({
         boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.85)",
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
       }}
-      onMouseDown={() => onFocus(id)}
+      onMouseDown={(e) => {
+        if ((e.target as HTMLElement).closest(".window-resize-edge, .window-resize-handle")) return;
+        onFocus(id);
+      }}
     >
       {accentBar && (
         <div
