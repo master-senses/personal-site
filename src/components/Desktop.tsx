@@ -20,6 +20,7 @@ import {
 import { BigTxtFileIcon } from "./icons/BigTxtFileIcon";
 import { GithubIcon } from "./icons/GithubIcon";
 import { LinkedinIcon } from "./icons/LinkedinIcon";
+import { XIcon } from "./icons/XIcon";
 
 // ── Fixed window IDs ──────────────────────────────────────────────────────────
 type WinId = "terminal" | "about" | "work" | "projects" | "research" | "skills";
@@ -270,6 +271,9 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="menubar-icon-link">
               <LinkedinIcon />
             </a>
+            <a href="https://x.com/thereal_hk" target="_blank" rel="noopener noreferrer" aria-label="X" className="menubar-icon-link">
+              <XIcon />
+            </a>
             <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link">
               Get in touch
             </a>
@@ -361,7 +365,7 @@ export default function Desktop({ experience, projects, research }: Props) {
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
       <footer className="desktop-footer">
-        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
+        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman</span>
       </footer>
     </div>
   );
