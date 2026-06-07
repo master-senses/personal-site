@@ -215,6 +215,7 @@ export default function Desktop({ experience, projects, research }: Props) {
         <div style={{ display: "flex", alignItems: "stretch", height: 44 }}>
           {/* Logo */}
           <button
+            type="button"
             onClick={() => openFixed("terminal")}
             style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
           >
@@ -226,6 +227,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           <nav style={{ display: "flex", alignItems: "stretch", borderRight: "1px solid var(--border)" }}>
             {NAV_ITEMS.map((item) => (
               <button
+                type="button"
                 key={item.id}
                 onClick={() => openFixed(item.id)}
                 className="nav-item"
@@ -375,6 +377,7 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
 
   return (
     <button
+      type="button"
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

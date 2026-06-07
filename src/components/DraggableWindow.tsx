@@ -274,6 +274,7 @@ export default function DraggableWindow({
       >
         <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
           <button
+            type="button"
             aria-label="Close window"
             onClick={(e) => { e.stopPropagation(); onClose(id); }}
             style={{
