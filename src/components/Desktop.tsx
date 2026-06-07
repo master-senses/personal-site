@@ -106,6 +106,28 @@ function expFilename(slug: string, company: string): string {
   return `${shortCompany}.txt`;
 }
 
+function renderItemContent(
+  win: ItemWin,
+  experience: ContentItem<ExperienceFrontmatter>[],
+  projects: ContentItem<ProjectFrontmatter>[],
+  research: ContentItem<ResearchFrontmatter>[],
+) {
+  switch (win.type) {
+    case "experience": {
+      const item = experience.find((e) => e.slug === win.slug);
+      return item ? <ExperienceContent item={item} /> : null;
+    }
+    case "project": {
+      const item = projects.find((p) => p.slug === win.slug);
+      return item ? <ProjectContent item={item} /> : null;
+    }
+    case "research": {
+      const item = research.find((r) => r.slug === win.slug);
+      return item ? <ResearchContent item={item} /> : null;
+    }
+  }
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Desktop({ experience, projects, research }: Props) {
   const [windows, setWindows] = useState<Record<WinId, WinConfig>>(INITIAL);
@@ -217,7 +239,8 @@ export default function Desktop({ experience, projects, research }: Props) {
           <button
             type="button"
             onClick={() => openFixed("terminal")}
-            style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
+            className="font-mono"
+            style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
           >
             <span style={{ width: 24, height: 24, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: "var(--font-xs)", fontWeight: 900, flexShrink: 0, letterSpacing: 0 }}>HK</span>
             <span>hrishikesh</span>
@@ -254,13 +277,13 @@ export default function Desktop({ experience, projects, research }: Props) {
 
         {/* Status sub-bar */}
         <div style={{ height: 28, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--yellow)" }}>●</span>
-          <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>personal-site</span>
-          <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--text-dim)" }}>/</span>
-          <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>main</span>
+          <span className="font-mono" style={{ fontSize: "var(--font-xs)", color: "var(--yellow)" }}>●</span>
+          <span className="type-caption font-mono" style={{ color: "var(--text)" }}>personal-site</span>
+          <span className="font-mono" style={{ fontSize: "var(--font-xs)", color: "var(--text-dim)" }}>/</span>
+          <span className="type-caption font-mono" style={{ color: "var(--text)" }}>main</span>
           <div style={{ marginLeft: "auto", display: "flex", gap: 24 }}>
-            <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--green)", fontWeight: 600 }}>● available for work</span>
-            <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>Indianapolis, IN</span>
+            <span className="type-caption font-mono" style={{ color: "var(--green)", fontWeight: 600 }}>● available for work</span>
+            <span className="type-caption font-mono" style={{ color: "var(--text)" }}>Indianapolis, IN</span>
           </div>
         </div>
       </header>
@@ -296,17 +319,8 @@ export default function Desktop({ experience, projects, research }: Props) {
         {/* Dynamic item windows */}
         {Object.entries(itemWins).map(([key, win]) => {
           if (!win.open) return null;
-          let content: React.ReactNode = null;
-          if (win.type === "experience") {
-            const item = experience.find((e) => e.slug === win.slug);
-            if (item) content = <ExperienceContent item={item} />;
-          } else if (win.type === "project") {
-            const item = projects.find((p) => p.slug === win.slug);
-            if (item) content = <ProjectContent item={item} />;
-          } else if (win.type === "research") {
-            const item = research.find((r) => r.slug === win.slug);
-            if (item) content = <ResearchContent item={item} />;
-          }
+          const content = renderItemContent(win, experience, projects, research);
+          if (!content) return null;
           return (
             <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? ITEM_WIN_WIDTHS.project : ITEM_WIN_WIDTHS.default} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
               {content}
@@ -331,8 +345,7 @@ export default function Desktop({ experience, projects, research }: Props) {
           {iconGroups.map((group) => (
             <div key={group.label} style={{ pointerEvents: "auto" }}>
               {/* Group label */}
-              <div className="type-label" style={{
-                fontFamily: "var(--font-geist-mono)",
+              <div className="type-label font-mono" style={{
                 color: "var(--blue)",
                 textTransform: "uppercase",
                 letterSpacing: "var(--tracking-label)",
@@ -359,11 +372,11 @@ export default function Desktop({ experience, projects, research }: Props) {
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
       <footer style={{ background: "var(--titlebar)", borderTop: "2px solid var(--border)", height: 28, display: "flex", alignItems: "center", justifyContent: "space-between", paddingInline: 16, flexShrink: 0 }}>
-        <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
+        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption link-chrome" style={{ fontFamily: "var(--font-geist-mono)" }}>hrishikeshkalyanaraman@gmail.com</a>
+          <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption link-chrome font-mono">hrishikeshkalyanaraman@gmail.com</a>
           <span style={{ width: 1, height: 10, background: "var(--border)" }} />
-          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption link-chrome" style={{ fontFamily: "var(--font-geist-mono)" }}>github/master-senses</a>
+          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption link-chrome font-mono">github/master-senses</a>
         </div>
       </footer>
     </div>
@@ -397,8 +410,7 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
       }}
     >
       <BigTxtFileIcon />
-      <span className="type-label" style={{
-        fontFamily: "var(--font-geist-mono)",
+      <span className="type-label font-mono" style={{
         fontSize: "var(--font-sm)",
         fontWeight: 500,
         color: "var(--text)",

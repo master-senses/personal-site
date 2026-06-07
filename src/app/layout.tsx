@@ -4,13 +4,13 @@ import "./globals.css";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
   weight: ["400", "500", "600", "700"],
 });
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   weight: ["400", "700"],
 });
 
@@ -53,9 +53,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${montserrat.variable} ${spaceMono.variable}`}>
-      <body style={{ margin: 0, overflow: "hidden" }}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -14,16 +14,46 @@ interface Line {
   green?: boolean;
 }
 
-type AnyStep =
+type Step =
   | { kind: "type"; text: string; afterDelay?: number }
-  | { kind: "output"; text: string; green?: boolean; afterDelay?: number; onShow?: () => void }
+  | { kind: "output"; text: string; green?: boolean; afterDelay?: number; openAbout?: boolean }
   | { kind: "pause"; ms: number };
 
 const CHAR_MIN = 55;
 const CHAR_MAX = 130;
 
+const STEPS: Step[] = [
+  { kind: "pause", ms: 400 },
+  { kind: "type", text: "ls ~/", afterDelay: 120 },
+  {
+    kind: "output",
+    text: "about.txt  work/  projects/  research/  skills/",
+    afterDelay: 700,
+  },
+  { kind: "type", text: "whoami", afterDelay: 150 },
+  {
+    kind: "output",
+    text: "Hrishikesh Kalyanaraman",
+    afterDelay: 300,
+    openAbout: true,
+  },
+  { kind: "pause", ms: 500 },
+  { kind: "type", text: "echo $STATUS", afterDelay: 150 },
+  {
+    kind: "output",
+    text: "available for work  ●",
+    green: true,
+    afterDelay: 0,
+  },
+  { kind: "pause", ms: 400 },
+];
+
 function randDelay() {
   return CHAR_MIN + Math.random() * (CHAR_MAX - CHAR_MIN);
+}
+
+function wait(ms: number) {
+  return new Promise<void>((r) => setTimeout(r, ms));
 }
 
 export default function Terminal({ onAboutOpen }: TerminalProps) {
@@ -32,45 +62,15 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
   const [showCursor, setShowCursor] = useState(true);
   const [done, setDone] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const startedRef = useRef(false);
+  const onAboutOpenRef = useRef(onAboutOpen);
 
-  const appendLine = (line: Line) =>
-    setLines((prev) => [...prev, line]);
+  onAboutOpenRef.current = onAboutOpen;
 
   useEffect(() => {
-    if (startedRef.current) return;
-    startedRef.current = true;
-
-    const steps: AnyStep[] = [
-      { kind: "pause", ms: 400 },
-      { kind: "type", text: "ls ~/", afterDelay: 120 },
-      {
-        kind: "output",
-        text: "about.txt  work/  projects/  research/  skills/",
-        afterDelay: 700,
-      },
-      { kind: "type", text: "whoami", afterDelay: 150 },
-      {
-        kind: "output",
-        text: "Hrishikesh Kalyanaraman",
-        afterDelay: 300,
-        onShow: onAboutOpen,
-      },
-      { kind: "pause", ms: 500 },
-      { kind: "type", text: "echo $STATUS", afterDelay: 150 },
-      {
-        kind: "output",
-        text: "available for work  ●",
-        green: true,
-        afterDelay: 0,
-      },
-      { kind: "pause", ms: 400 },
-    ];
-
     let cancelled = false;
 
     async function run() {
-      for (const step of steps) {
+      for (const step of STEPS) {
         if (cancelled) return;
 
         if (step.kind === "pause") {
@@ -85,15 +85,14 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
             if (i < step.text.length) await wait(randDelay());
           }
           await wait(step.afterDelay ?? 200);
-
-          appendLine({ kind: "command", text: step.text });
+          setLines((prev) => [...prev, { kind: "command", text: step.text }]);
           setTyping("");
           continue;
         }
 
         if (step.kind === "output") {
-          step.onShow?.();
-          appendLine({ kind: "output", text: step.text, green: step.green });
+          if (step.openAbout) onAboutOpenRef.current();
+          setLines((prev) => [...prev, { kind: "output", text: step.text, green: step.green }]);
           await wait(step.afterDelay ?? 200);
         }
       }
@@ -105,7 +104,6 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -181,8 +179,4 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
       <div ref={bottomRef} />
     </div>
   );
-}
-
-function wait(ms: number) {
-  return new Promise<void>((r) => setTimeout(r, ms));
 }

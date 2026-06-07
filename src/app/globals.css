@@ -1,64 +1,29 @@
-@import "tailwindcss";
-
 :root {
-  /* tweakcn theme tokens (dark) */
-  --background: oklch(0.1649 0.0308 162.2739);
-  --foreground: oklch(0.9809 0.0260 91.6197);
-  --card: oklch(0.2283 0.0445 158.2398);
-  --card-foreground: oklch(0.9809 0.0260 91.6197);
-  --popover: oklch(0.2283 0.0445 158.2398);
-  --popover-foreground: oklch(0.9809 0.0260 91.6197);
-  --primary: oklch(0.8484 0.2275 151.1487);
-  --primary-foreground: oklch(0.1292 0.0270 165.3808);
-  --secondary: oklch(0.6489 0.2370 26.9728);
-  --secondary-foreground: oklch(1.0000 0 0);
-  --muted: oklch(0.2724 0.0467 159.1721);
-  --muted-foreground: oklch(0.8253 0.0270 91.6606);
-  --accent: oklch(0.7951 0.1631 68.6392);
-  --accent-foreground: oklch(0.1292 0.0270 165.3808);
-  --destructive: oklch(0.6280 0.2577 29.2339);
-  --destructive-foreground: oklch(1.0000 0 0);
+  --bg: oklch(0.1649 0.0308 162.2739);
+  --bg-window: oklch(0.2283 0.0445 158.2398);
+  --titlebar: oklch(0.2724 0.0467 159.1721);
   --border: oklch(0.9809 0.0260 91.6197);
-  --input: oklch(0.2642 0.0387 160.3481);
-  --ring: oklch(0.7951 0.1631 68.6392);
-  --chart-1: oklch(0.8484 0.2275 151.1487);
-  --chart-2: oklch(0.6489 0.2370 26.9728);
-  --chart-3: oklch(0.7951 0.1631 68.6392);
-  --chart-4: oklch(0.7337 0.2145 342.8759);
-  --chart-5: oklch(0.8296 0.1375 215.2952);
-  --font-sans: var(--font-geist-sans), "Montserrat", sans-serif;
-  --font-mono: var(--font-geist-mono), "Space Mono", monospace;
-  --radius: 0px;
-  --shadow-lg: 4px 4px 0px 0px hsl(45 100% 80% / 1.00), 4px 4px 6px -1px hsl(45 100% 80% / 1.00);
-  --shadow-sm: 4px 4px 0px 0px hsl(45 100% 80% / 1.00), 4px 1px 2px -1px hsl(45 100% 80% / 1.00);
-  --tracking-normal: 0.02em;
-
-  /* site tokens (mapped from tweakcn) */
-  --bg: var(--background);
-  --bg-window: var(--card);
-  --titlebar: var(--muted);
   --border-strong: var(--border);
 
-  --yellow: var(--accent);
-  --yellow-dim: color-mix(in oklch, var(--accent) 12%, transparent);
-  --yellow-border: color-mix(in oklch, var(--accent) 45%, transparent);
-  --yellow-hover: color-mix(in oklch, var(--accent) 88%, white);
+  --yellow: oklch(0.7951 0.1631 68.6392);
+  --yellow-dim: color-mix(in oklch, var(--yellow) 12%, transparent);
+  --yellow-border: color-mix(in oklch, var(--yellow) 45%, transparent);
+  --yellow-hover: color-mix(in oklch, var(--yellow) 88%, white);
 
-  --blue: var(--chart-5);
-  --blue-border: color-mix(in oklch, var(--chart-5) 45%, transparent);
+  --blue: oklch(0.8296 0.1375 215.2952);
+  --blue-border: color-mix(in oklch, var(--blue) 45%, transparent);
 
-  --text: var(--foreground);
-  --text-dim: var(--muted-foreground);
-  --text-on-yellow: var(--accent-foreground);
+  --text: oklch(0.9809 0.0260 91.6197);
+  --text-dim: oklch(0.8253 0.0270 91.6606);
+  --text-on-yellow: oklch(0.1292 0.0270 165.3808);
 
-  --red: var(--destructive);
-  --orange: var(--secondary);
-  --green: var(--primary);
+  --red: oklch(0.6280 0.2577 29.2339);
+  --orange: oklch(0.6489 0.2370 26.9728);
+  --green: oklch(0.8484 0.2275 151.1487);
 
-  --shadow-window: var(--shadow-lg);
-  --shadow-card: var(--shadow-sm);
+  --shadow-window: 4px 4px 0px 0px hsl(45 100% 80% / 1), 4px 4px 6px -1px hsl(45 100% 80% / 1);
+  --shadow-card: 4px 4px 0px 0px hsl(45 100% 80% / 1), 4px 1px 2px -1px hsl(45 100% 80% / 1);
 
-  /* layout */
   --font-xs: 13px;
   --font-sm: 15px;
   --font-base: 17px;
@@ -69,13 +34,7 @@
   --leading-normal: 1.5;
   --leading-relaxed: 1.7;
 
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-
+  --tracking-normal: 0.02em;
   --tracking-label: 0.06em;
   --tracking-caption: 0.08em;
 
@@ -96,9 +55,11 @@ html {
 }
 
 body {
+  margin: 0;
+  overflow: hidden;
   background-color: var(--bg);
   color: var(--text);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-size: var(--font-base);
   line-height: var(--leading-normal);
   font-weight: 500;
@@ -106,7 +67,7 @@ body {
   -webkit-font-smoothing: antialiased;
   background-image: radial-gradient(
     circle,
-    color-mix(in oklch, var(--foreground) 5%, transparent) 1px,
+    color-mix(in oklch, var(--text) 5%, transparent) 1px,
     transparent 1px
   );
   background-size: 24px 24px;
@@ -125,10 +86,13 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-strong);
+}
+
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
 }
 
 .tag {
@@ -137,10 +101,10 @@ body {
   border: 1px solid var(--border-strong);
   border-radius: 3px;
   font-size: var(--font-xs);
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-weight: 500;
   color: var(--text);
-  background: color-mix(in oklch, var(--foreground) 4%, transparent);
+  background: color-mix(in oklch, var(--text) 4%, transparent);
   white-space: nowrap;
   line-height: var(--leading-snug);
 }
@@ -168,7 +132,7 @@ body {
 }
 
 .type-body-mono {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: var(--font-base);
   line-height: var(--leading-relaxed);
   color: var(--text);
@@ -183,14 +147,14 @@ body {
 }
 
 .type-terminal {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: var(--font-base);
   line-height: var(--leading-relaxed);
   font-weight: 500;
 }
 
 .txt-window {
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 500;
   font-feature-settings: "kern" 1, "liga" 1;
   letter-spacing: 0.01em;
@@ -211,7 +175,7 @@ body {
 }
 
 .json-window {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-weight: 500;
   font-variant-ligatures: none;
   letter-spacing: 0.02em;
@@ -307,11 +271,11 @@ body {
 }
 .nav-item:hover { background: rgba(255, 255, 255, 0.04); }
 .nav-item[data-open="true"] {
-  background: color-mix(in oklch, var(--accent) 10%, transparent);
+  background: color-mix(in oklch, var(--yellow) 10%, transparent);
   border-bottom-color: var(--yellow);
 }
 .nav-item[data-open="true"]:hover {
-  background: color-mix(in oklch, var(--accent) 15%, transparent);
+  background: color-mix(in oklch, var(--yellow) 15%, transparent);
 }
 
 .menubar-icon-link {

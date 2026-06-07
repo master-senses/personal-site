@@ -296,7 +296,7 @@ export default function DraggableWindow({
             flex: 1,
             textAlign: "center",
             fontSize: "var(--font-sm)",
-            fontFamily: "var(--font-geist-mono), monospace",
+            fontFamily: "var(--font-mono), monospace",
             color: "var(--text)",
             letterSpacing: "0.02em",
             lineHeight: "var(--leading-snug)",
