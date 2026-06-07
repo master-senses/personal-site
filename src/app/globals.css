@@ -16,6 +16,12 @@
   --titlebar: #252525;
   --border: #383838;
   --border-strong: #4a4a4a;
+  --hairline: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.04);
+  --surface-active: rgba(249, 189, 43, 0.1);
+  --surface-active-strong: rgba(249, 189, 43, 0.15);
+  --chrome-shadow: rgba(0, 0, 0, 0.85);
+  --media-bg: #000;
 
   /* ── 10% — primary accent (yellow: energy, CTA, active states) ───── */
   --yellow: #f5c035;
@@ -173,6 +179,26 @@ body {
   user-select: none;
 }
 
+.window-titlebar-draggable {
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.window-titlebar-draggable:active {
+  cursor: grabbing;
+}
+
+.traffic-light-button {
+  padding: 0;
+  cursor: pointer;
+}
+
+.window-accent-bar {
+  height: 4px;
+  border-bottom: 2px solid var(--yellow);
+  border-radius: 4px 4px 0 0;
+}
+
 .traffic-lights {
   display: flex;
   gap: 6px;
@@ -194,6 +220,191 @@ body {
   color: var(--text);
   letter-spacing: 0.02em;
   line-height: var(--leading-snug);
+}
+
+/* ── App shell / desktop chrome ─────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.menubar {
+  background: var(--titlebar);
+  border-bottom: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.menubar-row,
+.menubar-actions,
+.status-bar,
+.status-cluster,
+.footer-bar,
+.footer-links {
+  display: flex;
+  align-items: center;
+}
+
+.menubar-row {
+  align-items: stretch;
+  height: 44px;
+}
+
+.brand-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border: none;
+  border-right: 1px solid var(--border);
+  background: none;
+  color: var(--yellow);
+  cursor: pointer;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: var(--font-base);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: var(--space-1);
+  background: var(--yellow);
+  color: var(--text-on-yellow);
+  font-size: var(--font-xs);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.menubar-nav {
+  display: flex;
+  align-items: stretch;
+  border-right: 1px solid var(--border);
+}
+
+.menubar-actions {
+  align-items: stretch;
+  margin-left: auto;
+}
+
+.status-bar {
+  height: 28px;
+  gap: var(--space-2);
+  padding-inline: var(--space-4);
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.status-dot {
+  color: var(--yellow);
+  font-size: var(--font-xs);
+}
+
+.status-divider {
+  color: var(--text-dim);
+  font-size: var(--font-xs);
+}
+
+.status-cluster {
+  gap: var(--space-6);
+  margin-left: auto;
+}
+
+.desktop-surface {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.desktop-icon-groups {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 1;
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  gap: var(--space-8);
+  pointer-events: none;
+}
+
+.desktop-icon-section {
+  pointer-events: auto;
+}
+
+.desktop-icon-group-label {
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--blue-border);
+  color: var(--blue);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+}
+
+.desktop-icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-8);
+  row-gap: var(--space-8);
+}
+
+.desktop-icon-button {
+  display: flex;
+  width: var(--icon-desktop-btn);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.desktop-icon-button[data-hovered="true"] {
+  border-color: var(--yellow-border);
+  background: var(--surface-active);
+}
+
+.desktop-icon-label {
+  max-width: 100%;
+  color: var(--text);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.footer-bar {
+  justify-content: space-between;
+  height: 28px;
+  flex-shrink: 0;
+  padding-inline: var(--space-4);
+  border-top: 2px solid var(--border);
+  background: var(--titlebar);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.footer-links {
+  gap: var(--space-4);
+}
+
+.footer-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--border);
 }
 
 ::-webkit-scrollbar {
@@ -365,6 +576,22 @@ body {
   touch-action: none;
 }
 
+.window-resize-edge-n {
+  top: 0;
+  left: 28px;
+  width: calc(100% - 56px);
+  height: 14px;
+  cursor: ns-resize;
+}
+
+.window-resize-edge-s {
+  left: 28px;
+  bottom: 0;
+  width: calc(100% - 56px);
+  height: 14px;
+  cursor: ns-resize;
+}
+
 .window-resize-edge-e {
   top: 36px;
   right: 0;
@@ -373,26 +600,24 @@ body {
   cursor: ew-resize;
 }
 
-.draggable-window:has(.window-accent-bar) .window-resize-edge-e {
+.window-resize-edge-w {
+  top: 36px;
+  left: 0;
+  width: 14px;
+  height: calc(100% - 36px);
+  cursor: ew-resize;
+}
+
+.draggable-window:has(.window-accent-bar) .window-resize-edge-e,
+.draggable-window:has(.window-accent-bar) .window-resize-edge-w {
   top: 41px;
   height: calc(100% - 41px);
 }
 
-.window-resize-edge-s {
-  left: 0;
-  bottom: 0;
-  width: calc(100% - 28px);
-  height: 14px;
-  cursor: ns-resize;
-}
-
 .window-resize-handle {
   position: absolute;
-  right: 0;
-  bottom: 0;
   width: 28px;
   height: 28px;
-  cursor: nwse-resize;
   pointer-events: auto;
   touch-action: none;
 }
@@ -400,18 +625,65 @@ body {
 .window-resize-handle::after {
   content: "";
   position: absolute;
-  right: 6px;
-  bottom: 6px;
   width: 12px;
   height: 12px;
-  border-right: 2px solid var(--border-strong);
-  border-bottom: 2px solid var(--border-strong);
   opacity: 0.7;
   transition: opacity 0.12s, border-color 0.12s;
 }
 
-.window-resize-handle:hover::after,
-.window-resize-layer:hover .window-resize-handle::after {
+.window-resize-handle-se {
+  right: 0;
+  bottom: 0;
+  cursor: nwse-resize;
+}
+
+.window-resize-handle-se::after {
+  right: 6px;
+  bottom: 6px;
+  border-right: 2px solid var(--border-strong);
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.window-resize-handle-sw {
+  left: 0;
+  bottom: 0;
+  cursor: nesw-resize;
+}
+
+.window-resize-handle-sw::after {
+  left: 6px;
+  bottom: 6px;
+  border-left: 2px solid var(--border-strong);
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.window-resize-handle-ne {
+  right: 0;
+  top: 0;
+  cursor: nesw-resize;
+}
+
+.window-resize-handle-ne::after {
+  right: 6px;
+  top: 6px;
+  border-right: 2px solid var(--border-strong);
+  border-top: 2px solid var(--border-strong);
+}
+
+.window-resize-handle-nw {
+  left: 0;
+  top: 0;
+  cursor: nwse-resize;
+}
+
+.window-resize-handle-nw::after {
+  left: 6px;
+  top: 6px;
+  border-left: 2px solid var(--border-strong);
+  border-top: 2px solid var(--border-strong);
+}
+
+.window-resize-handle:hover::after {
   opacity: 1;
   border-color: var(--yellow);
 }
@@ -433,14 +705,18 @@ body {
   border-bottom: 2px solid transparent;
   cursor: pointer;
   background: none;
+  color: var(--text);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--font-base);
+  font-weight: 500;
   transition: background 0.12s, border-color 0.12s;
 }
-.nav-item:hover { background: rgba(255, 255, 255, 0.04); }
+.nav-item:hover { background: var(--surface-hover); }
 .nav-item[data-open="true"] {
-  background: rgba(249, 189, 43, 0.1);
+  background: var(--surface-active);
   border-bottom-color: var(--yellow);
 }
-.nav-item[data-open="true"]:hover { background: rgba(249, 189, 43, 0.15); }
+.nav-item[data-open="true"]:hover { background: var(--surface-active-strong); }
 
 /* ── Menubar icon links (GitHub, LinkedIn) ────────────────────────────────── */
 .menubar-icon-link {
@@ -453,7 +729,7 @@ body {
   transition: background 0.12s, color 0.12s;
 }
 .menubar-icon-link:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-hover);
   color: var(--yellow-hover);
 }
 
@@ -465,6 +741,9 @@ body {
   border-left: 2px solid var(--yellow);
   background: var(--yellow);
   color: var(--text-on-yellow);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: var(--font-sm);
+  font-weight: 700;
   text-decoration: none;
   transition: background 0.12s, border-color 0.12s;
 }
