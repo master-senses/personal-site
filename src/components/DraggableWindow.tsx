@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useLayoutEffect } from "react";
+import { useRef, useState, useCallback, useLayoutEffect, useEffect } from "react";
 
 const MIN_WIDTH = 320;
 const MIN_HEIGHT = 200;
@@ -39,6 +39,8 @@ export default function DraggableWindow({
   children,
 }: DraggableWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [iframeShield, setIframeShield] = useState(false);
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [hasMoved, setHasMoved] = useState(false);
   const [size, setSize] = useState<{ w: number; h: number | null }>({ w: width, h: null });
@@ -91,11 +93,35 @@ export default function DraggableWindow({
     return () => window.removeEventListener("resize", centerWindow);
   }, [isOpen, centered, hasMoved, size.w, centerWindow]);
 
-  const onTitleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.button !== 0) return;
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      setIframeShield(false);
+      return;
+    }
+    setIframeShield(!!contentRef.current?.querySelector("iframe"));
+  }, [isOpen, children]);
 
+  useEffect(() => {
+    if (!isOpen || !iframeShield) return;
+    const onDocPointerDown = (e: PointerEvent) => {
+      if (!windowRef.current?.contains(e.target as Node)) {
+        setIframeShield(!!contentRef.current?.querySelector("iframe"));
+      }
+    };
+    document.addEventListener("pointerdown", onDocPointerDown);
+    return () => document.removeEventListener("pointerdown", onDocPointerDown);
+  }, [isOpen, iframeShield]);
+
+  const onTitlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
       onFocus(id);
+
+      const handle = e.currentTarget as HTMLElement;
+      handle.setPointerCapture(e.pointerId);
+
       if (centered && !hasMoved) pinCenteredWindow();
       setHasMoved(true);
       dragState.current = {
@@ -105,7 +131,7 @@ export default function DraggableWindow({
         startPosY: pos.y,
       };
 
-      const onMove = (ev: MouseEvent) => {
+      const onMove = (ev: PointerEvent) => {
         if (!dragState.current) return;
         setPos({
           x: dragState.current.startPosX + (ev.clientX - dragState.current.startMouseX),
@@ -116,15 +142,17 @@ export default function DraggableWindow({
         });
       };
 
-      const onUp = () => {
+      const onUp = (ev: PointerEvent) => {
         dragState.current = null;
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
+        handle.releasePointerCapture(ev.pointerId);
+        handle.removeEventListener("pointermove", onMove);
+        handle.removeEventListener("pointerup", onUp);
+        handle.removeEventListener("pointercancel", onUp);
       };
 
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
-      e.preventDefault();
+      handle.addEventListener("pointermove", onMove);
+      handle.addEventListener("pointerup", onUp);
+      handle.addEventListener("pointercancel", onUp);
     },
     [id, onFocus, pos.x, pos.y, centered, hasMoved, pinCenteredWindow]
   );
@@ -243,6 +271,12 @@ export default function DraggableWindow({
         height: explicitHeight ? size.h! : undefined,
         zIndex,
       }}
+      onMouseDown={(e) => {
+        if ((e.target as HTMLElement).closest(".window-resize-layer, .window-resize-edge, .window-resize-handle, .window-drag-handle")) {
+          return;
+        }
+        onFocus(id);
+      }}
     >
       {accentBar && (
         <div
@@ -260,42 +294,46 @@ export default function DraggableWindow({
         data-accent={accentBar ? "true" : "false"}
         className="window-titlebar"
       >
-        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-          <button
-            type="button"
-            aria-label="Close window"
-            onClick={(e) => { e.stopPropagation(); onClose(id); }}
-            style={{
-              width: 11,
-              height: 11,
-              borderRadius: "50%",
-              background: "var(--red)",
-              border: "1px solid rgba(0,0,0,0.25)",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          />
-          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--orange)", border: "1px solid rgba(0,0,0,0.25)" }} />
-          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--green)", border: "1px solid rgba(0,0,0,0.25)" }} />
-        </div>
-
         <button
           type="button"
           className="window-drag-handle"
           aria-label={`Drag ${title}`}
-          onMouseDown={onTitleMouseDown}
+          onPointerDown={onTitlePointerDown}
         >
           {title}
         </button>
 
         {titleRight ? (
           <div style={{ flexShrink: 0 }}>{titleRight}</div>
-        ) : (
-          <div className="window-titlebar-spacer" />
-        )}
+        ) : null}
+
+        <button
+          type="button"
+          className="window-close"
+          aria-label="Close window"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose(id);
+          }}
+        >
+          ×
+        </button>
       </div>
 
-      <div style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}>{children}</div>
+      <div ref={contentRef} style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}>
+        {children}
+        {iframeShield ? (
+          <div
+            className="iframe-focus-shield"
+            aria-hidden="true"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              onFocus(id);
+              setIframeShield(false);
+            }}
+          />
+        ) : null}
+      </div>
 
       {/* Resize overlay — above scroll content */}
       <div className="window-resize-layer" aria-hidden="true">

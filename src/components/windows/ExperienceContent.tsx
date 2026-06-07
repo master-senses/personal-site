@@ -15,7 +15,7 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
               </span>
             )}
           </div>
-          <div className="type-label" style={{ color: "var(--blue)", marginTop: 4 }}>
+          <div className="type-label" style={{ color: "var(--red)", marginTop: 4 }}>
             {item.frontmatter.company}
           </div>
         </div>

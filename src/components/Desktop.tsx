@@ -20,6 +20,8 @@ import {
 import { BigTxtFileIcon } from "./icons/BigTxtFileIcon";
 import { GithubIcon } from "./icons/GithubIcon";
 import { LinkedinIcon } from "./icons/LinkedinIcon";
+import { XIcon } from "./icons/XIcon";
+import { CONTACT_MAILTO } from "@/lib/contact";
 
 // ── Fixed window IDs ──────────────────────────────────────────────────────────
 type WinId = "terminal" | "about" | "work" | "projects" | "research" | "skills";
@@ -270,7 +272,10 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="menubar-icon-link">
               <LinkedinIcon />
             </a>
-            <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link">
+            <a href="https://x.com/thereal_hk" target="_blank" rel="noopener noreferrer" aria-label="X" className="menubar-icon-link">
+              <XIcon />
+            </a>
+            <a href={CONTACT_MAILTO} className="cta-link">
               Get in touch
             </a>
           </div>
@@ -361,12 +366,7 @@ export default function Desktop({ experience, projects, research }: Props) {
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
       <footer className="desktop-footer">
-        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
-        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption link-chrome font-mono">hrishikeshkalyanaraman@gmail.com</a>
-          <span style={{ width: 1, height: 10, background: "var(--border)" }} />
-          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption link-chrome font-mono">github/master-senses</a>
-        </div>
+        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman</span>
       </footer>
     </div>
   );

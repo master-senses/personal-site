@@ -30,11 +30,11 @@ export default function SkillsWindow() {
       <div style={{ marginTop: 8 }}>{"}"}</div>
 
       <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-        <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 8, fontWeight: 600 }}>
+        <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--red)", marginBottom: 8, fontWeight: 600 }}>
           education
         </div>
         <div className="type-subheading">University of Illinois at Urbana-Champaign</div>
-        <div className="type-label" style={{ color: "var(--blue)", marginTop: 8 }}>B.S. Computer Science</div>
+        <div className="type-label" style={{ color: "var(--red)", marginTop: 8 }}>B.S. Computer Science</div>
       </div>
     </div>
   );
