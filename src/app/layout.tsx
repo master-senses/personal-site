@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
@@ -42,7 +43,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body style={{ margin: 0, overflow: "hidden" }}>{children}</body>
+      <body style={{ margin: 0, overflow: "hidden" }}>
+        {children}
+        <Script
+          src="https://tweakcn.com/live-preview.min.js"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
+      </body>
     </html>
   );
 }
