@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import Script from "next/script";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Montserrat, Space_Mono } from "next/font/google";
 import "./globals.css";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+  weight: ["400", "500", "600", "700"],
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  weight: ["400", "700"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hk39.dev"),
@@ -42,14 +52,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${spaceMono.variable}`}>
       <body style={{ margin: 0, overflow: "hidden" }}>
         {children}
-        <Script
-          src="https://tweakcn.com/live-preview.min.js"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
       </body>
     </html>
   );
