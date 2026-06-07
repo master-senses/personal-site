@@ -316,14 +316,6 @@ body {
   font-family: inherit;
 }
 
-.txt-window .type-label {
-  /* Match body size for key/value parity on about.txt */
-  font-size: var(--font-base);
-  font-weight: 600;
-  line-height: var(--leading-normal);
-  letter-spacing: 0.01em;
-}
-
 .txt-window .type-caption {
   font-size: var(--font-xs);
 }

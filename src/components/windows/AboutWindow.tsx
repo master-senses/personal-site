@@ -23,7 +23,7 @@ export default function AboutWindow() {
               {value}
             </a>
           ) : (
-            <span className="type-body" style={{ color: green ? "var(--green)" : "var(--text)", fontWeight: green ? 600 : 400, minWidth: 0, wordBreak: "break-word" }}>{value}</span>
+            <span className="type-body" style={{ color: green ? "var(--green)" : "var(--text)", fontWeight: green ? 600 : 500, minWidth: 0, wordBreak: "break-word" }}>{value}</span>
           )}
         </div>
       ))}
