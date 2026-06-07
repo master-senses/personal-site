@@ -16,7 +16,7 @@ export default function AboutWindow() {
         about.txt — plain text
       </div>
       {rows.map(({ key, value, href, green }) => (
-        <div key={key} style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: 20, padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "baseline" }}>
+        <div key={key} style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: 20, padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "baseline" }}>
           <span className="type-label" style={{ color: "var(--yellow)", textTransform: "lowercase" }}>{key}</span>
           {href ? (
             <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="type-body" style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500, minWidth: 0, wordBreak: "break-word" }}>

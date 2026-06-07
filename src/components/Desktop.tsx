@@ -228,7 +228,9 @@ export default function Desktop({ experience, projects, research }: Props) {
               <button
                 key={item.id}
                 onClick={() => openFixed(item.id)}
-                style={{ display: "flex", alignItems: "center", padding: "0 20px", background: windows[item.id].open ? "rgba(249,189,43,0.1)" : "none", border: "none", borderRight: "1px solid var(--border)", borderBottom: windows[item.id].open ? "2px solid var(--yellow)" : "2px solid transparent", cursor: "pointer", fontSize: "var(--font-base)", color: "var(--text)", fontFamily: "var(--font-geist-sans)", fontWeight: 500, transition: "color 0.15s, background 0.15s" }}
+                className="nav-item"
+                data-open={windows[item.id].open}
+                style={{ fontSize: "var(--font-base)", color: "var(--text)", fontFamily: "var(--font-geist-sans)", fontWeight: 500 }}
               >
                 {item.label}
               </button>
@@ -243,7 +245,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
               <LinkedinIcon />
             </a>
-            <a href="mailto:hrishikeshkalyanaraman@gmail.com" style={{ display: "flex", alignItems: "center", padding: "0 16px", borderLeft: "2px solid var(--yellow)", background: "var(--yellow)", color: "var(--text-on-yellow)", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700, textDecoration: "none" }}>
+            <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link" style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700 }}>
               Get in touch
             </a>
           </div>
@@ -333,8 +335,8 @@ export default function Desktop({ experience, projects, research }: Props) {
                 color: "var(--blue)",
                 textTransform: "uppercase",
                 letterSpacing: "var(--tracking-label)",
-                marginBottom: 10,
-                paddingBottom: 5,
+              marginBottom: 8,
+              paddingBottom: 4,
                 borderBottom: "1px solid var(--blue-border)",
               }}>
                 {group.label}
@@ -356,11 +358,11 @@ export default function Desktop({ experience, projects, research }: Props) {
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
       <footer style={{ background: "var(--titlebar)", borderTop: "2px solid var(--border)", height: 28, display: "flex", alignItems: "center", justifyContent: "space-between", paddingInline: 16, flexShrink: 0 }}>
-        <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
+        <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)", textDecoration: "none" }}>hrishikeshkalyanaraman@gmail.com</a>
+          <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption link-chrome" style={{ fontFamily: "var(--font-geist-mono)" }}>hrishikeshkalyanaraman@gmail.com</a>
           <span style={{ width: 1, height: 10, background: "var(--border)" }} />
-          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)", textDecoration: "none" }}>github/master-senses</a>
+          <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption link-chrome" style={{ fontFamily: "var(--font-geist-mono)" }}>github/master-senses</a>
         </div>
       </footer>
     </div>
@@ -399,7 +401,7 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         fontWeight: 500,
         color: "var(--text)",
         textAlign: "center",
-        lineHeight: 1.2,
+        lineHeight: "var(--leading-snug)",
         whiteSpace: "nowrap",
         maxWidth: "100%",
       }}>

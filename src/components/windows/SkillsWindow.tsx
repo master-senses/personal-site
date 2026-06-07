@@ -13,7 +13,7 @@ export default function SkillsWindow() {
       <div style={{ marginBottom: 8 }}>{"{"}</div>
       <div style={{ paddingLeft: 20 }}>
         {GROUPS.map((g, gi) => (
-          <div key={g.label} style={{ display: "flex", flexWrap: "wrap", gap: 5, alignItems: "baseline", marginBottom: gi < GROUPS.length - 1 ? 10 : 0 }}>
+          <div key={g.label} style={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "baseline", marginBottom: gi < GROUPS.length - 1 ? 12 : 0 }}>
             <span className="type-label" style={{ color: "var(--yellow)", fontSize: "var(--font-base)" }}>&quot;{g.label}&quot;</span>
             <span>: [</span>
             {g.skills.map((s, si) => (
@@ -30,7 +30,7 @@ export default function SkillsWindow() {
       <div style={{ marginTop: 8 }}>{"}"}</div>
 
       <div style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-        <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 10, fontWeight: 600 }}>
+        <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 8, fontWeight: 600 }}>
           education
         </div>
         <div className="type-body" style={{ fontSize: "var(--font-lg)", fontWeight: 500, lineHeight: "var(--leading-snug)" }}>University of Illinois at Urbana-Champaign</div>
