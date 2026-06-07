@@ -21,7 +21,7 @@ import { BigTxtFileIcon } from "./icons/BigTxtFileIcon";
 import { GithubIcon } from "./icons/GithubIcon";
 import { LinkedinIcon } from "./icons/LinkedinIcon";
 import { XIcon } from "./icons/XIcon";
-import { CONTACT_MAILTO, openContactEmail } from "@/lib/contact";
+import { CONTACT_MAILTO } from "@/lib/contact";
 
 // ── Fixed window IDs ──────────────────────────────────────────────────────────
 type WinId = "terminal" | "about" | "work" | "projects" | "research" | "skills";
@@ -275,15 +275,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://x.com/thereal_hk" target="_blank" rel="noopener noreferrer" aria-label="X" className="menubar-icon-link">
               <XIcon />
             </a>
-            <a
-              href={CONTACT_MAILTO}
-              className="cta-link"
-              onClick={(e) => {
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-                e.preventDefault();
-                openContactEmail();
-              }}
-            >
+            <a href={CONTACT_MAILTO} className="cta-link">
               Get in touch
             </a>
           </div>
