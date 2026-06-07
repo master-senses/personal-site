@@ -38,16 +38,16 @@ const INITIAL: Record<WinId, WinConfig> = {
 };
 
 const WIN_WIDTHS: Record<WinId, number> = {
-  terminal: 580,
-  about:    640,
-  work:     980,
-  projects: 1080,
-  research: 960,
-  skills:   860,
+  terminal: 480,
+  about:    520,
+  work:     780,
+  projects: 860,
+  research: 760,
+  skills:   680,
 };
 
-/** Individual desktop file windows — ~70ch body at 17px sans */
-const ITEM_WIN_WIDTHS = { default: 720, project: 880 } as const;
+/** Individual desktop file windows — ~55–60ch body at 17px sans */
+const ITEM_WIN_WIDTHS = { default: 580, project: 700 } as const;
 
 const WIN_TITLES: Record<WinId, string> = {
   terminal: "terminal — bash",

@@ -11,7 +11,7 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
 
   return (
     <div className="txt-window">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "16px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "12px 16px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div className="type-subheading">{item.frontmatter.title}</div>
           <div className="type-caption" style={{ color: TYPE_COLOR[item.frontmatter.type] ?? "var(--text)", textTransform: "uppercase", marginTop: 4, fontWeight: 600 }}>
@@ -23,12 +23,12 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
         </span>
       </div>
 
-      <p className="type-body" style={{ margin: 0, padding: "16px 20px" }}>
+      <p className="type-body" style={{ margin: 0, padding: "12px 16px" }}>
         {item.content}
       </p>
 
       {embedUrl && (
-        <div style={{ padding: "0 20px 16px" }}>
+        <div style={{ padding: "0 16px 12px" }}>
           <div style={{ position: "relative", aspectRatio: "16 / 9", border: "2px solid var(--border)", boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.7)", background: "#000" }}>
             <iframe
               src={embedUrl}
@@ -41,7 +41,7 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
         </div>
       )}
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "12px 20px 16px", borderTop: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "12px 16px", borderTop: "1px solid var(--border)" }}>
         {item.frontmatter.tags.map((t) => <span key={t} className="tag">{t}</span>)}
       </div>
     </div>

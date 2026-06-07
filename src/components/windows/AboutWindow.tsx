@@ -11,7 +11,7 @@ export default function AboutWindow() {
   ];
 
   return (
-    <div className="txt-window" style={{ padding: "24px" }}>
+    <div className="txt-window" style={{ padding: "16px" }}>
       <div className="type-caption" style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", textTransform: "uppercase", fontWeight: 600, letterSpacing: "var(--tracking-caption)" }}>
         about.txt — plain text
       </div>

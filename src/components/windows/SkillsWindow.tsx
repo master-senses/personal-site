@@ -9,9 +9,9 @@ const GROUPS = [
 
 export default function SkillsWindow() {
   return (
-    <div className="json-window type-body-mono" style={{ padding: "24px" }}>
+    <div className="json-window type-body-mono" style={{ padding: "16px" }}>
       <div style={{ marginBottom: 8 }}>{"{"}</div>
-      <div style={{ paddingLeft: 20 }}>
+      <div style={{ paddingLeft: 16 }}>
         {GROUPS.map((g, gi) => (
           <div key={g.label} style={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "baseline", marginBottom: gi < GROUPS.length - 1 ? 12 : 0 }}>
             <span className="type-label" style={{ color: "var(--yellow)", fontSize: "var(--font-base)" }}>&quot;{g.label}&quot;</span>

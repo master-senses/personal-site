@@ -2,8 +2,8 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 
-const MIN_WIDTH = 320;
-const MIN_HEIGHT = 200;
+const MIN_WIDTH = 280;
+const MIN_HEIGHT = 160;
 
 export interface DraggableWindowProps {
   id: string;
@@ -218,7 +218,7 @@ export default function DraggableWindow({
         style={{
           background: "var(--titlebar)",
           borderBottom: "2px solid var(--border)",
-          height: 40,
+          height: 36,
           display: "flex",
           alignItems: "center",
           gap: 8,

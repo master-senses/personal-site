@@ -5,7 +5,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
 
   return (
     <div className="txt-window">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "16px 20px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "12px 16px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div className="type-subheading">{item.frontmatter.title}</div>
           <div className="type-label" style={{ color: "var(--blue)", marginTop: 4 }}>{item.frontmatter.company}</div>
@@ -20,7 +20,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
         </div>
       </div>
 
-      <ul style={{ margin: 0, padding: "16px 20px", listStyle: "none" }}>
+      <ul style={{ margin: 0, padding: "12px 16px", listStyle: "none" }}>
         {bullets.map((b, i) => (
             <li key={i} className="type-body" style={{ display: "flex", gap: 10, marginBottom: i < bullets.length - 1 ? 12 : 0 }}>
             <span style={{ color: "var(--yellow)", flexShrink: 0, marginTop: 2, fontWeight: 700 }}>·</span>
@@ -29,7 +29,7 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
         ))}
       </ul>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "12px 20px 16px", borderTop: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "12px 16px", borderTop: "1px solid var(--border)" }}>
         {item.frontmatter.tags.map((t) => <span key={t} className="tag">{t}</span>)}
       </div>
     </div>

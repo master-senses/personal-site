@@ -293,7 +293,7 @@ body {
 
 .type-terminal {
   font-family: var(--font-geist-mono), monospace;
-  font-size: var(--font-md);
+  font-size: var(--font-base);
   line-height: var(--leading-relaxed);
   font-weight: 500;
 }
