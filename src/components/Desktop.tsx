@@ -365,8 +365,7 @@ export default function Desktop({ experience, projects, research }: Props) {
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
       <footer className="desktop-footer">
-        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
-        <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" className="type-caption link-chrome font-mono">github/master-senses</a>
+        <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman</span>
       </footer>
     </div>
   );
