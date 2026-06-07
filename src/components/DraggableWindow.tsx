@@ -21,12 +21,7 @@ export interface DraggableWindowProps {
   children: React.ReactNode;
 }
 
-type ResizeEdge = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
-
-const RESIZE_WEST = new Set<ResizeEdge>(["w", "nw", "sw"]);
-const RESIZE_EAST = new Set<ResizeEdge>(["e", "ne", "se"]);
-const RESIZE_NORTH = new Set<ResizeEdge>(["n", "nw", "ne"]);
-const RESIZE_SOUTH = new Set<ResizeEdge>(["s", "sw", "se"]);
+type ResizeEdge = "se" | "e" | "s";
 
 export default function DraggableWindow({
   id,
@@ -179,55 +174,27 @@ export default function DraggableWindow({
         const dx = ev.clientX - startMouseX;
         const dy = ev.clientY - startMouseY;
 
-        const parent = el?.offsetParent as HTMLElement | null;
-        const parentW = parent?.clientWidth ?? window.innerWidth;
-        const parentH = parent?.clientHeight ?? window.innerHeight;
-        const margin = 8;
-
-        const rightEdge = anchorX + startW;
-        const bottomEdge = anchorY + startH;
-
         let newW = startW;
         let newH = startH;
-        let newX = anchorX;
-        let newY = anchorY;
 
-        if (RESIZE_EAST.has(resizeEdge)) {
+        if (resizeEdge === "se" || resizeEdge === "e") {
           newW = Math.max(MIN_WIDTH, startW + dx);
-          newW = Math.min(newW, parentW - anchorX - margin);
         }
-
-        if (RESIZE_WEST.has(resizeEdge)) {
-          newW = Math.max(MIN_WIDTH, startW - dx);
-          newX = rightEdge - newW;
-          if (newX < 0) {
-            newX = 0;
-            newW = rightEdge;
-          }
-          newW = Math.min(newW, parentW - margin);
-          newX = rightEdge - newW;
-        }
-
-        if (RESIZE_SOUTH.has(resizeEdge)) {
+        if (resizeEdge === "se" || resizeEdge === "s") {
           newH = Math.max(MIN_HEIGHT, startH + dy);
-          newH = Math.min(newH, parentH - anchorY - margin);
         }
 
-        if (RESIZE_NORTH.has(resizeEdge)) {
-          newH = Math.max(MIN_HEIGHT, startH - dy);
-          newY = bottomEdge - newH;
-          if (newY < 0) {
-            newY = 0;
-            newH = bottomEdge;
-          }
-          newH = Math.min(newH, parentH - margin);
-          newY = bottomEdge - newH;
-        }
+        const parent = el?.offsetParent as HTMLElement | null;
+        const maxW = parent
+          ? parent.clientWidth - anchorX - 8
+          : window.innerWidth - anchorX - 8;
+        const maxH = parent
+          ? parent.clientHeight - anchorY - 8
+          : window.innerHeight - anchorY - 8;
+        newW = Math.min(newW, maxW);
+        newH = Math.min(newH, maxH);
 
         setSize({ w: newW, h: newH });
-        if (RESIZE_WEST.has(resizeEdge) || RESIZE_NORTH.has(resizeEdge)) {
-          setPos({ x: newX, y: newY });
-        }
       };
 
       const onUp = (ev: PointerEvent) => {
@@ -253,7 +220,7 @@ export default function DraggableWindow({
   return (
     <div
       ref={windowRef}
-      className="window draggable-window"
+      className="draggable-window"
       style={{
         position: "absolute",
         left: useCssCenter ? "50%" : pos.x,
@@ -264,8 +231,13 @@ export default function DraggableWindow({
         minHeight: MIN_HEIGHT,
         maxHeight: explicitHeight ? undefined : "75vh",
         zIndex,
+        borderRadius: 6,
+        border: "2px solid var(--border)",
+        background: "var(--bg-window)",
+        boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.85)",
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
       }}
       onMouseDown={(e) => {
         if ((e.target as HTMLElement).closest(".window-resize-layer, .window-resize-edge, .window-resize-handle")) return;
@@ -276,33 +248,58 @@ export default function DraggableWindow({
         <div
           className="window-accent-bar"
           style={{
-            background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, var(--surface-active-strong) 5px, var(--surface-active-strong) 10px)",
+            height: 3,
+            background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(249,189,43,0.15) 5px, rgba(249,189,43,0.15) 10px)",
+            borderBottom: "2px solid var(--yellow)",
+            borderRadius: "4px 4px 0 0",
           }}
         />
       )}
 
       <div
         onMouseDown={onTitleMouseDown}
-        className="window-titlebar window-titlebar-draggable"
         style={{
+          background: "var(--titlebar)",
+          borderBottom: "2px solid var(--border)",
+          height: 36,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "0 12px",
+          cursor: "grab",
+          userSelect: "none",
+          flexShrink: 0,
           borderRadius: accentBar ? 0 : "4px 4px 0 0",
         }}
       >
-        <div className="traffic-lights" style={{ flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
           <button
             aria-label="Close window"
             onClick={(e) => { e.stopPropagation(); onClose(id); }}
-            className="traffic-light traffic-light-button"
             style={{
+              width: 11,
+              height: 11,
+              borderRadius: "50%",
               background: "var(--red)",
+              border: "1px solid rgba(0,0,0,0.25)",
+              cursor: "pointer",
+              padding: 0,
             }}
           />
-          <div className="traffic-light" style={{ background: "var(--orange)" }} />
-          <div className="traffic-light" style={{ background: "var(--green)" }} />
+          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--orange)", border: "1px solid rgba(0,0,0,0.25)" }} />
+          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--green)", border: "1px solid rgba(0,0,0,0.25)" }} />
         </div>
 
         <span
-          className="window-title"
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontSize: "var(--font-sm)",
+            fontFamily: "var(--font-geist-mono), monospace",
+            color: "var(--text)",
+            letterSpacing: "0.02em",
+            lineHeight: "var(--leading-snug)",
+          }}
         >
           {title}
         </span>
@@ -318,14 +315,18 @@ export default function DraggableWindow({
 
       {/* Resize overlay — above scroll content */}
       <div className="window-resize-layer" aria-hidden="true">
-        <div className="window-resize-edge window-resize-edge-n" onPointerDown={(e) => onResizePointerDown(e, "n")} />
-        <div className="window-resize-edge window-resize-edge-s" onPointerDown={(e) => onResizePointerDown(e, "s")} />
-        <div className="window-resize-edge window-resize-edge-e" onPointerDown={(e) => onResizePointerDown(e, "e")} />
-        <div className="window-resize-edge window-resize-edge-w" onPointerDown={(e) => onResizePointerDown(e, "w")} />
-        <div className="window-resize-handle window-resize-handle-nw" onPointerDown={(e) => onResizePointerDown(e, "nw")} />
-        <div className="window-resize-handle window-resize-handle-ne" onPointerDown={(e) => onResizePointerDown(e, "ne")} />
-        <div className="window-resize-handle window-resize-handle-sw" onPointerDown={(e) => onResizePointerDown(e, "sw")} />
-        <div className="window-resize-handle window-resize-handle-se" onPointerDown={(e) => onResizePointerDown(e, "se")} />
+        <div
+          className="window-resize-edge window-resize-edge-e"
+          onPointerDown={(e) => onResizePointerDown(e, "e")}
+        />
+        <div
+          className="window-resize-edge window-resize-edge-s"
+          onPointerDown={(e) => onResizePointerDown(e, "s")}
+        />
+        <div
+          className="window-resize-handle"
+          onPointerDown={(e) => onResizePointerDown(e, "se")}
+        />
       </div>
     </div>
   );
