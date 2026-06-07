@@ -239,10 +239,10 @@ export default function Desktop({ experience, projects, research }: Props) {
 
           {/* Right */}
           <div style={{ display: "flex", alignItems: "stretch", marginLeft: "auto" }}>
-            <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
+            <a href="https://github.com/master-senses" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="menubar-icon-link">
               <GithubIcon />
             </a>
-            <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ display: "flex", alignItems: "center", padding: "0 13px", borderLeft: "1px solid var(--border)", color: "var(--blue)", textDecoration: "none" }}>
+            <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="menubar-icon-link">
               <LinkedinIcon />
             </a>
             <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link" style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700 }}>
