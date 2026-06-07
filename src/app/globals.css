@@ -24,8 +24,8 @@
   --shadow-window: 4px 4px 0px 0px hsl(45 100% 80% / 1), 4px 4px 6px -1px hsl(45 100% 80% / 1);
   --shadow-card: 4px 4px 0px 0px hsl(45 100% 80% / 1), 4px 1px 2px -1px hsl(45 100% 80% / 1);
   --shadow-close: 2px 2px 0px 0px hsl(45 100% 80% / 0.85);
-  --shadow-close-hover: 4px 4px 0px 0px hsl(45 100% 80% / 1), 3px 3px 6px -1px hsl(45 100% 80% / 0.45);
-  --shadow-close-hover-subtle: 2px 2px 0px 0px hsl(45 100% 80% / 1), 1px 1px 2px -1px hsl(45 100% 80% / 0.35);
+  --shadow-close-hover: 4px 4px 0px 0px hsl(45 100% 80% / 1), 0 -2px 0px 0px hsl(45 100% 80% / 1), 3px 3px 6px -1px hsl(45 100% 80% / 0.45), 0 -2px 4px -1px hsl(45 100% 80% / 0.35);
+  --shadow-close-hover-subtle: 2px 2px 0px 0px hsl(45 100% 80% / 1), 0 -2px 0px 0px hsl(45 100% 80% / 1), 1px 1px 2px -1px hsl(45 100% 80% / 0.35), 0 -2px 3px -1px hsl(45 100% 80% / 0.3);
 
   --font-xs: 13px;
   --font-sm: 15px;
@@ -424,7 +424,7 @@ body {
 .window-titlebar {
   background: var(--titlebar);
   border-bottom: 2px solid var(--border);
-  height: 36px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -483,7 +483,7 @@ body {
   .window-close:hover {
     background: color-mix(in oklch, var(--yellow) 10%, var(--bg-window));
     box-shadow: var(--shadow-close-hover);
-    transform: translate(-2px, -2px);
+    transform: translate(-2px, 0);
   }
 }
 
