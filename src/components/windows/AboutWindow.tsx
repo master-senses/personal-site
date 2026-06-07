@@ -7,7 +7,6 @@ export default function AboutWindow() {
     { key: "github",    value: "github.com/master-senses",                  href: "https://github.com/master-senses" },
     { key: "linkedin",  value: "linkedin.com/in/hk39",                      href: "https://www.linkedin.com/in/hk39/" },
     { key: "email",     value: "hrishikeshkalyanaraman@gmail.com",          href: "mailto:hrishikeshkalyanaraman@gmail.com" },
-    { key: "status",    value: "available for work  ●",                     green: true },
   ];
 
   return (
@@ -15,7 +14,7 @@ export default function AboutWindow() {
       <div className="type-caption" style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", textTransform: "uppercase", fontWeight: 600, letterSpacing: "var(--tracking-caption)" }}>
         about.txt — plain text
       </div>
-      {rows.map(({ key, value, href, green }) => (
+      {rows.map(({ key, value, href }) => (
         <div key={key} style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: 20, padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "baseline" }}>
           <span className="type-label" style={{ color: "var(--yellow)", textTransform: "lowercase" }}>{key}</span>
           {href ? (
@@ -23,7 +22,7 @@ export default function AboutWindow() {
               {value}
             </a>
           ) : (
-            <span className="type-body" style={{ color: green ? "var(--green)" : "var(--text)", fontWeight: green ? 600 : 500, minWidth: 0, wordBreak: "break-word" }}>{value}</span>
+            <span className="type-body" style={{ color: "var(--text)", fontWeight: 500, minWidth: 0, wordBreak: "break-word" }}>{value}</span>
           )}
         </div>
       ))}
