@@ -124,7 +124,7 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
   return (
     <div className="type-terminal" style={{ padding: "16px", minHeight: 180, maxHeight: "50vh", overflowY: "auto" }}>
       {lines.map((line, i) => (
-        <div key={i} style={{ display: "flex", gap: 10 }}>
+        <div key={i} style={{ display: "flex", gap: 12 }}>
           {line.kind === "command" ? (
             <>
               <span style={{ color: "var(--yellow)", userSelect: "none" }}>$</span>
@@ -143,7 +143,7 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
 
       {/* Currently typing row */}
       {!done && (
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 12 }}>
           <span style={{ color: "var(--yellow)", userSelect: "none" }}>$</span>
           <span style={{ color: "var(--text)" }}>
             {typing}
@@ -165,7 +165,7 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
 
       {/* Idle cursor after sequence done */}
       {done && (
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 12 }}>
           <span style={{ color: "var(--yellow)", userSelect: "none" }}>$</span>
           <span>
             <span

@@ -34,7 +34,7 @@ export default function SkillsWindow() {
           education
         </div>
         <div className="type-body" style={{ fontSize: "var(--font-lg)", fontWeight: 500, lineHeight: "var(--leading-snug)" }}>University of Illinois at Urbana-Champaign</div>
-        <div className="type-label" style={{ color: "var(--blue)", marginTop: 6, fontSize: "var(--font-base)" }}>B.S. Computer Science</div>
+        <div className="type-label" style={{ color: "var(--blue)", marginTop: 8, fontSize: "var(--font-base)" }}>B.S. Computer Science</div>
       </div>
     </div>
   );

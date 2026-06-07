@@ -29,7 +29,7 @@ export default function ProjectContent({ item }: { item: ContentItem<ProjectFron
 
       {embedUrl && (
         <div style={{ padding: "0 16px 12px" }}>
-          <div style={{ position: "relative", aspectRatio: "16 / 9", border: "2px solid var(--border)", boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.7)", background: "#000" }}>
+          <div style={{ position: "relative", aspectRatio: "16 / 9", border: "2px solid var(--border)", boxShadow: "var(--shadow-card)", background: "var(--bg)" }}>
             <iframe
               src={embedUrl}
               title={`${item.frontmatter.title} demo`}
