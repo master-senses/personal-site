@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useLayoutEffect } from "react";
 
 const MIN_WIDTH = 320;
 const MIN_HEIGHT = 200;
@@ -42,6 +42,7 @@ export default function DraggableWindow({
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [hasMoved, setHasMoved] = useState(false);
   const [size, setSize] = useState<{ w: number; h: number | null }>({ w: width, h: null });
+  const [centeredX, setCenteredX] = useState<number | null>(null);
   const dragState = useRef<{
     startMouseX: number;
     startMouseY: number;
@@ -58,16 +59,14 @@ export default function DraggableWindow({
     anchorY: number;
   } | null>(null);
 
-  // Reset position and size when reopened
-  const prevOpen = useRef(isOpen);
-  useEffect(() => {
-    if (!prevOpen.current && isOpen) {
-      setPos({ x: initialX, y: initialY });
-      setHasMoved(false);
-      setSize({ w: width, h: null });
-    }
-    prevOpen.current = isOpen;
-  }, [isOpen, initialX, initialY, width]);
+  const prevIsOpenRef = useRef(isOpen);
+  if (!prevIsOpenRef.current && isOpen) {
+    setPos({ x: initialX, y: initialY });
+    setHasMoved(false);
+    setSize({ w: width, h: null });
+    setCenteredX(null);
+  }
+  prevIsOpenRef.current = isOpen;
 
   const pinCenteredWindow = useCallback(() => {
     const el = windowRef.current;
@@ -78,10 +77,23 @@ export default function DraggableWindow({
     setHasMoved(true);
   }, []);
 
+  const centerWindow = useCallback(() => {
+    const el = windowRef.current;
+    const parent = el?.offsetParent as HTMLElement | null;
+    if (!el || !parent) return;
+    setCenteredX(Math.round((parent.clientWidth - el.offsetWidth) / 2));
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isOpen || !centered || hasMoved) return;
+    centerWindow();
+    window.addEventListener("resize", centerWindow);
+    return () => window.removeEventListener("resize", centerWindow);
+  }, [isOpen, centered, hasMoved, size.w, centerWindow]);
+
   const onTitleMouseDown = useCallback(
     (e: React.MouseEvent) => {
       if (e.button !== 0) return;
-      if ((e.target as HTMLElement).tagName === "BUTTON") return;
 
       onFocus(id);
       if (centered && !hasMoved) pinCenteredWindow();
@@ -214,34 +226,22 @@ export default function DraggableWindow({
 
   if (!isOpen) return null;
 
-  const useCssCenter = centered && !hasMoved;
+  const isCentering = centered && !hasMoved;
+  const useCssCenter = isCentering && centeredX === null;
   const explicitHeight = size.h !== null;
 
   return (
     <div
       ref={windowRef}
-      className="draggable-window"
+      className="draggable-window draggable-window-shell"
+      data-explicit-height={explicitHeight ? "true" : "false"}
       style={{
-        position: "absolute",
-        left: useCssCenter ? "50%" : pos.x,
+        left: isCentering ? (centeredX ?? "50%") : pos.x,
         top: pos.y,
         transform: useCssCenter ? "translateX(-50%)" : undefined,
         width: size.w,
         height: explicitHeight ? size.h! : undefined,
-        minHeight: MIN_HEIGHT,
-        maxHeight: explicitHeight ? undefined : "75vh",
         zIndex,
-        borderRadius: 6,
-        border: "2px solid var(--border)",
-        background: "var(--bg-window)",
-        boxShadow: "var(--shadow-window)",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-      onMouseDown={(e) => {
-        if ((e.target as HTMLElement).closest(".window-resize-layer, .window-resize-edge, .window-resize-handle")) return;
-        onFocus(id);
       }}
     >
       {accentBar && (
@@ -257,20 +257,8 @@ export default function DraggableWindow({
       )}
 
       <div
-        onMouseDown={onTitleMouseDown}
-        style={{
-          background: "var(--titlebar)",
-          borderBottom: "2px solid var(--border)",
-          height: 36,
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "0 12px",
-          cursor: "grab",
-          userSelect: "none",
-          flexShrink: 0,
-          borderRadius: accentBar ? 0 : "4px 4px 0 0",
-        }}
+        data-accent={accentBar ? "true" : "false"}
+        className="window-titlebar"
       >
         <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
           <button
@@ -291,24 +279,19 @@ export default function DraggableWindow({
           <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--green)", border: "1px solid rgba(0,0,0,0.25)" }} />
         </div>
 
-        <span
-          style={{
-            flex: 1,
-            textAlign: "center",
-            fontSize: "var(--font-sm)",
-            fontFamily: "var(--font-mono), monospace",
-            color: "var(--text)",
-            letterSpacing: "0.02em",
-            lineHeight: "var(--leading-snug)",
-          }}
+        <button
+          type="button"
+          className="window-drag-handle"
+          aria-label={`Drag ${title}`}
+          onMouseDown={onTitleMouseDown}
         >
           {title}
-        </span>
+        </button>
 
         {titleRight ? (
           <div style={{ flexShrink: 0 }}>{titleRight}</div>
         ) : (
-          <div style={{ width: 37 }} />
+          <div className="window-titlebar-spacer" />
         )}
       </div>
 

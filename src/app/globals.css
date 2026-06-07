@@ -321,6 +321,134 @@ body {
 }
 .link-chrome:hover { color: var(--text); }
 
+.menubar-logo-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--yellow);
+  letter-spacing: -0.02em;
+}
+
+.menubar-logo-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-on-yellow);
+  font-size: var(--font-xs);
+  font-weight: 900;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
+.desktop-icon-grid {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.desktop-footer {
+  background: var(--titlebar);
+  border-top: 2px solid var(--border);
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 16px;
+  flex-shrink: 0;
+}
+
+.desktop-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  width: var(--icon-desktop-btn);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.desktop-icon-btn:hover {
+  background: var(--yellow-dim);
+  border-color: var(--yellow-border);
+}
+
+.draggable-window-shell {
+  position: absolute;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  background: var(--bg-window);
+  box-shadow: var(--shadow-window);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.draggable-window-shell[data-explicit-height="false"] {
+  max-height: 75vh;
+}
+
+.window-titlebar {
+  background: var(--titlebar);
+  border-bottom: 2px solid var(--border);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.window-titlebar[data-accent="true"] {
+  border-radius: 0;
+}
+
+.window-drag-handle {
+  flex: 1;
+  text-align: center;
+  font-size: var(--font-sm);
+  font-family: var(--font-mono), monospace;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  line-height: var(--leading-snug);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.window-titlebar-spacer {
+  width: 37px;
+  flex-shrink: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

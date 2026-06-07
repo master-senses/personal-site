@@ -164,28 +164,27 @@ export default function Desktop({ experience, projects, research }: Props) {
   // ── Open individual item window ──────────────────────────────────────────
   const openItem = useCallback((type: ItemType, slug: string, filename: string) => {
     const key = `${type}::${slug}`;
-    const existing = itemWins[key];
-    if (existing?.open) {
-      // Bring to front
-      setItemWins((prev) => ({ ...prev, [key]: { ...prev[key], z: ++zCounter.current } }));
-      return;
-    }
-    // Stagger position for each new window
-    const base = { experience: { x: 200, y: 80 }, project: { x: 220, y: 100 }, research: { x: 240, y: 120 } }[type] ?? { x: 200, y: 80 };
-    const offset = Object.keys(itemWins).filter((k) => itemWins[k].open).length;
-    setItemWins((prev) => ({
-      ...prev,
-      [key]: {
-        open: true,
-        x: base.x + offset * 24,
-        y: base.y + offset * 24,
-        z: ++zCounter.current,
-        type,
-        slug,
-        title: filename,
-      },
-    }));
-  }, [itemWins]);
+    setItemWins((prev) => {
+      const existing = prev[key];
+      if (existing?.open) {
+        return { ...prev, [key]: { ...existing, z: ++zCounter.current } };
+      }
+      const base = { experience: { x: 200, y: 80 }, project: { x: 220, y: 100 }, research: { x: 240, y: 120 } }[type] ?? { x: 200, y: 80 };
+      const offset = Object.keys(prev).filter((k) => prev[k].open).length;
+      return {
+        ...prev,
+        [key]: {
+          open: true,
+          x: base.x + offset * 24,
+          y: base.y + offset * 24,
+          z: ++zCounter.current,
+          type,
+          slug,
+          title: filename,
+        },
+      };
+    });
+  }, []);
 
   // ── Terminal callback — position about.txt just right of terminal center ──
   const handleAboutOpen = useCallback(() => {
@@ -242,10 +241,9 @@ export default function Desktop({ experience, projects, research }: Props) {
           <button
             type="button"
             onClick={() => openFixed("terminal")}
-            className="font-mono"
-            style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
+            className="menubar-logo-btn font-mono"
           >
-            <span style={{ width: 24, height: 24, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: "var(--font-xs)", fontWeight: 900, flexShrink: 0, letterSpacing: 0 }}>HK</span>
+            <span className="menubar-logo-mark">HK</span>
             <span>hrishikesh</span>
           </button>
 
@@ -332,19 +330,7 @@ export default function Desktop({ experience, projects, research }: Props) {
         })}
 
         {/* ── Desktop icon grid (LEFT side) ──────────────────────────── */}
-        <div
-          style={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            width: 400,
-            display: "flex",
-            flexDirection: "column",
-            gap: 32,
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        >
+        <div className="desktop-icon-grid">
           {iconGroups.map((group) => (
             <div key={group.label} style={{ pointerEvents: "auto" }}>
               {/* Group label */}
@@ -352,8 +338,8 @@ export default function Desktop({ experience, projects, research }: Props) {
                 color: "var(--blue)",
                 textTransform: "uppercase",
                 letterSpacing: "var(--tracking-label)",
-              marginBottom: 8,
-              paddingBottom: 4,
+                marginBottom: 8,
+                paddingBottom: 4,
                 borderBottom: "1px solid var(--blue-border)",
               }}>
                 {group.label}
@@ -374,7 +360,7 @@ export default function Desktop({ experience, projects, research }: Props) {
       </div>
 
       {/* ── Footer status bar ──────────────────────────────────────────── */}
-      <footer style={{ background: "var(--titlebar)", borderTop: "2px solid var(--border)", height: 28, display: "flex", alignItems: "center", justifyContent: "space-between", paddingInline: 16, flexShrink: 0 }}>
+      <footer className="desktop-footer">
         <span className="type-caption font-mono" style={{ color: "var(--text-dim)" }}>hrishikesh kalyanaraman · personal-site v2.0</span>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
           <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="type-caption link-chrome font-mono">hrishikeshkalyanaraman@gmail.com</a>
@@ -388,29 +374,11 @@ export default function Desktop({ experience, projects, research }: Props) {
 
 // ── Desktop icon (macOS-style: big doc + label below) ────────────────────────
 function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <button
       type="button"
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 8px",
-        background: hovered ? "var(--yellow-dim)" : "transparent",
-        border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
-        borderRadius: 6,
-        cursor: "pointer",
-        width: "var(--icon-desktop-btn)",
-        boxSizing: "border-box",
-        overflow: "hidden",
-        transition: "background 0.12s, border-color 0.12s",
-      }}
+      className="desktop-icon-btn"
     >
       <BigTxtFileIcon />
       <span className="type-label font-mono" style={{

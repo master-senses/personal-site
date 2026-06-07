@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function WorkWindow({ experience }: Props) {
-  const sorted = [...experience].sort((a, b) => {
+  const sorted = experience.toSorted((a, b) => {
     if (a.frontmatter.current) return -1;
     if (b.frontmatter.current) return 1;
     return 0;
