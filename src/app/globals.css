@@ -359,6 +359,52 @@ body {
   font-family: inherit;
 }
 
+/* ── Window resize handles ──────────────────────────────────────────────── */
+.window-resize-edge {
+  position: absolute;
+  z-index: 2;
+}
+.window-resize-edge-e {
+  top: 40px;
+  right: 0;
+  width: 6px;
+  height: calc(100% - 46px);
+  cursor: ew-resize;
+}
+.window-resize-edge-s {
+  left: 0;
+  bottom: 0;
+  width: calc(100% - 14px);
+  height: 6px;
+  cursor: ns-resize;
+}
+.window-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  z-index: 3;
+}
+.window-resize-handle::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--border-strong);
+  border-bottom: 2px solid var(--border-strong);
+  opacity: 0.45;
+  transition: opacity 0.12s, border-color 0.12s;
+}
+.window-resize-handle:hover::after,
+.window-resize-edge:hover + .window-resize-handle::after {
+  opacity: 1;
+  border-color: var(--yellow);
+}
+
 /* ── Focus rings (a11y) ─────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--yellow);

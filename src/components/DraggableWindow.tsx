@@ -2,6 +2,9 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 
+const MIN_WIDTH = 320;
+const MIN_HEIGHT = 200;
+
 export interface DraggableWindowProps {
   id: string;
   title: string;
@@ -18,6 +21,8 @@ export interface DraggableWindowProps {
   children: React.ReactNode;
 }
 
+type ResizeEdge = "se" | "e" | "s";
+
 export default function DraggableWindow({
   id,
   title,
@@ -33,32 +38,51 @@ export default function DraggableWindow({
   titleRight,
   children,
 }: DraggableWindowProps) {
+  const windowRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [hasMoved, setHasMoved] = useState(false);
+  const [size, setSize] = useState<{ w: number; h: number | null }>({ w: width, h: null });
   const dragState = useRef<{
     startMouseX: number;
     startMouseY: number;
     startPosX: number;
     startPosY: number;
   } | null>(null);
+  const resizeState = useRef<{
+    edge: ResizeEdge;
+    startMouseX: number;
+    startMouseY: number;
+    startW: number;
+    startH: number;
+  } | null>(null);
 
-  // Reset position when reopened
+  // Reset position and size when reopened
   const prevOpen = useRef(isOpen);
   useEffect(() => {
     if (!prevOpen.current && isOpen) {
       setPos({ x: initialX, y: initialY });
       setHasMoved(false);
+      setSize({ w: width, h: null });
     }
     prevOpen.current = isOpen;
-  }, [isOpen, initialX, initialY]);
+  }, [isOpen, initialX, initialY, width]);
+
+  const pinCenteredWindow = useCallback(() => {
+    const el = windowRef.current;
+    if (!el || !el.offsetParent) return;
+    const rect = el.getBoundingClientRect();
+    const parentRect = (el.offsetParent as HTMLElement).getBoundingClientRect();
+    setPos({ x: rect.left - parentRect.left, y: rect.top - parentRect.top });
+    setHasMoved(true);
+  }, []);
 
   const onTitleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      // Only drag on left-click, ignore clicks on buttons inside titlebar
       if (e.button !== 0) return;
       if ((e.target as HTMLElement).tagName === "BUTTON") return;
 
       onFocus(id);
+      if (centered && !hasMoved) pinCenteredWindow();
       setHasMoved(true);
       dragState.current = {
         startMouseX: e.clientX,
@@ -88,21 +112,86 @@ export default function DraggableWindow({
       document.addEventListener("mouseup", onUp);
       e.preventDefault();
     },
-    [id, onFocus, pos.x, pos.y]
+    [id, onFocus, pos.x, pos.y, centered, hasMoved, pinCenteredWindow]
+  );
+
+  const onResizeMouseDown = useCallback(
+    (e: React.MouseEvent, edge: ResizeEdge) => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
+      onFocus(id);
+
+      if (centered && !hasMoved) pinCenteredWindow();
+      setHasMoved(true);
+
+      const el = windowRef.current;
+      const currentH = size.h ?? el?.offsetHeight ?? MIN_HEIGHT;
+      const currentW = size.w;
+
+      setSize({ w: currentW, h: currentH });
+
+      resizeState.current = {
+        edge,
+        startMouseX: e.clientX,
+        startMouseY: e.clientY,
+        startW: currentW,
+        startH: currentH,
+      };
+
+      const onMove = (ev: MouseEvent) => {
+        if (!resizeState.current) return;
+        const { edge: resizeEdge, startMouseX, startMouseY, startW, startH } = resizeState.current;
+        const dx = ev.clientX - startMouseX;
+        const dy = ev.clientY - startMouseY;
+
+        let newW = startW;
+        let newH = startH;
+
+        if (resizeEdge === "se" || resizeEdge === "e") {
+          newW = Math.max(MIN_WIDTH, startW + dx);
+        }
+        if (resizeEdge === "se" || resizeEdge === "s") {
+          newH = Math.max(MIN_HEIGHT, startH + dy);
+        }
+
+        const maxW = window.innerWidth - pos.x - 8;
+        const maxH = window.innerHeight - pos.y - 8;
+        newW = Math.min(newW, maxW);
+        newH = Math.min(newH, maxH);
+
+        setSize({ w: newW, h: newH });
+      };
+
+      const onUp = () => {
+        resizeState.current = null;
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+      };
+
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    },
+    [id, onFocus, size.h, size.w, pos.x, pos.y, centered, hasMoved, pinCenteredWindow]
   );
 
   if (!isOpen) return null;
 
   const useCssCenter = centered && !hasMoved;
+  const explicitHeight = size.h !== null;
 
   return (
     <div
+      ref={windowRef}
       style={{
         position: "absolute",
         left: useCssCenter ? "50%" : pos.x,
         top: pos.y,
         transform: useCssCenter ? "translateX(-50%)" : undefined,
-        width,
+        width: size.w,
+        height: explicitHeight ? size.h! : undefined,
+        minHeight: MIN_HEIGHT,
+        maxHeight: explicitHeight ? undefined : "75vh",
         zIndex,
         borderRadius: 6,
         border: "2px solid var(--border)",
@@ -110,11 +199,9 @@ export default function DraggableWindow({
         boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.85)",
         display: "flex",
         flexDirection: "column",
-        maxHeight: "75vh",
       }}
       onMouseDown={() => onFocus(id)}
     >
-      {/* Yellow accent stripe on focused window */}
       {accentBar && (
         <div
           style={{
@@ -126,7 +213,6 @@ export default function DraggableWindow({
         />
       )}
 
-      {/* Title bar — drag handle */}
       <div
         onMouseDown={onTitleMouseDown}
         style={{
@@ -143,7 +229,6 @@ export default function DraggableWindow({
           borderRadius: accentBar ? 0 : "4px 4px 0 0",
         }}
       >
-        {/* Traffic lights */}
         <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
           <button
             aria-label="Close window"
@@ -162,7 +247,6 @@ export default function DraggableWindow({
           <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--green)", border: "1px solid rgba(0,0,0,0.25)" }} />
         </div>
 
-        {/* Title */}
         <span
           style={{
             flex: 1,
@@ -177,7 +261,6 @@ export default function DraggableWindow({
           {title}
         </span>
 
-        {/* Right slot */}
         {titleRight ? (
           <div style={{ flexShrink: 0 }}>{titleRight}</div>
         ) : (
@@ -185,8 +268,26 @@ export default function DraggableWindow({
         )}
       </div>
 
-      {/* Content — scrollable */}
-      <div style={{ overflowY: "auto", flex: 1 }}>{children}</div>
+      <div style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>{children}</div>
+
+      {/* Resize: right edge */}
+      <div
+        className="window-resize-edge window-resize-edge-e"
+        onMouseDown={(e) => onResizeMouseDown(e, "e")}
+        aria-hidden="true"
+      />
+      {/* Resize: bottom edge */}
+      <div
+        className="window-resize-edge window-resize-edge-s"
+        onMouseDown={(e) => onResizeMouseDown(e, "s")}
+        aria-hidden="true"
+      />
+      {/* Resize: bottom-right corner */}
+      <div
+        className="window-resize-handle"
+        onMouseDown={(e) => onResizeMouseDown(e, "se")}
+        aria-hidden="true"
+      />
     </div>
   );
 }
