@@ -5,15 +5,15 @@ export default function ResearchContent({ item }: { item: ContentItem<ResearchFr
 
   return (
     <div className="txt-window">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "12px 16px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 16px", background: "var(--titlebar)", borderBottom: "1px solid var(--border)" }}>
         <div>
           <div className="type-subheading">{item.frontmatter.title}</div>
-          <div className="type-label" style={{ color: "var(--blue)", marginTop: 4 }}>{item.frontmatter.company}</div>
+          <div className="type-label" style={{ color: "var(--red)", marginTop: 4 }}>{item.frontmatter.company}</div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-          <span className="type-label" style={{ color: "var(--text)", whiteSpace: "nowrap" }}>{item.frontmatter.period}</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+          <span className="type-label" style={{ color: "var(--text)" }}>{item.frontmatter.period}</span>
           {item.frontmatter.url && (
-            <a href={item.frontmatter.url} target="_blank" rel="noopener noreferrer" className="type-label" style={{ color: "var(--blue)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+            <a href={item.frontmatter.url} target="_blank" rel="noopener noreferrer" className="type-label" style={{ color: "var(--blue)", textDecoration: "underline", textUnderlineOffset: 2, flexShrink: 0 }}>
               paper ↗
             </a>
           )}

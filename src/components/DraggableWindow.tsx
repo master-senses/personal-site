@@ -260,25 +260,6 @@ export default function DraggableWindow({
         data-accent={accentBar ? "true" : "false"}
         className="window-titlebar"
       >
-        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-          <button
-            type="button"
-            aria-label="Close window"
-            onClick={(e) => { e.stopPropagation(); onClose(id); }}
-            style={{
-              width: 11,
-              height: 11,
-              borderRadius: "50%",
-              background: "var(--red)",
-              border: "1px solid rgba(0,0,0,0.25)",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          />
-          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--orange)", border: "1px solid rgba(0,0,0,0.25)" }} />
-          <div style={{ width: 11, height: 11, borderRadius: "50%", background: "var(--green)", border: "1px solid rgba(0,0,0,0.25)" }} />
-        </div>
-
         <button
           type="button"
           className="window-drag-handle"
@@ -290,9 +271,19 @@ export default function DraggableWindow({
 
         {titleRight ? (
           <div style={{ flexShrink: 0 }}>{titleRight}</div>
-        ) : (
-          <div className="window-titlebar-spacer" />
-        )}
+        ) : null}
+
+        <button
+          type="button"
+          className="window-close"
+          aria-label="Close window"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose(id);
+          }}
+        >
+          ×
+        </button>
       </div>
 
       <div style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}>{children}</div>

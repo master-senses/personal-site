@@ -11,9 +11,6 @@ export default function AboutWindow() {
 
   return (
     <div className="txt-window" style={{ padding: "16px" }}>
-      <div className="type-caption" style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border)", textTransform: "uppercase", fontWeight: 600, letterSpacing: "var(--tracking-caption)" }}>
-        about.txt — plain text
-      </div>
       {rows.map(({ key, value, href }) => (
         <div key={key} style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: 24, padding: "12px 0", borderBottom: "1px solid color-mix(in oklch, var(--text) 8%, transparent)", alignItems: "baseline" }}>
           <span className="type-label" style={{ color: "var(--yellow)", textTransform: "lowercase" }}>{key}</span>
