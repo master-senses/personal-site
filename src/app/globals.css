@@ -215,7 +215,7 @@ body {
   padding: 4px 10px;
   border: 1px solid var(--border-strong);
   border-radius: 3px;
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   font-family: var(--font-geist-mono), monospace;
   font-weight: 500;
   color: var(--text);

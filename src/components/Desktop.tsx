@@ -218,7 +218,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             onClick={() => openFixed("terminal")}
             style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 16px", background: "none", border: "none", borderRight: "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-base)", fontWeight: 700, color: "var(--yellow)", letterSpacing: "-0.02em" }}
           >
-            <span style={{ width: 22, height: 22, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: 11, fontWeight: 900, flexShrink: 0, letterSpacing: 0 }}>HK</span>
+            <span style={{ width: 24, height: 24, borderRadius: 4, background: "var(--yellow)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-on-yellow)", fontSize: "var(--font-xs)", fontWeight: 900, flexShrink: 0, letterSpacing: 0 }}>HK</span>
             <span>hrishikesh</span>
           </button>
 
@@ -252,12 +252,12 @@ export default function Desktop({ experience, projects, research }: Props) {
         </div>
 
         {/* Status sub-bar */}
-        <div style={{ height: 26, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
+        <div style={{ height: 28, display: "flex", alignItems: "center", paddingInline: 16, gap: 8, borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--yellow)" }}>●</span>
           <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>personal-site</span>
           <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-xs)", color: "var(--text-dim)" }}>/</span>
           <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>main</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 24 }}>
             <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--green)", fontWeight: 600 }}>● available for work</span>
             <span className="type-caption" style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text)" }}>Indianapolis, IN</span>
           </div>
@@ -322,7 +322,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             width: 400,
             display: "flex",
             flexDirection: "column",
-            gap: 28,
+            gap: 32,
             zIndex: 1,
             pointerEvents: "none",
           }}
@@ -342,7 +342,7 @@ export default function Desktop({ experience, projects, research }: Props) {
                 {group.label}
               </div>
               {/* Icon grid */}
-              <div style={{ display: "flex", flexWrap: "wrap", columnGap: 36, rowGap: 28 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", columnGap: 32, rowGap: 32 }}>
                 {group.icons.map((icon) => (
                   <DesktopIcon
                     key={icon.slug}
@@ -384,7 +384,7 @@ function DesktopIcon({ filename, onClick }: { filename: string; onClick: () => v
         alignItems: "center",
         gap: 8,
         padding: "8px 8px",
-        background: hovered ? "rgba(249,189,43,0.1)" : "transparent",
+        background: hovered ? "var(--yellow-dim)" : "transparent",
         border: hovered ? "1px solid var(--yellow-border)" : "1px solid transparent",
         borderRadius: 6,
         cursor: "pointer",
@@ -416,7 +416,7 @@ function BigTxtFileIcon() {
     <svg style={{ width: "var(--icon-desktop-w)", height: "var(--icon-desktop-h)" }} viewBox="0 0 52 64" fill="none" aria-hidden="true">
       <rect x="1" y="1" width="37" height="49" rx="2" fill="var(--bg-window)" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
       <path d="M27 1 L39 13" stroke="var(--yellow)" strokeOpacity="0.75" strokeWidth="1.5" />
-      <path d="M27 1 L27 13 L39 13" fill="rgba(249,189,43,0.15)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
+      <path d="M27 1 L27 13 L39 13" fill="var(--yellow-dim)" stroke="var(--yellow)" strokeOpacity="0.6" strokeWidth="1" />
       <line x1="7" y1="22" x2="32" y2="22" stroke="var(--text-dim)" strokeWidth="1.5" />
       <line x1="7" y1="28" x2="32" y2="28" stroke="var(--text-dim)" strokeWidth="1.5" />
       <line x1="7" y1="34" x2="23" y2="34" stroke="var(--text-dim)" strokeWidth="1.5" />

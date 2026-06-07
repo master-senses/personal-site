@@ -234,7 +234,7 @@ export default function DraggableWindow({
         borderRadius: 6,
         border: "2px solid var(--border)",
         background: "var(--bg-window)",
-        boxShadow: "6px 6px 0px 0px rgba(0,0,0,0.85)",
+        boxShadow: "var(--shadow-window)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -249,7 +249,7 @@ export default function DraggableWindow({
           className="window-accent-bar"
           style={{
             height: 3,
-            background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(249,189,43,0.15) 5px, rgba(249,189,43,0.15) 10px)",
+            background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, var(--yellow-dim) 5px, var(--yellow-dim) 10px)",
             borderBottom: "2px solid var(--yellow)",
             borderRadius: "4px 4px 0 0",
           }}
