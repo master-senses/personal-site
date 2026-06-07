@@ -461,8 +461,9 @@ body {
 
 .window-close {
   flex-shrink: 0;
+  align-self: stretch;
   width: 36px;
-  height: 36px;
+  height: auto;
   border: 1px solid var(--border);
   border-radius: 0;
   background: color-mix(in oklch, var(--bg-window) 35%, transparent);
