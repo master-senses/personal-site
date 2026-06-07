@@ -232,7 +232,6 @@ export default function Desktop({ experience, projects, research }: Props) {
                 onClick={() => openFixed(item.id)}
                 className="nav-item"
                 data-open={windows[item.id].open}
-                style={{ fontSize: "var(--font-base)", color: "var(--text)", fontFamily: "var(--font-geist-sans)", fontWeight: 500 }}
               >
                 {item.label}
               </button>
@@ -247,7 +246,7 @@ export default function Desktop({ experience, projects, research }: Props) {
             <a href="https://www.linkedin.com/in/hk39/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="menubar-icon-link">
               <LinkedinIcon />
             </a>
-            <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link" style={{ fontFamily: "var(--font-geist-mono)", fontSize: "var(--font-sm)", fontWeight: 700 }}>
+            <a href="mailto:hrishikeshkalyanaraman@gmail.com" className="cta-link">
               Get in touch
             </a>
           </div>

@@ -28,7 +28,7 @@ function randDelay() {
 
 export default function Terminal({ onAboutOpen }: TerminalProps) {
   const [lines, setLines] = useState<Line[]>([]);
-  const [typing, setTyping] = useState(""); // current command being typed
+  const [typing, setTyping] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [done, setDone] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -79,7 +79,6 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
         }
 
         if (step.kind === "type") {
-          // type chars one by one
           for (let i = 0; i <= step.text.length; i++) {
             if (cancelled) return;
             setTyping(step.text.slice(0, i));
@@ -87,7 +86,6 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
           }
           await wait(step.afterDelay ?? 200);
 
-          // commit as a full line
           appendLine({ kind: "command", text: step.text });
           setTyping("");
           continue;
@@ -110,13 +108,11 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // blinking cursor when not typing
   useEffect(() => {
     const id = setInterval(() => setShowCursor((v) => !v), 530);
     return () => clearInterval(id);
   }, []);
 
-  // auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [lines, typing]);
@@ -141,7 +137,6 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
         </div>
       ))}
 
-      {/* Currently typing row */}
       {!done && (
         <div style={{ display: "flex", gap: 12 }}>
           <span style={{ color: "var(--yellow)", userSelect: "none" }}>$</span>
@@ -163,7 +158,6 @@ export default function Terminal({ onAboutOpen }: TerminalProps) {
         </div>
       )}
 
-      {/* Idle cursor after sequence done */}
       {done && (
         <div style={{ display: "flex", gap: 12 }}>
           <span style={{ color: "var(--yellow)", userSelect: "none" }}>$</span>

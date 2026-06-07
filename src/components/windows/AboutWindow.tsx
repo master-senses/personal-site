@@ -4,9 +4,9 @@ export default function AboutWindow() {
     { key: "role",      value: "Software Engineer" },
     { key: "company",   value: "Eli Lilly and Company" },
     { key: "education", value: "B.S. Computer Science · UIUC" },
-    { key: "github",    value: "github.com/master-senses",                  href: "https://github.com/master-senses" },
-    { key: "linkedin",  value: "linkedin.com/in/hk39",                      href: "https://www.linkedin.com/in/hk39/" },
-    { key: "email",     value: "hrishikeshkalyanaraman@gmail.com",          href: "mailto:hrishikeshkalyanaraman@gmail.com" },
+    { key: "github", value: "github.com/master-senses", href: "https://github.com/master-senses" },
+    { key: "linkedin", value: "linkedin.com/in/hk39", href: "https://www.linkedin.com/in/hk39/" },
+    { key: "email", value: "hrishikeshkalyanaraman@gmail.com", href: "mailto:hrishikeshkalyanaraman@gmail.com" },
   ];
 
   return (
@@ -18,11 +18,11 @@ export default function AboutWindow() {
         <div key={key} style={{ display: "grid", gridTemplateColumns: "112px 1fr", gap: 24, padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", alignItems: "baseline" }}>
           <span className="type-label" style={{ color: "var(--yellow)", textTransform: "lowercase" }}>{key}</span>
           {href ? (
-            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="type-body" style={{ color: "var(--blue)", textDecoration: "none", fontWeight: 500, minWidth: 0, wordBreak: "break-word" }}>
+            <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="type-body" style={{ color: "var(--blue)", textDecoration: "none", minWidth: 0, wordBreak: "break-word" }}>
               {value}
             </a>
           ) : (
-            <span className="type-body" style={{ color: "var(--text)", fontWeight: 500, minWidth: 0, wordBreak: "break-word" }}>{value}</span>
+            <span className="type-body" style={{ minWidth: 0, wordBreak: "break-word" }}>{value}</span>
           )}
         </div>
       ))}

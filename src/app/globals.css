@@ -1,106 +1,55 @@
 @import "tailwindcss";
 
-/*
- * Palette: monochromatic dark (60%) + warm neutrals (30%) + yellow accent (10%)
- * Split-complementary secondary: steel blue (yellow's split pair) for links/metadata
- * Ref: Figma 60-30-10 rule + split complementary for balanced contrast
- */
-
 :root {
-  /* ── 60% — dominant surface (desktop) ─────────────────────────────── */
   --bg: #131313;
-
-  /* ── 30% — secondary surfaces (windows, chrome) ─────────────────── */
-  --bg-raised: #1e1e1e;
   --bg-window: #1c1c1c;
   --titlebar: #252525;
   --border: #383838;
   --border-strong: #4a4a4a;
 
-  /* ── 10% — primary accent (yellow: energy, CTA, active states) ───── */
   --yellow: #f5c035;
   --yellow-dim: rgba(245, 192, 53, 0.1);
   --yellow-border: rgba(245, 192, 53, 0.4);
   --yellow-hover: #ffd04d;
 
-  /* Split-complementary secondary — clearly blue, not white-adjacent */
   --blue: #4A9EFF;
-  --blue-dim: rgba(74, 158, 255, 0.12);
   --blue-border: rgba(74, 158, 255, 0.45);
 
-  /* ── Text (Figma: type style ≠ color; dark/negative application) ──────── */
-  --text: #FAFAF8;             /* primary — content, headings, values */
-  --text-dim: #B8B4AE;         /* chrome only — separators, breadcrumbs, timestamps (not content) */
-  --text-secondary: #FAFAF8; /* legacy alias → --text */
-  --text-muted: var(--text-dim);
-  --text-faint: var(--text-dim);
+  --text: #FAFAF8;
+  --text-dim: #B8B4AE;
   --text-on-yellow: #131313;
-  --text-on-blue: #131313;
 
-  /* ── Typography scale (~1.3 content ratio: 13 / 17 / 21) ─────────────── */
-  --font-xs: 13px;    /* content labels, meta, dates, captions */
-  --font-sm: 15px;    /* chrome only — window titles, icon labels, nav CTA */
-  --font-base: 17px;  /* body */
-  --font-md: 19px;    /* terminal */
-  --font-lg: 21px;    /* content headings */
-  --font-xl: 26px;    /* hero (reserved) */
+  --font-xs: 13px;
+  --font-sm: 15px;
+  --font-base: 17px;
+  --font-lg: 21px;
 
-  --leading-tight: 1.15;   /* display headings */
-  --leading-subheading: 1.25; /* window headings (Figma: ~110–130% at 22px) */
-  --leading-snug: 1.35;    /* labels, icon filenames */
-  --leading-normal: 1.5;   /* UI chrome */
-  --leading-relaxed: 1.7;  /* body, bullets — WCAG ≥1.5 on dark */
+  --leading-subheading: 1.25;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
 
-  /* ── Spacing (8pt grid) ─────────────────────────────────────────────── */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
-  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
 
-  --tracking-label: 0.06em;  /* small caps / folder labels */
+  --tracking-label: 0.06em;
   --tracking-caption: 0.08em;
 
-  /* ── Icon scale (aligned to type ramp) ───────────────────────────── */
-  --icon-inline: 18px;       /* nav github/linkedin */
+  --icon-inline: 18px;
   --icon-desktop-w: 52px;
   --icon-desktop-h: 64px;
-  --icon-desktop-btn: 172px; /* fits longest filename on one line */
+  --icon-desktop-btn: 172px;
 
-  /* ── Semantic status ──────────────────────────────────────────────── */
   --red: #ff5f57;
   --orange: #ffbd2e;
   --green: #34d058;
 
-  /* Hard shadow */
   --shadow-window: 6px 6px 0px 0px rgba(0, 0, 0, 0.85);
   --shadow-card: 4px 4px 0px 0px rgba(0, 0, 0, 0.7);
-  --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 0.6);
-}
-
-@theme inline {
-  --color-bg: var(--bg);
-  --color-bg-raised: var(--bg-raised);
-  --color-bg-window: var(--bg-window);
-  --color-titlebar: var(--titlebar);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-  --color-yellow: var(--yellow);
-  --color-yellow-dim: var(--yellow-dim);
-  --color-yellow-border: var(--yellow-border);
-  --color-blue: var(--blue);
-  --color-blue-dim: var(--blue-dim);
-  --color-text: var(--text);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-dim: var(--text-dim);
-  --color-text-on-yellow: var(--text-on-yellow);
-  --color-red: var(--red);
-  --color-orange: var(--orange);
-  --color-green: var(--green);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 *,
@@ -134,68 +83,6 @@ body {
   color: var(--text-on-yellow);
 }
 
-.stripe-bg {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 5px,
-    rgba(255, 255, 255, 0.02) 5px,
-    rgba(255, 255, 255, 0.02) 10px
-  );
-}
-
-.stripe-yellow {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 5px,
-    rgba(245, 192, 53, 0.07) 5px,
-    rgba(245, 192, 53, 0.07) 10px
-  );
-}
-
-.window {
-  border: 2px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: var(--shadow-window);
-  background: var(--bg-window);
-}
-
-.window-titlebar {
-  background: var(--titlebar);
-  border-bottom: 2px solid var(--border);
-  padding: 0 12px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  user-select: none;
-}
-
-.traffic-lights {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.traffic-light {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-}
-
-.window-title {
-  flex: 1;
-  text-align: center;
-  font-size: var(--font-sm);
-  font-family: var(--font-geist-mono), monospace;
-  color: var(--text);
-  letter-spacing: 0.02em;
-  line-height: var(--leading-snug);
-}
-
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -224,42 +111,12 @@ body {
   line-height: var(--leading-snug);
 }
 
-.tag-yellow {
-  border-color: var(--yellow-border);
-  color: var(--yellow);
-  background: var(--yellow-dim);
-}
-
-.tag-blue {
-  border-color: var(--blue-border);
-  color: var(--blue);
-  background: var(--blue-dim);
-}
-
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--font-xs);
-  font-family: var(--font-geist-mono), monospace;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caption);
-  color: var(--text);
-  line-height: var(--leading-snug);
-}
-
-/* ── Semantic type styles (Figma: size/weight in style, color applied separately) ─ */
-
 .type-caption {
   font-size: var(--font-xs);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-caption);
   font-weight: 500;
   color: var(--text);
-}
-
-.type-caption-chrome {
-  color: var(--text-dim);
 }
 
 .type-label {
@@ -298,7 +155,6 @@ body {
   font-weight: 500;
 }
 
-/* .txt windows — unified sans; Figma negative application (dark bg) */
 .txt-window {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   font-weight: 500;
@@ -316,27 +172,10 @@ body {
   font-family: inherit;
 }
 
-.txt-window .type-caption {
-  font-size: var(--font-xs);
-}
-
-.txt-window .type-body,
-.txt-window .type-body-mono {
-  font-weight: 500;
-}
-
 .txt-window .type-subheading {
-  font-weight: 700;
-  line-height: var(--leading-subheading);
   letter-spacing: -0.02em;
 }
 
-.txt-window .tag {
-  font-size: var(--font-xs);
-  font-weight: 500;
-}
-
-/* skills.json — full monospace, high-contrast on dark */
 .json-window {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-weight: 500;
@@ -351,7 +190,6 @@ body {
   font-family: inherit;
 }
 
-/* ── Window resize handles ──────────────────────────────────────────────── */
 .window-resize-layer {
   position: absolute;
   inset: 0;
@@ -416,14 +254,12 @@ body {
   border-color: var(--yellow);
 }
 
-/* ── Focus rings (a11y) ─────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--yellow);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* ── Nav item (menubar buttons) ─────────────────────────────────────────── */
 .nav-item {
   display: flex;
   align-items: center;
@@ -442,7 +278,6 @@ body {
 }
 .nav-item[data-open="true"]:hover { background: rgba(249, 189, 43, 0.15); }
 
-/* ── Menubar icon links (GitHub, LinkedIn) ────────────────────────────────── */
 .menubar-icon-link {
   display: flex;
   align-items: center;
@@ -457,7 +292,6 @@ body {
   color: var(--yellow-hover);
 }
 
-/* ── CTA "Get in touch" button ──────────────────────────────────────────── */
 .cta-link {
   display: flex;
   align-items: center;
@@ -473,7 +307,6 @@ body {
   border-left-color: var(--yellow-hover);
 }
 
-/* ── Footer / chrome links ──────────────────────────────────────────────── */
 .link-chrome {
   color: var(--text-dim);
   text-decoration: none;

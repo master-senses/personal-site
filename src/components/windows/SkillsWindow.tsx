@@ -18,7 +18,7 @@ export default function SkillsWindow() {
             <span>: [</span>
             {g.skills.map((s, si) => (
               <span key={s}>
-                <span style={{ fontWeight: 500 }}>&quot;{s}&quot;</span>
+                <span>&quot;{s}&quot;</span>
                 {si < g.skills.length - 1 && <span>, </span>}
               </span>
             ))}
@@ -33,7 +33,7 @@ export default function SkillsWindow() {
         <div className="type-caption" style={{ textTransform: "uppercase", color: "var(--text)", marginBottom: 8, fontWeight: 600 }}>
           education
         </div>
-        <div className="type-body" style={{ fontSize: "var(--font-lg)", fontWeight: 500, lineHeight: "var(--leading-snug)" }}>University of Illinois at Urbana-Champaign</div>
+        <div className="type-body" style={{ fontSize: "var(--font-lg)", lineHeight: "var(--leading-snug)" }}>University of Illinois at Urbana-Champaign</div>
         <div className="type-label" style={{ color: "var(--blue)", marginTop: 8, fontSize: "var(--font-base)" }}>B.S. Computer Science</div>
       </div>
     </div>

@@ -24,9 +24,9 @@ export default function ExperienceContent({ item }: { item: ContentItem<Experien
         </span>
       </div>
 
-      <ul style={{ margin: 0, padding: "12px 16px", listStyle: "none" }}>
+      <ul style={{ margin: 0, padding: "12px 16px", listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
         {bullets.map((b, i) => (
-            <li key={i} className="type-body" style={{ display: "flex", gap: 12, marginBottom: i < bullets.length - 1 ? 12 : 0 }}>
+          <li key={i} className="type-body" style={{ display: "flex", gap: 12 }}>
             <span style={{ color: "var(--yellow)", flexShrink: 0, marginTop: 2, fontWeight: 700 }}>·</span>
             <span style={{ minWidth: 0 }}>{b}</span>
           </li>
