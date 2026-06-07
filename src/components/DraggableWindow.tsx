@@ -128,12 +128,15 @@ export default function DraggableWindow({
     };
   }, [pos.x, pos.y]);
 
-  const onResizeMouseDown = useCallback(
-    (e: React.MouseEvent, edge: ResizeEdge) => {
+  const onResizePointerDown = useCallback(
+    (e: React.PointerEvent, edge: ResizeEdge) => {
       if (e.button !== 0) return;
       e.stopPropagation();
       e.preventDefault();
       onFocus(id);
+
+      const handle = e.currentTarget as HTMLElement;
+      handle.setPointerCapture(e.pointerId);
 
       const anchored = getAnchoredPosition();
       if (centered && !hasMoved) {
@@ -157,7 +160,7 @@ export default function DraggableWindow({
         anchorY: anchored.y,
       };
 
-      const onMove = (ev: MouseEvent) => {
+      const onMove = (ev: PointerEvent) => {
         if (!resizeState.current) return;
         const {
           edge: resizeEdge,
@@ -194,14 +197,17 @@ export default function DraggableWindow({
         setSize({ w: newW, h: newH });
       };
 
-      const onUp = () => {
+      const onUp = (ev: PointerEvent) => {
         resizeState.current = null;
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
+        handle.releasePointerCapture(ev.pointerId);
+        handle.removeEventListener("pointermove", onMove);
+        handle.removeEventListener("pointerup", onUp);
+        handle.removeEventListener("pointercancel", onUp);
       };
 
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
+      handle.addEventListener("pointermove", onMove);
+      handle.addEventListener("pointerup", onUp);
+      handle.addEventListener("pointercancel", onUp);
     },
     [id, onFocus, size.h, size.w, centered, hasMoved, getAnchoredPosition]
   );
@@ -214,6 +220,7 @@ export default function DraggableWindow({
   return (
     <div
       ref={windowRef}
+      className="draggable-window"
       style={{
         position: "absolute",
         left: useCssCenter ? "50%" : pos.x,
@@ -233,12 +240,13 @@ export default function DraggableWindow({
         overflow: "hidden",
       }}
       onMouseDown={(e) => {
-        if ((e.target as HTMLElement).closest(".window-resize-edge, .window-resize-handle")) return;
+        if ((e.target as HTMLElement).closest(".window-resize-layer, .window-resize-edge, .window-resize-handle")) return;
         onFocus(id);
       }}
     >
       {accentBar && (
         <div
+          className="window-accent-bar"
           style={{
             height: 3,
             background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(249,189,43,0.15) 5px, rgba(249,189,43,0.15) 10px)",
@@ -303,26 +311,23 @@ export default function DraggableWindow({
         )}
       </div>
 
-      <div style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>{children}</div>
+      <div style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}>{children}</div>
 
-      {/* Resize: right edge */}
-      <div
-        className="window-resize-edge window-resize-edge-e"
-        onMouseDown={(e) => onResizeMouseDown(e, "e")}
-        aria-hidden="true"
-      />
-      {/* Resize: bottom edge */}
-      <div
-        className="window-resize-edge window-resize-edge-s"
-        onMouseDown={(e) => onResizeMouseDown(e, "s")}
-        aria-hidden="true"
-      />
-      {/* Resize: bottom-right corner */}
-      <div
-        className="window-resize-handle"
-        onMouseDown={(e) => onResizeMouseDown(e, "se")}
-        aria-hidden="true"
-      />
+      {/* Resize overlay — above scroll content */}
+      <div className="window-resize-layer" aria-hidden="true">
+        <div
+          className="window-resize-edge window-resize-edge-e"
+          onPointerDown={(e) => onResizePointerDown(e, "e")}
+        />
+        <div
+          className="window-resize-edge window-resize-edge-s"
+          onPointerDown={(e) => onResizePointerDown(e, "s")}
+        />
+        <div
+          className="window-resize-handle"
+          onPointerDown={(e) => onResizePointerDown(e, "se")}
+        />
+      </div>
     </div>
   );
 }
