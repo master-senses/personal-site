@@ -42,6 +42,7 @@ export interface DraggableWindowProps {
   width: number;
   isOpen: boolean;
   zIndex: number;
+  isFocused: boolean;
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
   centered?: boolean;
@@ -59,6 +60,7 @@ export default function DraggableWindow({
   width,
   isOpen,
   zIndex,
+  isFocused,
   onFocus,
   onClose,
   centered = false,
@@ -191,10 +193,14 @@ export default function DraggableWindow({
       setIframeShield(false);
       return;
     }
-    if (!iframeUnlockedRef.current) {
+    if (isFocused) {
+      iframeUnlockedRef.current = true;
+      setIframeShield(false);
+    } else {
+      iframeUnlockedRef.current = false;
       setIframeShield(!!contentRef.current?.querySelector("iframe"));
     }
-  }, [isOpen]);
+  }, [isOpen, isFocused]);
 
   useEffect(() => {
     if (!isOpen || !iframeShield) return;

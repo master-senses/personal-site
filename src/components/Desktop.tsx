@@ -161,10 +161,12 @@ export default function Desktop({ experience, projects, research }: Props) {
 function DesktopShell({ experience, projects, research }: Props) {
   const [windows, setWindows] = useState<Record<WinId, WinConfig>>(INITIAL);
   const [itemWins, setItemWins] = useState<Record<string, ItemWin>>({});
+  const [focusedWindowId, setFocusedWindowId] = useState<string>("terminal");
   const zCounter = useRef(11);
 
   // ── Focus / open / close for fixed windows ───────────────────────────────
   const focus = useCallback((id: string) => {
+    setFocusedWindowId(id);
     if (id in INITIAL) {
       setWindows((prev) => ({ ...prev, [id]: { ...prev[id as WinId], z: ++zCounter.current } }));
     } else {
@@ -173,6 +175,7 @@ function DesktopShell({ experience, projects, research }: Props) {
   }, []);
 
   const openFixed = useCallback((id: WinId) => {
+    setFocusedWindowId(id);
     setWindows((prev) => ({
       ...prev,
       [id]: { ...prev[id], open: true, z: ++zCounter.current },
@@ -190,6 +193,7 @@ function DesktopShell({ experience, projects, research }: Props) {
   // ── Open individual item window ──────────────────────────────────────────
   const openItem = useCallback((type: ItemType, slug: string, filename: string) => {
     const key = `${type}::${slug}`;
+    setFocusedWindowId(key);
     setItemWins((prev) => {
       const existing = prev[key];
       if (existing?.open) {
@@ -223,9 +227,16 @@ function DesktopShell({ experience, projects, research }: Props) {
           window.innerWidth - aboutWidth - 16
         )
       : 640;
+    setFocusedWindowId((current) => (current === "terminal" ? "about" : current));
     setWindows((prev) => ({
       ...prev,
-      about: { ...prev.about, open: true, x, y: INITIAL.terminal.y, z: ++zCounter.current },
+      about: {
+        ...prev.about,
+        open: true,
+        x,
+        y: INITIAL.terminal.y,
+        z: ++zCounter.current,
+      },
     }));
   }, []);
 
@@ -322,27 +333,27 @@ function DesktopShell({ experience, projects, research }: Props) {
       <div style={{ position: "relative", flex: 1, overflow: "hidden" }}>
 
         {/* Fixed windows */}
-        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} centered>
+        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} isFocused={focusedWindowId === "terminal"} onFocus={focus} onClose={closeWin} centered>
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
 
-        <DraggableWindow id="about" title={WIN_TITLES.about} initialX={windows.about.x} initialY={windows.about.y} width={WIN_WIDTHS.about} isOpen={windows.about.open} zIndex={windows.about.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="about" title={WIN_TITLES.about} initialX={windows.about.x} initialY={windows.about.y} width={WIN_WIDTHS.about} isOpen={windows.about.open} zIndex={windows.about.z} isFocused={focusedWindowId === "about"} onFocus={focus} onClose={closeWin}>
           <AboutWindow />
         </DraggableWindow>
 
-        <DraggableWindow id="work" title={WIN_TITLES.work} initialX={INITIAL.work.x} initialY={INITIAL.work.y} width={WIN_WIDTHS.work} isOpen={windows.work.open} zIndex={windows.work.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="work" title={WIN_TITLES.work} initialX={INITIAL.work.x} initialY={INITIAL.work.y} width={WIN_WIDTHS.work} isOpen={windows.work.open} zIndex={windows.work.z} isFocused={focusedWindowId === "work"} onFocus={focus} onClose={closeWin}>
           <WorkWindow experience={experience} />
         </DraggableWindow>
 
-        <DraggableWindow id="projects" title={WIN_TITLES.projects} initialX={INITIAL.projects.x} initialY={INITIAL.projects.y} width={WIN_WIDTHS.projects} isOpen={windows.projects.open} zIndex={windows.projects.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="projects" title={WIN_TITLES.projects} initialX={INITIAL.projects.x} initialY={INITIAL.projects.y} width={WIN_WIDTHS.projects} isOpen={windows.projects.open} zIndex={windows.projects.z} isFocused={focusedWindowId === "projects"} onFocus={focus} onClose={closeWin}>
           <ProjectsWindow projects={projects} />
         </DraggableWindow>
 
-        <DraggableWindow id="research" title={WIN_TITLES.research} initialX={INITIAL.research.x} initialY={INITIAL.research.y} width={WIN_WIDTHS.research} isOpen={windows.research.open} zIndex={windows.research.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="research" title={WIN_TITLES.research} initialX={INITIAL.research.x} initialY={INITIAL.research.y} width={WIN_WIDTHS.research} isOpen={windows.research.open} zIndex={windows.research.z} isFocused={focusedWindowId === "research"} onFocus={focus} onClose={closeWin}>
           <ResearchWindow research={research} />
         </DraggableWindow>
 
-        <DraggableWindow id="skills" title={WIN_TITLES.skills} initialX={INITIAL.skills.x} initialY={INITIAL.skills.y} width={WIN_WIDTHS.skills} isOpen={windows.skills.open} zIndex={windows.skills.z} onFocus={focus} onClose={closeWin}>
+        <DraggableWindow id="skills" title={WIN_TITLES.skills} initialX={INITIAL.skills.x} initialY={INITIAL.skills.y} width={WIN_WIDTHS.skills} isOpen={windows.skills.open} zIndex={windows.skills.z} isFocused={focusedWindowId === "skills"} onFocus={focus} onClose={closeWin}>
           <SkillsWindow />
         </DraggableWindow>
 
@@ -352,7 +363,7 @@ function DesktopShell({ experience, projects, research }: Props) {
           const content = renderItemContent(win, experience, projects, research);
           if (!content) return null;
           return (
-            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? ITEM_WIN_WIDTHS.project : ITEM_WIN_WIDTHS.default} isOpen={win.open} zIndex={win.z} onFocus={focus} onClose={closeWin}>
+            <DraggableWindow key={key} id={key} title={win.title} initialX={win.x} initialY={win.y} width={win.type === "project" ? ITEM_WIN_WIDTHS.project : ITEM_WIN_WIDTHS.default} isOpen={win.open} zIndex={win.z} isFocused={focusedWindowId === key} onFocus={focus} onClose={closeWin}>
               {content}
             </DraggableWindow>
           );
