@@ -1,0 +1,382 @@
+/* Scoped to /preview/mobile only — delete this folder to remove */
+
+.mobile-preview-frame {
+  min-height: 100dvh;
+  background: #0a0a0a;
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 32px;
+}
+
+.mobile-preview-phone {
+  width: 100%;
+  max-width: 390px;
+  height: min(844px, calc(100dvh - 32px));
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--border-strong);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.6);
+}
+
+.mobile-preview-banner {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 8px 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-xs);
+  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-preview-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── macOS menubar ───────────────────────────────────────────────────── */
+.mobile-preview-menubar {
+  flex-shrink: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: stretch;
+  background: var(--titlebar);
+  border-bottom: 2px solid var(--border);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.mobile-preview-logo-btn {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  padding: 0 12px;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mobile-preview-logo-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: var(--yellow);
+  color: var(--text-on-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-xs);
+  font-weight: 900;
+}
+
+.mobile-preview-menubar-file {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-sm);
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-preview-menubar-actions {
+  display: flex;
+  align-items: stretch;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.mobile-preview-menubar-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 0 12px;
+  border-left: 1px solid var(--border);
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.mobile-preview-menubar-icon-link:active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mobile-preview-menubar-cta {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-left: 2px solid var(--yellow);
+  background: var(--yellow);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mobile-preview-menubar-cta:active {
+  background: var(--yellow-hover);
+  border-left-color: var(--yellow-hover);
+  color: var(--text);
+}
+
+/* ── Desktop (icon grid) ─────────────────────────────────────────────── */
+.mobile-preview-desktop {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 14px 12px;
+}
+
+.mobile-app-folder {
+  margin-top: 20px;
+}
+
+.mobile-app-folder-label {
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--blue-border);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+
+.mobile-app-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 8px;
+}
+
+.mobile-app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.mobile-app-icon:active {
+  background: rgba(245, 192, 53, 0.1);
+  border-color: var(--yellow-border);
+}
+
+.mobile-app-icon-graphic {
+  width: 48px;
+  height: 58px;
+}
+
+.mobile-app-icon-label {
+  width: 100%;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text);
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ── App window (macOS style) ──────────────────────────────────────── */
+.mobile-app-window {
+  flex: 0 1 auto;
+  max-height: calc(100% - 16px);
+  min-height: 0;
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-window);
+  box-shadow: var(--shadow-window);
+  overflow: hidden;
+}
+
+.mobile-app-window-titlebar {
+  flex-shrink: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 0 0 12px;
+  background: var(--titlebar);
+  border-bottom: 2px solid var(--border);
+  cursor: default;
+  user-select: none;
+}
+
+.mobile-app-window-title {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-sm);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-app-close {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: color-mix(in oklch, var(--bg-window) 35%, transparent);
+  color: var(--text);
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: box-shadow 0.15s ease, background 0.15s ease, color 0.12s ease;
+}
+
+@media (hover: hover) {
+  .mobile-app-close:hover {
+    background: color-mix(in oklch, var(--yellow) 6%, var(--bg-window));
+    box-shadow: var(--shadow-close-hover-subtle);
+  }
+}
+
+.mobile-app-close:active {
+  color: var(--yellow);
+  box-shadow: 1px 1px 0px 0px hsl(45 100% 80% / 0.7);
+}
+
+.mobile-app-window-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+}
+
+/* ── Window content: readable type, no clipping ────────────────────── */
+.mobile-app-window-body .txt-window,
+.mobile-app-window-body .json-window {
+  min-width: 0;
+  width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.mobile-app-window-body .type-subheading {
+  font-size: clamp(15px, 4.2vw, var(--font-lg));
+  line-height: var(--leading-subheading);
+}
+
+.mobile-app-window-body .type-body,
+.mobile-app-window-body .type-body-mono {
+  font-size: clamp(14px, 3.8vw, var(--font-base));
+}
+
+.mobile-app-window-body .type-label,
+.mobile-app-window-body .type-caption {
+  font-size: clamp(12px, 3.2vw, var(--font-sm));
+}
+
+.mobile-app-window-body .txt-window > div[style*="gridTemplateColumns"] {
+  grid-template-columns: minmax(0, 88px) minmax(0, 1fr) !important;
+  gap: 12px !important;
+}
+
+.mobile-app-window-body .txt-window > div[style*="space-between"] {
+  flex-wrap: wrap !important;
+}
+
+.mobile-app-window-body .txt-window > div[style*="space-between"] > span:last-child {
+  white-space: normal !important;
+  flex-basis: 100%;
+  margin-top: 4px;
+}
+
+.mobile-app-window-body .tag {
+  white-space: normal;
+}
+
+/* ── Project content (preview-only) ────────────────────────────────── */
+.mobile-content-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 12px;
+  padding: 12px 16px;
+  background: var(--titlebar);
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-content-header-main {
+  min-width: 0;
+  flex: 1 1 160px;
+}
+
+.mobile-content-period {
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.mobile-content-body {
+  margin: 0;
+  padding: 12px 16px;
+}
+
+.mobile-content-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.mobile-youtube-wrap {
+  padding: 0 16px 12px;
+}
+
+.mobile-youtube-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 180px;
+  background: var(--bg);
+}
+
+.mobile-youtube-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+}
+

@@ -298,7 +298,7 @@ export default function Desktop({ experience, projects, research }: Props) {
       <div style={{ position: "relative", flex: 1, overflow: "hidden" }}>
 
         {/* Fixed windows */}
-        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} accentBar centered>
+        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} centered>
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
 
