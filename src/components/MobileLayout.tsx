@@ -106,14 +106,14 @@ function AppWindow({
         <span className="mobile-app-window-title">{title}</span>
         <button
           type="button"
-          className="mobile-app-close"
-          aria-label="Close"
+          className="window-close"
+          aria-label="Close window"
           onClick={onClose}
         >
           ×
         </button>
       </div>
-      <div className="mobile-app-window-body">{children}</div>
+      <div className="mobile-app-window-body window-content">{children}</div>
     </div>
   );
 }
