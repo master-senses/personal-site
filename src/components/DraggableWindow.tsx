@@ -442,9 +442,13 @@ export default function DraggableWindow({
             className="iframe-focus-shield"
             aria-hidden="true"
             onPointerDown={(e) => {
+              if (e.button !== 0) return;
               e.stopPropagation();
               iframeUnlockedRef.current = true;
               onFocus(id);
+              // Hide synchronously so pointerup/click hit the iframe on quick taps.
+              // React state alone re-renders too late for the same gesture.
+              (e.currentTarget as HTMLElement).style.display = "none";
               setIframeShield(false);
             }}
           />
