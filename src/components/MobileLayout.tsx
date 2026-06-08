@@ -4,7 +4,7 @@ import { useState } from "react";
 import AboutWindow from "@/components/windows/AboutWindow";
 import SkillsWindow from "@/components/windows/SkillsWindow";
 import ExperienceContent from "@/components/windows/ExperienceContent";
-import ProjectContentMobile from "./ProjectContentMobile";
+import ProjectContentMobile from "@/components/windows/ProjectContentMobile";
 import ResearchContent from "@/components/windows/ResearchContent";
 import {
   ContentItem,
@@ -16,6 +16,7 @@ import { GithubIcon } from "@/components/icons/GithubIcon";
 import { LinkedinIcon } from "@/components/icons/LinkedinIcon";
 import { XIcon } from "@/components/icons/XIcon";
 import { CONTACT_MAILTO } from "@/lib/contact";
+import "./mobile-layout.css";
 
 interface Props {
   experience: ContentItem<ExperienceFrontmatter>[];
@@ -117,7 +118,7 @@ function AppWindow({
   );
 }
 
-export default function MobileLayoutPreview({
+export default function MobileLayout({
   experience,
   projects,
   research,
@@ -156,21 +157,21 @@ export default function MobileLayoutPreview({
         : openApp?.title ?? "";
 
   return (
-    <div className="mobile-preview-shell" data-app-open={openApp ? "true" : "false"}>
-      <header className="mobile-preview-menubar">
-        <button type="button" className="mobile-preview-logo-btn" onClick={() => setOpenApp(null)}>
-          <span className="mobile-preview-logo-mark">HK</span>
+    <div className="mobile-layout-root" data-app-open={openApp ? "true" : "false"}>
+      <header className="mobile-menubar">
+        <button type="button" className="mobile-logo-btn" onClick={() => setOpenApp(null)}>
+          <span className="mobile-logo-mark">HK</span>
         </button>
         {menubarFile && (
-          <span className="mobile-preview-menubar-file">{menubarFile}</span>
+          <span className="mobile-menubar-file">{menubarFile}</span>
         )}
-        <div className="mobile-preview-menubar-actions">
+        <div className="mobile-menubar-actions">
           <a
             href="https://github.com/master-senses"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="mobile-preview-menubar-icon-link"
+            className="mobile-menubar-icon-link"
           >
             <GithubIcon />
           </a>
@@ -179,7 +180,7 @@ export default function MobileLayoutPreview({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="mobile-preview-menubar-icon-link"
+            className="mobile-menubar-icon-link"
           >
             <LinkedinIcon />
           </a>
@@ -188,18 +189,18 @@ export default function MobileLayoutPreview({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="X"
-            className="mobile-preview-menubar-icon-link"
+            className="mobile-menubar-icon-link"
           >
             <XIcon />
           </a>
-          <a href={CONTACT_MAILTO} className="mobile-preview-menubar-cta">
+          <a href={CONTACT_MAILTO} className="mobile-menubar-cta">
             Get in touch
           </a>
         </div>
       </header>
 
       {!openApp ? (
-        <main className="mobile-preview-desktop">
+        <main className="mobile-home">
           <div className="mobile-app-icon-grid">
             <AppIcon label="about.txt" onClick={() => setOpenApp({ kind: "about" })}>
               <TxtFileIcon />
@@ -268,7 +269,6 @@ export default function MobileLayoutPreview({
           {appContent}
         </AppWindow>
       )}
-
     </div>
   );
 }

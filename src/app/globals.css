@@ -62,6 +62,7 @@ html {
 body {
   margin: 0;
   overflow: hidden;
+  overflow-x: hidden;
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;

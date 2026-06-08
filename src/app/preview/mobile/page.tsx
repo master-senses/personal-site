@@ -1,5 +1,5 @@
 import { getExperience, getProjects, getResearch } from "@/lib/mdx";
-import MobileLayoutPreview from "./MobileLayoutPreview";
+import MobileLayout from "@/components/MobileLayout";
 
 export default function MobilePreviewPage() {
   const experience = getExperience();
@@ -12,7 +12,7 @@ export default function MobilePreviewPage() {
         <div className="mobile-preview-banner">
           Layout preview only — delete src/app/preview/mobile to remove
         </div>
-        <MobileLayoutPreview
+        <MobileLayout
           experience={experience}
           projects={projects}
           research={research}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import MobileLayout from "./MobileLayout";
 import DraggableWindow from "./DraggableWindow";
 import Terminal from "./Terminal";
 import AboutWindow from "./windows/AboutWindow";
@@ -135,6 +137,28 @@ function renderItemContent(
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Desktop({ experience, projects, research }: Props) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <MobileLayout
+        experience={experience}
+        projects={projects}
+        research={research}
+      />
+    );
+  }
+
+  return (
+    <DesktopShell
+      experience={experience}
+      projects={projects}
+      research={research}
+    />
+  );
+}
+
+function DesktopShell({ experience, projects, research }: Props) {
   const [windows, setWindows] = useState<Record<WinId, WinConfig>>(INITIAL);
   const [itemWins, setItemWins] = useState<Record<string, ItemWin>>({});
   const zCounter = useRef(11);
