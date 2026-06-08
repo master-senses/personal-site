@@ -4,6 +4,35 @@ import { useRef, useState, useCallback, useLayoutEffect, useEffect } from "react
 
 const MIN_WIDTH = 320;
 const MIN_HEIGHT = 200;
+const EDGE_INSET = 8;
+
+function clampToDesktopBounds(
+  parentW: number,
+  parentH: number,
+  x: number,
+  y: number,
+  w: number,
+  h: number | null,
+  measuredH: number,
+): { x: number; y: number; w: number; h: number | null } {
+  const maxW = Math.max(MIN_WIDTH, parentW - EDGE_INSET);
+  const clampedW = Math.min(w, maxW);
+
+  const layoutH = h ?? measuredH;
+  const maxH = Math.max(MIN_HEIGHT, parentH - EDGE_INSET);
+  const clampedH = h === null ? null : Math.min(h, maxH);
+  const effectiveH = clampedH ?? Math.min(layoutH, maxH);
+
+  const maxX = Math.max(0, parentW - clampedW - EDGE_INSET);
+  const maxY = Math.max(0, parentH - effectiveH - EDGE_INSET);
+
+  return {
+    x: Math.min(Math.max(0, x), maxX),
+    y: Math.min(Math.max(0, y), maxY),
+    w: clampedW,
+    h: clampedH,
+  };
+}
 
 export interface DraggableWindowProps {
   id: string;
@@ -43,6 +72,12 @@ export default function DraggableWindow({
   const [hasMoved, setHasMoved] = useState(false);
   const [size, setSize] = useState<{ w: number; h: number | null }>({ w: width, h: null });
   const [centeredX, setCenteredX] = useState<number | null>(null);
+  const posRef = useRef(pos);
+  const sizeRef = useRef(size);
+  useLayoutEffect(() => {
+    posRef.current = pos;
+    sizeRef.current = size;
+  });
   const dragState = useRef<{
     startMouseX: number;
     startMouseY: number;
@@ -70,10 +105,20 @@ export default function DraggableWindow({
 
   const pinCenteredWindow = useCallback(() => {
     const el = windowRef.current;
-    if (!el || !el.offsetParent) return;
+    const parent = el?.offsetParent as HTMLElement | null;
+    if (!el || !parent) return;
     const rect = el.getBoundingClientRect();
-    const parentRect = (el.offsetParent as HTMLElement).getBoundingClientRect();
-    setPos({ x: rect.left - parentRect.left, y: rect.top - parentRect.top });
+    const parentRect = parent.getBoundingClientRect();
+    const clamped = clampToDesktopBounds(
+      parent.clientWidth,
+      parent.clientHeight,
+      rect.left - parentRect.left,
+      rect.top - parentRect.top,
+      sizeRef.current.w,
+      sizeRef.current.h,
+      el.offsetHeight,
+    );
+    setPos({ x: clamped.x, y: clamped.y });
     setHasMoved(true);
   }, []);
 
@@ -81,15 +126,63 @@ export default function DraggableWindow({
     const el = windowRef.current;
     const parent = el?.offsetParent as HTMLElement | null;
     if (!el || !parent) return;
-    setCenteredX(Math.round((parent.clientWidth - el.offsetWidth) / 2));
+
+    const clamped = clampToDesktopBounds(
+      parent.clientWidth,
+      parent.clientHeight,
+      posRef.current.x,
+      posRef.current.y,
+      sizeRef.current.w,
+      sizeRef.current.h,
+      el.offsetHeight,
+    );
+
+    if (clamped.w !== sizeRef.current.w || clamped.h !== sizeRef.current.h) {
+      setSize({ w: clamped.w, h: clamped.h });
+    }
+    if (clamped.y !== posRef.current.y) {
+      setPos((prev) => ({ ...prev, y: clamped.y }));
+    }
+    setCenteredX(Math.max(0, Math.round((parent.clientWidth - clamped.w) / 2)));
+  }, []);
+
+  const enforceBounds = useCallback(() => {
+    const el = windowRef.current;
+    const parent = el?.offsetParent as HTMLElement | null;
+    if (!el || !parent) return;
+
+    const clamped = clampToDesktopBounds(
+      parent.clientWidth,
+      parent.clientHeight,
+      posRef.current.x,
+      posRef.current.y,
+      sizeRef.current.w,
+      sizeRef.current.h,
+      el.offsetHeight,
+    );
+
+    if (clamped.x !== posRef.current.x || clamped.y !== posRef.current.y) {
+      setPos({ x: clamped.x, y: clamped.y });
+    }
+    if (clamped.w !== sizeRef.current.w || clamped.h !== sizeRef.current.h) {
+      setSize({ w: clamped.w, h: clamped.h });
+    }
   }, []);
 
   useLayoutEffect(() => {
-    if (!isOpen || !centered || hasMoved) return;
-    centerWindow();
-    window.addEventListener("resize", centerWindow);
-    return () => window.removeEventListener("resize", centerWindow);
-  }, [isOpen, centered, hasMoved, size.w, centerWindow]);
+    if (!isOpen) return;
+    if (centered && !hasMoved) {
+      centerWindow();
+      const onResize = () => centerWindow();
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }
+
+    enforceBounds();
+    const onResize = () => enforceBounds();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [isOpen, centered, hasMoved, size.w, size.h, centerWindow, enforceBounds]);
 
   useLayoutEffect(() => {
     if (!isOpen) {
@@ -131,13 +224,28 @@ export default function DraggableWindow({
 
       const onMove = (ev: PointerEvent) => {
         if (!dragState.current) return;
-        setPos({
-          x: dragState.current.startPosX + (ev.clientX - dragState.current.startMouseX),
-          y: Math.max(
-            0,
-            dragState.current.startPosY + (ev.clientY - dragState.current.startMouseY)
-          ),
-        });
+        const el = windowRef.current;
+        const parent = el?.offsetParent as HTMLElement | null;
+        const nextX =
+          dragState.current.startPosX + (ev.clientX - dragState.current.startMouseX);
+        const nextY =
+          dragState.current.startPosY + (ev.clientY - dragState.current.startMouseY);
+
+        if (!el || !parent) {
+          setPos({ x: nextX, y: Math.max(0, nextY) });
+          return;
+        }
+
+        const clamped = clampToDesktopBounds(
+          parent.clientWidth,
+          parent.clientHeight,
+          nextX,
+          nextY,
+          sizeRef.current.w,
+          sizeRef.current.h,
+          el.offsetHeight,
+        );
+        setPos({ x: clamped.x, y: clamped.y });
       };
 
       const onUp = (ev: PointerEvent) => {
@@ -232,13 +340,16 @@ export default function DraggableWindow({
         const parent = el?.offsetParent as HTMLElement | null;
         if (resizeEdge === "se" || resizeEdge === "e") {
           const maxW = parent
-            ? parent.clientWidth - anchorX - 8
-            : window.innerWidth - anchorX - 8;
+            ? parent.clientWidth - anchorX - EDGE_INSET
+            : window.innerWidth - anchorX - EDGE_INSET;
           newW = Math.min(newW, maxW);
         }
+        if (resizeEdge === "w" || resizeEdge === "sw") {
+          newX = Math.max(0, newX);
+        }
         const maxH = parent
-          ? parent.clientHeight - anchorY - 8
-          : window.innerHeight - anchorY - 8;
+          ? parent.clientHeight - anchorY - EDGE_INSET
+          : window.innerHeight - anchorY - EDGE_INSET;
         newH = Math.min(newH, maxH);
 
         setSize({ w: newW, h: newH });
