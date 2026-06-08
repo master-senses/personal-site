@@ -67,6 +67,7 @@ export default function DraggableWindow({
 }: DraggableWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const iframeUnlockedRef = useRef(false);
   const [iframeShield, setIframeShield] = useState(false);
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [hasMoved, setHasMoved] = useState(false);
@@ -186,16 +187,20 @@ export default function DraggableWindow({
 
   useLayoutEffect(() => {
     if (!isOpen) {
+      iframeUnlockedRef.current = false;
       setIframeShield(false);
       return;
     }
-    setIframeShield(!!contentRef.current?.querySelector("iframe"));
-  }, [isOpen, children]);
+    if (!iframeUnlockedRef.current) {
+      setIframeShield(!!contentRef.current?.querySelector("iframe"));
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen || !iframeShield) return;
     const onDocPointerDown = (e: PointerEvent) => {
       if (!windowRef.current?.contains(e.target as Node)) {
+        iframeUnlockedRef.current = false;
         setIframeShield(!!contentRef.current?.querySelector("iframe"));
       }
     };
@@ -438,6 +443,7 @@ export default function DraggableWindow({
             aria-hidden="true"
             onPointerDown={(e) => {
               e.stopPropagation();
+              iframeUnlockedRef.current = true;
               onFocus(id);
               setIframeShield(false);
             }}
