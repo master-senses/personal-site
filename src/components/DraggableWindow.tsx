@@ -42,6 +42,7 @@ export interface DraggableWindowProps {
   width: number;
   isOpen: boolean;
   zIndex: number;
+  isFocused: boolean;
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
   centered?: boolean;
@@ -59,6 +60,7 @@ export default function DraggableWindow({
   width,
   isOpen,
   zIndex,
+  isFocused,
   onFocus,
   onClose,
   centered = false,
@@ -67,6 +69,7 @@ export default function DraggableWindow({
 }: DraggableWindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const iframeUnlockedRef = useRef(false);
   const [iframeShield, setIframeShield] = useState(false);
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [hasMoved, setHasMoved] = useState(false);
@@ -186,16 +189,24 @@ export default function DraggableWindow({
 
   useLayoutEffect(() => {
     if (!isOpen) {
+      iframeUnlockedRef.current = false;
       setIframeShield(false);
       return;
     }
-    setIframeShield(!!contentRef.current?.querySelector("iframe"));
-  }, [isOpen, children]);
+    if (isFocused) {
+      iframeUnlockedRef.current = true;
+      setIframeShield(false);
+    } else {
+      iframeUnlockedRef.current = false;
+      setIframeShield(!!contentRef.current?.querySelector("iframe"));
+    }
+  }, [isOpen, isFocused]);
 
   useEffect(() => {
     if (!isOpen || !iframeShield) return;
     const onDocPointerDown = (e: PointerEvent) => {
       if (!windowRef.current?.contains(e.target as Node)) {
+        iframeUnlockedRef.current = false;
         setIframeShield(!!contentRef.current?.querySelector("iframe"));
       }
     };
@@ -437,8 +448,13 @@ export default function DraggableWindow({
             className="iframe-focus-shield"
             aria-hidden="true"
             onPointerDown={(e) => {
+              if (e.button !== 0) return;
               e.stopPropagation();
+              iframeUnlockedRef.current = true;
               onFocus(id);
+              // Hide synchronously so pointerup/click hit the iframe on quick taps.
+              // React state alone re-renders too late for the same gesture.
+              (e.currentTarget as HTMLElement).style.display = "none";
               setIframeShield(false);
             }}
           />
