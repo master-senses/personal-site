@@ -15,13 +15,12 @@ export interface DraggableWindowProps {
   zIndex: number;
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
-  accentBar?: boolean;
   centered?: boolean;
   titleRight?: React.ReactNode;
   children: React.ReactNode;
 }
 
-type ResizeEdge = "se" | "e" | "s";
+type ResizeEdge = "se" | "sw" | "e" | "s" | "w";
 
 export default function DraggableWindow({
   id,
@@ -33,7 +32,6 @@ export default function DraggableWindow({
   zIndex,
   onFocus,
   onClose,
-  accentBar,
   centered = false,
   titleRight,
   children,
@@ -216,25 +214,37 @@ export default function DraggableWindow({
 
         let newW = startW;
         let newH = startH;
+        let newX = anchorX;
 
         if (resizeEdge === "se" || resizeEdge === "e") {
           newW = Math.max(MIN_WIDTH, startW + dx);
         }
-        if (resizeEdge === "se" || resizeEdge === "s") {
+        if (resizeEdge === "w" || resizeEdge === "sw") {
+          const rightEdge = anchorX + startW;
+          newW = Math.max(MIN_WIDTH, startW - dx);
+          newW = Math.min(newW, rightEdge - 8);
+          newX = rightEdge - newW;
+        }
+        if (resizeEdge === "se" || resizeEdge === "s" || resizeEdge === "sw") {
           newH = Math.max(MIN_HEIGHT, startH + dy);
         }
 
         const parent = el?.offsetParent as HTMLElement | null;
-        const maxW = parent
-          ? parent.clientWidth - anchorX - 8
-          : window.innerWidth - anchorX - 8;
+        if (resizeEdge === "se" || resizeEdge === "e") {
+          const maxW = parent
+            ? parent.clientWidth - anchorX - 8
+            : window.innerWidth - anchorX - 8;
+          newW = Math.min(newW, maxW);
+        }
         const maxH = parent
           ? parent.clientHeight - anchorY - 8
           : window.innerHeight - anchorY - 8;
-        newW = Math.min(newW, maxW);
         newH = Math.min(newH, maxH);
 
         setSize({ w: newW, h: newH });
+        if (resizeEdge === "w" || resizeEdge === "sw") {
+          setPos((prev) => ({ ...prev, x: newX }));
+        }
       };
 
       const onUp = (ev: PointerEvent) => {
@@ -278,22 +288,7 @@ export default function DraggableWindow({
         onFocus(id);
       }}
     >
-      {accentBar && (
-        <div
-          className="window-accent-bar"
-          style={{
-            height: 3,
-            background: "repeating-linear-gradient(-45deg, transparent, transparent 5px, var(--yellow-dim) 5px, var(--yellow-dim) 10px)",
-            borderBottom: "2px solid var(--yellow)",
-            borderRadius: "4px 4px 0 0",
-          }}
-        />
-      )}
-
-      <div
-        data-accent={accentBar ? "true" : "false"}
-        className="window-titlebar"
-      >
+      <div className="window-titlebar">
         <button
           type="button"
           className="window-drag-handle"
@@ -320,7 +315,11 @@ export default function DraggableWindow({
         </button>
       </div>
 
-      <div ref={contentRef} style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}>
+      <div
+        ref={contentRef}
+        className="window-content"
+        style={{ overflowY: "auto", flex: 1, minHeight: 0, position: "relative" }}
+      >
         {children}
         {iframeShield ? (
           <div
@@ -338,6 +337,10 @@ export default function DraggableWindow({
       {/* Resize overlay — above scroll content */}
       <div className="window-resize-layer" aria-hidden="true">
         <div
+          className="window-resize-edge window-resize-edge-w"
+          onPointerDown={(e) => onResizePointerDown(e, "w")}
+        />
+        <div
           className="window-resize-edge window-resize-edge-e"
           onPointerDown={(e) => onResizePointerDown(e, "e")}
         />
@@ -346,7 +349,11 @@ export default function DraggableWindow({
           onPointerDown={(e) => onResizePointerDown(e, "s")}
         />
         <div
-          className="window-resize-handle"
+          className="window-resize-handle window-resize-handle-sw"
+          onPointerDown={(e) => onResizePointerDown(e, "sw")}
+        />
+        <div
+          className="window-resize-handle window-resize-handle-se"
           onPointerDown={(e) => onResizePointerDown(e, "se")}
         />
       </div>

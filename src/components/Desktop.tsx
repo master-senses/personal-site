@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import MobileLayout from "./MobileLayout";
 import DraggableWindow from "./DraggableWindow";
 import Terminal from "./Terminal";
 import AboutWindow from "./windows/AboutWindow";
@@ -135,6 +137,28 @@ function renderItemContent(
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Desktop({ experience, projects, research }: Props) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <MobileLayout
+        experience={experience}
+        projects={projects}
+        research={research}
+      />
+    );
+  }
+
+  return (
+    <DesktopShell
+      experience={experience}
+      projects={projects}
+      research={research}
+    />
+  );
+}
+
+function DesktopShell({ experience, projects, research }: Props) {
   const [windows, setWindows] = useState<Record<WinId, WinConfig>>(INITIAL);
   const [itemWins, setItemWins] = useState<Record<string, ItemWin>>({});
   const zCounter = useRef(11);
@@ -298,7 +322,7 @@ export default function Desktop({ experience, projects, research }: Props) {
       <div style={{ position: "relative", flex: 1, overflow: "hidden" }}>
 
         {/* Fixed windows */}
-        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} accentBar centered>
+        <DraggableWindow id="terminal" title={WIN_TITLES.terminal} initialX={INITIAL.terminal.x} initialY={INITIAL.terminal.y} width={WIN_WIDTHS.terminal} isOpen={windows.terminal.open} zIndex={windows.terminal.z} onFocus={focus} onClose={closeWin} centered>
           <Terminal onAboutOpen={handleAboutOpen} />
         </DraggableWindow>
 

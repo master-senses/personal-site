@@ -14,6 +14,11 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://hk39.dev"),
   title: "Hrishikesh Kalyanaraman",
