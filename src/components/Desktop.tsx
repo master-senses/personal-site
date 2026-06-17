@@ -23,7 +23,7 @@ import { BigTxtFileIcon } from "./icons/BigTxtFileIcon";
 import { GithubIcon } from "./icons/GithubIcon";
 import { LinkedinIcon } from "./icons/LinkedinIcon";
 import { XIcon } from "./icons/XIcon";
-import { CONTACT_MAILTO } from "@/lib/contact";
+import { CONTACT_MAILTO, RESUME_URL } from "@/lib/contact";
 
 // ── Fixed window IDs ──────────────────────────────────────────────────────────
 type WinId = "terminal" | "about" | "work" | "projects" | "research" | "skills";
@@ -297,6 +297,14 @@ function DesktopShell({ experience, projects, research }: Props) {
                 {item.label}
               </button>
             ))}
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-item"
+            >
+              Resume
+            </a>
           </nav>
 
           {/* Right */}

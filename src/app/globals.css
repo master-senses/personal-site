@@ -308,6 +308,7 @@ body {
   cursor: pointer;
   background: none;
   color: var(--text);
+  text-decoration: none;
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-size: var(--font-sm);
   font-weight: 600;

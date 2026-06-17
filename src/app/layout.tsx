@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://hk39.dev"),
   title: "Hrishikesh Kalyanaraman",
   description:
-    "Software engineer building AI tooling, design systems, and things that actually ship.",
+    "SWE that likes talking to users. Currently building developer tools and AI tooling",
   icons: {
     icon: "/hk-logo.svg",
     shortcut: "/hk-logo.svg",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Hrishikesh Kalyanaraman",
     description:
-      "Software engineer building AI tooling, design systems, and things that actually ship.",
+      "SWE that likes talking to users. Currently building developer tools and AI tooling",
     url: "https://hk39.dev",
     siteName: "Hrishikesh Kalyanaraman",
     images: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Hrishikesh Kalyanaraman",
     description:
-      "Software engineer building AI tooling, design systems, and things that actually ship.",
+      "SWE that likes talking to users. Currently building developer tools and AI tooling",
     images: ["/hk-logo.png"],
   },
 };
