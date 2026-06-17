@@ -15,7 +15,7 @@ import {
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { LinkedinIcon } from "@/components/icons/LinkedinIcon";
 import { XIcon } from "@/components/icons/XIcon";
-import { CONTACT_MAILTO } from "@/lib/contact";
+import { CONTACT_MAILTO, RESUME_URL } from "@/lib/contact";
 import "./mobile-layout.css";
 
 interface Props {
@@ -125,14 +125,6 @@ export default function MobileLayout({
 }: Props) {
   const [openApp, setOpenApp] = useState<OpenApp | null>(null);
 
-  const menubarFile = openApp
-    ? openApp.kind === "about"
-      ? "about.txt"
-      : openApp.kind === "skills"
-        ? "skills.json"
-        : openApp.title
-    : null;
-
   let appContent: React.ReactNode = null;
   if (openApp?.kind === "about") {
     appContent = <AboutWindow />;
@@ -162,9 +154,14 @@ export default function MobileLayout({
         <button type="button" className="mobile-logo-btn" onClick={() => setOpenApp(null)}>
           <span className="mobile-logo-mark">HK</span>
         </button>
-        {menubarFile && (
-          <span className="mobile-menubar-file">{menubarFile}</span>
-        )}
+        <a
+          href={RESUME_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-menubar-nav-link mobile-menubar-resume-link"
+        >
+          Resume
+        </a>
         <div className="mobile-menubar-actions">
           <a
             href="https://github.com/master-senses"
